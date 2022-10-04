@@ -1,4 +1,4 @@
-import SubTitle from './components/EksempelKomp';
+import Nav from './components/Nav';
 import React, { Component } from 'react';
 
 
@@ -8,8 +8,7 @@ export default class App extends Component {
   render () {
       return (
         <>
-              <h1>Her skal Stock Market appen utvikles. Her legges alle komponentene inn</h1>
-              <SubTitle />
+              <Nav />
         </>
               );
   }
