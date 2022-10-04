@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.28" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,6 +23,7 @@
     <None Remove="ClientApp\src\components\" />
     <None Remove="ClientApp\src\css\" />
     <None Remove="ClientApp\src\js\" />
+    <None Remove="Microsoft.EntityFrameworkCore" />
   </ItemGroup>
 
   <ItemGroup>
