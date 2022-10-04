@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace stock-market.Controllers
+namespace stock_market.Controllers
 {
     [Route("[controller]/[action]")]
     public class UserController : ControllerBase
@@ -21,7 +21,7 @@ namespace stock-market.Controllers
         {
             try
             {
-                _db.Users.Add(innUser)
+                _db.Users.Add(innUser);
                 _db.SaveChanges();
                 return true;
             }
