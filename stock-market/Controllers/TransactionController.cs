@@ -18,13 +18,10 @@ namespace stock_market.Controllers
             _db = db;
         }
 
-        public bool CreateTransaction()
+        public bool CreateTransaction(string ticker, int price, int userid)
         {
             try
             {
-                string ticker = "BTC";
-                int price = 18_000;
-                int userid = 1;
 
                 Transaction transaction = new Transaction();
                 transaction.ticker = ticker;

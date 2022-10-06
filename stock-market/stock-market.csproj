@@ -15,6 +15,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="3.1.0" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.9" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,6 +31,7 @@
     <None Remove="Microsoft.EntityFrameworkCore.Proxies" />
     <None Remove="main.db-wal" />
     <None Remove="main.db-shm" />
+    <None Remove="Microsoft.AspNet.WebApi.Client" />
   </ItemGroup>
 
   <ItemGroup>
