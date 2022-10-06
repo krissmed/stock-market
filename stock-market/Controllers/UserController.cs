@@ -4,36 +4,25 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using stock_market.Model;
 
 namespace stock_market.Controllers
 {
     [Route("[controller]/[action]")]
     public class UserController : ControllerBase
     {
-        /*
-        private readonly UserContext _db;
+        private readonly UsersDB _UsersDB;
 
-        public UserController(UserContext db)
+        public UserController(UsersDB UserDb)
         {
-            _db = db;
+            _UsersDB = UserDb;
         }
 
-        public bool Lagre(User innUser)
+        public List<User> HentAlle()
         {
-            try
-            {
-                _db.Users.Add(innUser);
-                _db.SaveChanges();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            List<User> alleUsers = _UsersDB.users.ToList();
+            return alleUsers;
         }
-        */
     }
-
-
 
 }
