@@ -25,6 +25,8 @@ namespace stock_market
 
             services.AddControllersWithViews();
             services.AddDbContext<mainDB>(options => options.UseSqlite("Data source=main.db"));
+            services.AddScoped<IDbInitializer, DbInitializer>();
+
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -52,6 +54,15 @@ namespace stock_market
             app.UseSpaStaticFiles();
 
             app.UseRouting();
+
+            var scopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
+            using (var scope = scopeFactory.CreateScope())
+            {
+                var dbInitializer = scope.ServiceProvider.GetService<IDbInitializer>();
+                dbInitializer.Initialize();
+                dbInitializer.SeedData();
+            }
+
 
             app.UseEndpoints(endpoints =>
             {
