@@ -4,14 +4,14 @@ import Logo from '../assets/LOGO.svg';
 //Material UI
 import AppBar from '@mui/material/AppBar';
 import Typography from '@mui/material/Typography';
-import Drawer from '@mui/material/Drawer';
+import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Toolbar from '@mui/material/Toolbar';
-import { useTheme } from '@mui/material/styles';
+import { useTheme, styled } from '@mui/material/styles';
 
 //Icons from material UI
 import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
@@ -19,6 +19,22 @@ import ContactPageRoundedIcon from '@mui/icons-material/ContactPageRounded';
 import VisibilityRoundedIcon from '@mui/icons-material/VisibilityRounded';
 import PaidRoundedIcon from '@mui/icons-material/PaidRounded';
 import QueryStatsRoundedIcon from '@mui/icons-material/QueryStatsRounded';
+
+//Width of drawer
+//const drawerWidth = 25;
+
+//Applying custom style to Drawer, because theme is not applied.
+const Drawer = styled(MuiDrawer)(
+    ({theme}) => ({
+        '& .MuiDrawer-paper': {
+            backgroundColor: theme.palette.primary.main,
+            color: theme.palette.primary.contrastText
+        },
+       '& .MuiListItemButton-root:hover': {
+           backgroundColor: theme.palette.primary.light,
+        }
+    }),
+);
 
 
 export default function Nav() {
@@ -30,9 +46,6 @@ export default function Nav() {
     return (
         <Drawer variant='permanent'
             anchor='left'
-            sx={{
-                bgcolor: "#252638"
-            }}
             >
                 <Toolbar sx={{
                     my: 3,
@@ -43,8 +56,8 @@ export default function Nav() {
                 <List>
                     <ListItemButton>
                         <ListItem>                        
-                            <ListItemIcon>
-                                <DashboardRoundedIcon/>
+                        <ListItemIcon>
+                            <DashboardRoundedIcon sx={{ color: customTheme.palette.primary.contrastText}} />
                             </ListItemIcon>
                                 <ListItemText primary="Dashboard" />
                         </ListItem>
@@ -54,7 +67,7 @@ export default function Nav() {
                     <ListItemButton>
                         <ListItem> 
                             <ListItemIcon>
-                                <QueryStatsRoundedIcon />
+                            <QueryStatsRoundedIcon sx={{ color: customTheme.palette.primary.contrastText }} />
                             </ListItemIcon>
                             <ListItemText primary="Buy Stocks" />
                        </ListItem>
@@ -63,7 +76,7 @@ export default function Nav() {
                     <ListItemButton>
                         <ListItem> 
                             <ListItemIcon>
-                                <ContactPageRoundedIcon />
+                            <ContactPageRoundedIcon sx={{ color: customTheme.palette.primary.contrastText }} />
                             </ListItemIcon>
                             <ListItemText primary="Portfolio" />
                         </ListItem>
@@ -72,7 +85,7 @@ export default function Nav() {
                     <ListItemButton>
                         <ListItem> 
                             <ListItemIcon>
-                                <VisibilityRoundedIcon />
+                            <VisibilityRoundedIcon sx={{ color: customTheme.palette.primary.contrastText }} />
                             </ListItemIcon>
                             <ListItemText primary="Watchlist" />
                         </ListItem>
@@ -81,7 +94,7 @@ export default function Nav() {
                     <ListItemButton>
                         <ListItem> 
                             <ListItemIcon>
-                                <PaidRoundedIcon />
+                            <PaidRoundedIcon sx={{ color: customTheme.palette.primary.contrastText }} />
                             </ListItemIcon>
                             <ListItemText primary="Transactions" />
                         </ListItem>

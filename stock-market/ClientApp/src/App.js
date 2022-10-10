@@ -6,7 +6,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 const customTheme = createTheme({
     palette: {
         primary: {
-            main: '#252638'
+            main: '#252638',
+            contrastText: '#FEFEFE'
         },
         background: {
             default: '#27262B'
@@ -16,7 +17,7 @@ const customTheme = createTheme({
         },
         success: {
             main: '#65CC14'
-        }
+        },
     }
 });
 
