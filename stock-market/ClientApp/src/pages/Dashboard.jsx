@@ -1,17 +1,15 @@
 ﻿import React from 'react';
 
-import NavBar from '../components/Nav.jsx';
-import { TopBar, topBarHeight } from '../components/TopBar.jsx';
+import { TopBar } from '../components/TopBar.jsx';
+import { drawerWidth } from '../components/Nav.jsx';
+import DashboardGraph from '../components/DashboardGraph';
 
-import { useTheme } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 
-import { drawerWidth } from '../components/Nav.jsx';
+
 
 export default function Dashboard() {
-
-    const customTheme = useTheme();
 
     return (
         <>
@@ -19,46 +17,41 @@ export default function Dashboard() {
 
 
             <Container>
-                <Grid container rowSpacing={3} sx={{
+                <Grid container spacing={1} sx={{
                     ml: drawerWidth + 'px',
-                    width: 'auto',
-                    height: 'auto',
-                    justifyContent: 'space-between',
+                    width: 'auto'
                 }}>
 
                     <Grid item xs={12} sx={{
-                            backgroundColor: customTheme.palette.success.main,
-                            minHeight: '120px'
+                        minHeight: '120px',
+                        textAlign: 'center',
+                        alignContent: 'center'
                     }}>
-                        TopBar to displaye stocks
+                        <h5>TopBar to display the popular stocks</h5>
                         </Grid>
 
-                    <Grid item xs={12} md={7} sx={{
-                            backgroundColor: customTheme.palette.primary.main,
+                    <Grid item xs={12} md={8} sx={{
                             minHeight: '350px'
                         }}>
-                            GRAF
+                            <DashboardGraph />
                         </Grid>
 
                     <Grid item xs={12} md={4} sx={{
-                            backgroundColor: customTheme.palette.primary.dark,
                             minHeight: '350px'
                     }}>
-                            Stocks
+                        <h5>Stocks</h5>
                         </Grid>
 
                     <Grid item xs={12} md={6} sx={{
-                            backgroundColor: customTheme.palette.error.light,
                             minHeight: '150px'
                         }}>
-                            Watchlist
+                        <h5>Watchlist</h5>
                         </Grid>
 
                     <Grid item xs={12} md={6} sx={{
-                            backgroundColor: customTheme.palette.error.dark,
                             minHeight: '150px'
                         }}>
-                            Transactions
+                        <h5>Transactions</h5>
                         </Grid>
 
                 </Grid>
