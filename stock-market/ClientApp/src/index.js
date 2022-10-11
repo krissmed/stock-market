@@ -1,17 +1,60 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
-import App from './App';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import registerServiceWorker from './registerServiceWorker';
+
+import Dashboard from './pages/Dashboard';
+import Portfolio from './pages/Portfolio';
+import Stocks from './pages/Stocks';
+import Transactions from './pages/Transactions';
+import Watchlist from './pages/Watchlist';
+
+import { Layout } from './pages/Layout';
+
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+
 
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
 const rootElement = document.getElementById('root');
 
+const customTheme = createTheme({
+    palette: {
+        primary: {
+            main: '#252638',
+            contrastText: '#FEFEFE'
+        },
+        background: {
+            default: '#27262B'
+        },
+        error: {
+            main: '#CB6508'
+        },
+        success: {
+            main: '#65CC14'
+        },
+    }
+});
+
 ReactDOM.render(
-  <BrowserRouter basename={baseUrl}>
-    <App />
-  </BrowserRouter>,
+    <ThemeProvider theme={customTheme}>
+        <CssBaseline />
+
+    <BrowserRouter basename={baseUrl}>
+
+        <Routes>
+            <Route path="/" element={<Layout />}>
+                <Route index element={<Dashboard />} />
+                <Route path="stocks" element={<Stocks />} />
+                <Route path="portfolio" element={<Portfolio />} />
+                <Route path="watchlist" element={<Watchlist />} />
+                <Route path="transactions" element={<Transactions />} />
+            </Route>
+        </Routes>
+
+        </BrowserRouter>
+    </ThemeProvider>,
   rootElement);
 
 registerServiceWorker();

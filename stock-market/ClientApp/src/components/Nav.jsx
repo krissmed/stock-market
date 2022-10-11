@@ -1,4 +1,6 @@
 ﻿import React from 'react';
+import { Link, Outlet } from "react-router-dom";
+
 //LOGO;
 import Logo from '../assets/LOGO.svg';
 //Material UI
@@ -21,12 +23,14 @@ import PaidRoundedIcon from '@mui/icons-material/PaidRounded';
 import QueryStatsRoundedIcon from '@mui/icons-material/QueryStatsRounded';
 
 //Width of drawer
-//const drawerWidth = 25;
+export const drawerWidth = 220;
 
-//Applying custom style to Drawer, because theme is not applied.
+//Applying custom style to Drawer, because theme cannot be applied
+//to this MUI-component..
 const Drawer = styled(MuiDrawer)(
     ({theme}) => ({
         '& .MuiDrawer-paper': {
+            width: drawerWidth,
             backgroundColor: theme.palette.primary.main,
             color: theme.palette.primary.contrastText
         },
@@ -44,63 +48,115 @@ export default function Nav() {
     const customTheme = useTheme();
 
     return (
+        <>
         <Drawer variant='permanent'
             anchor='left'
-            >
+        >
+           
                 <Toolbar sx={{
                     my: 3,
                     mx: 'auto',
                 }}>
-                    <img src={Logo} alt="LOGO" />
+                    <Link to="/"> 
+                        <img src={Logo} alt="LOGO" />
+                    </Link>
                 </Toolbar>
-                <List>
-                    <ListItemButton>
-                        <ListItem>                        
-                        <ListItemIcon>
-                            <DashboardRoundedIcon sx={{ color: customTheme.palette.primary.contrastText}} />
-                            </ListItemIcon>
-                                <ListItemText primary="Dashboard" />
-                        </ListItem>
-                    </ListItemButton>
+            
+            <List>
 
-
+                    <Link to="/" style={{
+                        textDecoration: 'none',
+                        
+                    }}>  
                     <ListItemButton>
-                        <ListItem> 
+                            <ListItem>                        
                             <ListItemIcon>
-                            <QueryStatsRoundedIcon sx={{ color: customTheme.palette.primary.contrastText }} />
-                            </ListItemIcon>
-                            <ListItemText primary="Buy Stocks" />
-                       </ListItem>
-                    </ListItemButton>
+                                <DashboardRoundedIcon sx={{ color: customTheme.palette.primary.contrastText}} />
+                                </ListItemIcon>
+                                <ListItemText primary="Dashboard" sx={{
+                                    color: customTheme.palette.primary.contrastText,
+                                    textDecoration: 'none',
+                              
+                                }} />
+                            </ListItem>
+                       </ListItemButton>
+                </Link>
 
+                    <Link to="/stocks" style={{
+                        textDecoration: 'none',
+
+                    }}>
                     <ListItemButton>
+                            <ListItem> 
+                                <ListItemIcon>
+                                <QueryStatsRoundedIcon sx={{ color: customTheme.palette.primary.contrastText }} />
+                                </ListItemIcon>
+                                <ListItemText primary="Buy Stocks" sx={{
+                                    color: customTheme.palette.primary.contrastText,
+                                    textDecoration: 'none',
+
+                                }} />
+                           </ListItem>
+                        </ListItemButton>
+                </Link>
+
+                    <Link to="/portfolio" style={{
+                        textDecoration: 'none',
+
+                    }}>
+                <ListItemButton>
                         <ListItem> 
                             <ListItemIcon>
                             <ContactPageRoundedIcon sx={{ color: customTheme.palette.primary.contrastText }} />
                             </ListItemIcon>
-                            <ListItemText primary="Portfolio" />
+                                <ListItemText primary="Portfolio" sx={{
+                                    color: customTheme.palette.primary.contrastText,
+                                    textDecoration: 'none',
+
+                                }} />
                         </ListItem>
                     </ListItemButton>
+                </Link>
 
-                    <ListItemButton>
+                    <Link to="/watchlist" style={{
+                        textDecoration: 'none',
+
+                    }}>
+                <ListItemButton>
                         <ListItem> 
                             <ListItemIcon>
                             <VisibilityRoundedIcon sx={{ color: customTheme.palette.primary.contrastText }} />
                             </ListItemIcon>
-                            <ListItemText primary="Watchlist" />
+                                <ListItemText primary="Watchlist" sx={{
+                                    color: customTheme.palette.primary.contrastText,
+                                    textDecoration: 'none',
+
+                                }} />
                         </ListItem>
                     </ListItemButton>
+                </Link>
 
-                    <ListItemButton>
+                    <Link to="/transactions" style={{
+                        textDecoration: 'none',
+
+                    }}>
+                <ListItemButton>
                         <ListItem> 
                             <ListItemIcon>
                             <PaidRoundedIcon sx={{ color: customTheme.palette.primary.contrastText }} />
                             </ListItemIcon>
-                            <ListItemText primary="Transactions" />
+                                <ListItemText primary="Transactions" sx={{
+                                    color: customTheme.palette.primary.contrastText,
+                                    textDecoration: 'none',
+
+                                }} />
                         </ListItem>
                     </ListItemButton>
-                </List>
+                </Link>
 
-            </Drawer>
+                </List>
+          
+        </Drawer>
+        </>
     )
 }
