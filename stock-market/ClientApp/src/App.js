@@ -2,6 +2,7 @@ import Nav from './components/Nav';
 import React, { Component } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import MyAvatar from "./components/Avatar"
 
 const customTheme = createTheme({
     palette: {
@@ -30,8 +31,8 @@ export default class App extends Component {
       return (
           <ThemeProvider theme={customTheme}>
               <CssBaseline />
+              <MyAvatar />
               <Nav />
-
           </ThemeProvider>
               );
   }
