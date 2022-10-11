@@ -1,11 +1,9 @@
 ﻿import React from 'react';
-import { Link, Outlet } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 //LOGO;
 import Logo from '../assets/LOGO.svg';
-//Material UI
-import AppBar from '@mui/material/AppBar';
-import Typography from '@mui/material/Typography';
+//Material UI;
 import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
