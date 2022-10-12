@@ -3,9 +3,10 @@ namespace stock_market.Model
 {
     public class HistoricalStock
     {
-        public string stock;
-        public int price;
-        public DateTime date;
+        public int id { get; set; }
+        public string stock { get; set; }
+        public double price { get; set; }
+        public DateTime date { get; set; }
     }
 }
 

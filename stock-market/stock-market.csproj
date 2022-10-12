@@ -32,6 +32,7 @@
     <None Remove="main.db-wal" />
     <None Remove="main.db-shm" />
     <None Remove="Microsoft.AspNet.WebApi.Client" />
+    <None Remove="main.db-shm" />
   </ItemGroup>
 
   <ItemGroup>

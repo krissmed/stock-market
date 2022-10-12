@@ -19,11 +19,28 @@ namespace stock_market.Controllers
         }
 
 
-        public List<User> ListAll()
+        public string GetFullName(int userid)
         {
-            List<User> Users = _db.Users.ToList();
-            return Users;
+            string fname = _db.Users.Find(userid).first_name;
+            string lname = _db.Users.Find(userid).last_name;
+            return fname + " " + lname;
         }
+
+        public string GetFName(int userid)
+        {
+            string fname = _db.Users.Find(userid).first_name;
+            return fname;
+        }
+
+        public string GetLName(int userid)
+        {
+            string lname = _db.Users.Find(userid).last_name;
+            return lname;
+        }
+
+
+
+
 
         public int GetUserID()
         {

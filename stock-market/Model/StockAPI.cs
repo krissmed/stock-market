@@ -9,9 +9,9 @@ namespace stock_market.Model
         public double open { get; set; }
         public double high { get; set; }
         public double low { get; set; }
-        public double last { get; set; }
-        public double close { get; set; }
-        public double volume { get; set; }
+        public string last { get; set; }
+        public string close { get; set; }
+        public string volume { get; set; }
         public DateTime date { get; set; }
         public string symbol { get; set; }
         public string exchange { get; set; }

@@ -17,6 +17,7 @@ namespace stock_market.Model
 
         public DbSet<User> Users { get; set; }
         public DbSet<Transaction> transactions { get; set; }
+        public DbSet<HistoricalStock> historicalStocks { get; set; }
 
 
 
