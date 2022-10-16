@@ -103,49 +103,67 @@ public class DbInitializer : IDbInitializer
                     client.DefaultRequestHeaders.Accept.Add(
                     new MediaTypeWithQualityHeaderValue("application/json"));
                     string param = parameters_before_sym + tick + parameters_after_sym + date_to;
+                    Console.WriteLine("USING: " + param);
                     HttpResponseMessage response = client.GetAsync(param).Result;
 
                     if (response.IsSuccessStatusCode)
                     {
+                        
+
                         var body = response.Content.ReadAsStringAsync().Result;
                         Root api_returns = JsonConvert.DeserializeObject<Root>(body);
 
-                        foreach (var i in api_returns.data)
-                        {
-                            HistoricalStock ex_stock = new HistoricalStock();
-                            if (i.last != "null")
-                            {
-                                double test_double = Convert.ToDouble(i.last, CultureInfo.InvariantCulture);
-                                ex_stock.price = test_double;
-                            }
-                            else
-                            {
-                                double test_double = i.open;
-                                ex_stock.price = test_double;
-                            }
-                            ex_stock.timestamp = _db.timestamps.Where(t => t.time == i.date).FirstOrDefault();
+                        //find total pages with pagination.total / 100. Use math.ceil to round up
+                        int total_pages = (int)Math.Ceiling((double)api_returns.pagination.total / 100);
 
-                            // find the base stock, if it doesn't exist, create it
-                            BaseStock base_stock = _db.baseStocks.Where(b => b.ticker == tick).FirstOrDefault();
-                            if (base_stock == null)
+                        //for each page, get the data and add it to the database
+                        for (int i = 0; i < total_pages; i++)
+                        {
+                            //get the data
+                            param = parameters_before_sym + tick + parameters_after_sym + date_to + "&limit=100&offset=" + i;
+                            response = client.GetAsync(param).Result;
+                            body = response.Content.ReadAsStringAsync().Result;
+                            api_returns = JsonConvert.DeserializeObject<Root>(body);
+                            
+                            foreach (var j in api_returns.data)
                             {
-                                base_stock = new BaseStock();
-                                base_stock.ticker = tick;
-                                _db.baseStocks.Add(base_stock);
+                                HistoricalStock ex_stock = new HistoricalStock();
+                                if (j.last != "null")
+                                {
+                                    double test_double = Convert.ToDouble(j.last, CultureInfo.InvariantCulture);
+                                    ex_stock.price = test_double;
+                                }
+                                else
+                                {
+                                    double test_double = j.open;
+                                    ex_stock.price = test_double;
+                                }
+                                ex_stock.timestamp = _db.timestamps.Where(t => t.time == j.date).FirstOrDefault();
+
+                                // find the base stock, if it doesn't exist, create it
+                                BaseStock base_stock = _db.baseStocks.Where(b => b.ticker == tick).FirstOrDefault();
+                                if (base_stock == null)
+                                {
+                                    base_stock = new BaseStock();
+                                    base_stock.ticker = tick;
+                                    _db.baseStocks.Add(base_stock);
+                                    _db.SaveChanges();
+                                }
+                                ex_stock.baseStock = base_stock;
+                                _db.historicalStocks.Add(ex_stock);
                                 _db.SaveChanges();
                             }
-                            ex_stock.baseStock = base_stock;
-                            _db.historicalStocks.Add(ex_stock);
-                            _db.SaveChanges();
+
                         }
+                    }
+
+
                     }
                     _db.SaveChanges();
                 }
             }
 
         }
-
-    }
 
 
     public async void SeedData()
