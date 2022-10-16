@@ -3,9 +3,9 @@ namespace stock_market.Model
 {
     public class BaseStock
     {
-        public int id;
-        public string ticker;
-        public string name;
+        public int id { get; set; }
+        public string ticker { get; set; }
+        public string name { get; set; }
     }
 }
 

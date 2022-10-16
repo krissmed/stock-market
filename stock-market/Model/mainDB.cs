@@ -19,6 +19,7 @@ namespace stock_market.Model
         public DbSet<Transaction> transactions { get; set; }
         public DbSet<HistoricalStock> historicalStocks { get; set; }
         public DbSet<Timestamp> timestamps { get; set; }
+        public DbSet<BaseStock> baseStocks { get; set; }
 
 
 

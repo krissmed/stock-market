@@ -62,8 +62,7 @@ public class DbInitializer : IDbInitializer
                         _db.timestamps.Add(timestamp);
                         date = date.AddMinutes(1);
                     }
-
-
+                    _db.SaveChanges();
 
                     //Create User
                     User john_doe = new User();
@@ -72,7 +71,6 @@ public class DbInitializer : IDbInitializer
                     john_doe.curr_balance_stock = 0;
                     john_doe.first_name = "John";
                     john_doe.last_name = "Doe";
-
                     _db.Users.Add(john_doe);
 
                     //Add historical stocks (and base stocks)
@@ -88,27 +86,17 @@ public class DbInitializer : IDbInitializer
 
                         client.DefaultRequestHeaders.Accept.Add(
                         new MediaTypeWithQualityHeaderValue("application/json"));
-
                         string param = parameters_before_sym + tick + parameters_after_sym + date_to;
-
-                        Console.WriteLine("trying: " + URL + param);
-                        Console.WriteLine("trying: " + URL + param);
-
                         HttpResponseMessage response = client.GetAsync(param).Result;
+                        
                         if (response.IsSuccessStatusCode)
                         {
                             var body = response.Content.ReadAsStringAsync().Result;
-                            Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(body);
-
-                            Console.WriteLine("Limit: " + myDeserializedClass.pagination.limit.ToString());
-                            Console.WriteLine("Count: " + myDeserializedClass.pagination.count.ToString());
-                            Console.WriteLine("Offset: " + myDeserializedClass.pagination.offset.ToString());
-                            Console.WriteLine("Total: " + myDeserializedClass.pagination.total.ToString());
-
-                            foreach (var i in myDeserializedClass.data)
+                            Root api_returns = JsonConvert.DeserializeObject<Root>(body);
+                            
+                            foreach (var i in api_returns.data)
                             {
                                 HistoricalStock ex_stock = new HistoricalStock();
-                                ex_stock.date = i.date;
                                 if (i.last != "null")
                                 {
                                     double test_double = Convert.ToDouble(i.last, CultureInfo.InvariantCulture);
@@ -119,8 +107,20 @@ public class DbInitializer : IDbInitializer
                                     double test_double = i.open;
                                     ex_stock.price = test_double;
                                 }
-                                ex_stock.stock = i.symbol;
+                                ex_stock.timestamp = _db.timestamps.Where(t => t.time == i.date).FirstOrDefault();
+
+                                // find the base stock, if it doesn't exist, create it
+                                BaseStock base_stock = _db.baseStocks.Where(b => b.ticker == tick).FirstOrDefault();
+                                if (base_stock == null)
+                                {
+                                    base_stock = new BaseStock();
+                                    base_stock.ticker = tick;
+                                    _db.baseStocks.Add(base_stock);
+                                    _db.SaveChanges();
+                                }
+                                ex_stock.baseStock = base_stock;
                                 _db.historicalStocks.Add(ex_stock);
+                                _db.SaveChanges();
                             }
                         }
 
