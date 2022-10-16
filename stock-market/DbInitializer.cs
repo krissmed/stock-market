@@ -41,91 +41,131 @@ public class DbInitializer : IDbInitializer
         }
     }
 
-    public async void SeedData()
+    public void InitializeTimestamps()
+    {
+        using (var serviceScope = _scopeFactory.CreateScope())
+        {
+            using (var _db = serviceScope.ServiceProvider.GetService<mainDB>())
+            {
+                // Create a Timestamp object for every minute since date_from
+                DateTime date = DateTime.ParseExact(date_from, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                DateTime now = DateTime.Now;
+                while (date < now)
+                {
+                    Timestamp timestamp = new Timestamp();
+                    timestamp.time = date;
+                    timestamp.unix = (int)date.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+                    _db.timestamps.Add(timestamp);
+                    date = date.AddMinutes(1);
+                }
+                _db.SaveChanges();
+            }
+        }
+    }
+
+    public void InitializeUser()
+    {
+        using (var serviceScope = _scopeFactory.CreateScope())
+        {
+            using (var _db = serviceScope.ServiceProvider.GetService<mainDB>())
+            {
+                //Create User
+                User john_doe = new User();
+                john_doe.curr_balance = 100_000;
+                john_doe.curr_balance_liquid = 100_000;
+                john_doe.curr_balance_stock = 0;
+                john_doe.first_name = "John";
+                john_doe.last_name = "Doe";
+                _db.Users.Add(john_doe);
+
+                _db.SaveChanges();
+            }
+        }
+    }
+
+    public void InitializeStocks()
     {
         using (var serviceScope = _scopeFactory.CreateScope())
         {
             using (var _db = serviceScope.ServiceProvider.GetService<mainDB>())
             {
 
-                if (!_db.Users.Any())
+                tickers.Add("TSLA");
+                tickers.Add("AMZN");
+                tickers.Add("AAPL");
+
+                foreach (var tick in tickers)
                 {
+                    HttpClient client = new HttpClient();
+                    client.BaseAddress = new Uri(URL);
+                    string date_to = DateTime.Today.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
 
-                    // Create a Timestamp object for every minute since date_from
-                    DateTime date = DateTime.ParseExact(date_from, "yyyy-MM-dd", CultureInfo.InvariantCulture);
-                    DateTime now = DateTime.Now;
-                    while (date < now)
+                    client.DefaultRequestHeaders.Accept.Add(
+                    new MediaTypeWithQualityHeaderValue("application/json"));
+                    string param = parameters_before_sym + tick + parameters_after_sym + date_to;
+                    HttpResponseMessage response = client.GetAsync(param).Result;
+
+                    if (response.IsSuccessStatusCode)
                     {
-                        Timestamp timestamp = new Timestamp();
-                        timestamp.time = date;
-                        timestamp.unix = (int)date.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
-                        _db.timestamps.Add(timestamp);
-                        date = date.AddMinutes(1);
-                    }
-                    _db.SaveChanges();
+                        var body = response.Content.ReadAsStringAsync().Result;
+                        Root api_returns = JsonConvert.DeserializeObject<Root>(body);
 
-                    //Create User
-                    User john_doe = new User();
-                    john_doe.curr_balance = 100_000;
-                    john_doe.curr_balance_liquid = 100_000;
-                    john_doe.curr_balance_stock = 0;
-                    john_doe.first_name = "John";
-                    john_doe.last_name = "Doe";
-                    _db.Users.Add(john_doe);
-
-                    //Add historical stocks (and base stocks)
-                    tickers.Add("TSLA");
-                    tickers.Add("AMZN");
-                    tickers.Add("AAPL");
-
-                    foreach (var tick in tickers)
-                    {
-                        HttpClient client = new HttpClient();
-                        client.BaseAddress = new Uri(URL);
-                        string date_to = DateTime.Today.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-
-                        client.DefaultRequestHeaders.Accept.Add(
-                        new MediaTypeWithQualityHeaderValue("application/json"));
-                        string param = parameters_before_sym + tick + parameters_after_sym + date_to;
-                        HttpResponseMessage response = client.GetAsync(param).Result;
-                        
-                        if (response.IsSuccessStatusCode)
+                        foreach (var i in api_returns.data)
                         {
-                            var body = response.Content.ReadAsStringAsync().Result;
-                            Root api_returns = JsonConvert.DeserializeObject<Root>(body);
-                            
-                            foreach (var i in api_returns.data)
+                            HistoricalStock ex_stock = new HistoricalStock();
+                            if (i.last != "null")
                             {
-                                HistoricalStock ex_stock = new HistoricalStock();
-                                if (i.last != "null")
-                                {
-                                    double test_double = Convert.ToDouble(i.last, CultureInfo.InvariantCulture);
-                                    ex_stock.price = test_double;
-                                }
-                                else
-                                {
-                                    double test_double = i.open;
-                                    ex_stock.price = test_double;
-                                }
-                                ex_stock.timestamp = _db.timestamps.Where(t => t.time == i.date).FirstOrDefault();
+                                double test_double = Convert.ToDouble(i.last, CultureInfo.InvariantCulture);
+                                ex_stock.price = test_double;
+                            }
+                            else
+                            {
+                                double test_double = i.open;
+                                ex_stock.price = test_double;
+                            }
+                            ex_stock.timestamp = _db.timestamps.Where(t => t.time == i.date).FirstOrDefault();
 
-                                // find the base stock, if it doesn't exist, create it
-                                BaseStock base_stock = _db.baseStocks.Where(b => b.ticker == tick).FirstOrDefault();
-                                if (base_stock == null)
-                                {
-                                    base_stock = new BaseStock();
-                                    base_stock.ticker = tick;
-                                    _db.baseStocks.Add(base_stock);
-                                    _db.SaveChanges();
-                                }
-                                ex_stock.baseStock = base_stock;
-                                _db.historicalStocks.Add(ex_stock);
+                            // find the base stock, if it doesn't exist, create it
+                            BaseStock base_stock = _db.baseStocks.Where(b => b.ticker == tick).FirstOrDefault();
+                            if (base_stock == null)
+                            {
+                                base_stock = new BaseStock();
+                                base_stock.ticker = tick;
+                                _db.baseStocks.Add(base_stock);
                                 _db.SaveChanges();
                             }
+                            ex_stock.baseStock = base_stock;
+                            _db.historicalStocks.Add(ex_stock);
+                            _db.SaveChanges();
                         }
-
-                        _db.SaveChanges();
                     }
+                    _db.SaveChanges();
+                }
+            }
+
+        }
+
+    }
+
+
+    public async void SeedData()
+    {
+        using (var serviceScope = _scopeFactory.CreateScope())
+        {
+            using (var _db = serviceScope.ServiceProvider.GetService<mainDB>())
+            {
+                if (!_db.Users.Any())
+                {
+                    //Seeding the DB by calling the three functions under
+                    
+                    //Initialize Timestamps
+                    InitializeTimestamps();
+
+                    //Initialize User
+                    InitializeUser();
+
+                    //Initialize HistoricalStocks and BaseStocks
+                    InitializeStocks();
 
                 }
             }
