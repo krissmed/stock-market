@@ -51,7 +51,18 @@ public class DbInitializer : IDbInitializer
                 if (!_db.Users.Any())
                 {
 
-                    //Create Timestamps
+                    // Create a Timestamp object for every minute since date_from
+                    DateTime date = DateTime.ParseExact(date_from, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                    DateTime now = DateTime.Now;
+                    while (date < now)
+                    {
+                        Timestamp timestamp = new Timestamp();
+                        timestamp.time = date;
+                        timestamp.unix = (int)date.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+                        _db.timestamps.Add(timestamp);
+                        date = date.AddMinutes(1);
+                    }
+
 
 
                     //Create User
