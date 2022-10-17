@@ -2,6 +2,9 @@
 import NavBar from '../components/Nav.jsx';
 import { TopBar } from '../components/TopBar.jsx';
 
+import Container from '@mui/material/Container';
+
+
 export default function Dashboard() {
 
     return (
@@ -9,6 +12,9 @@ export default function Dashboard() {
             <NavBar />
             <TopBar title='All Stocks' />
 
+            <Container>
+
+            </Container>
         </>
     );
 }

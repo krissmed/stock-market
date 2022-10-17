@@ -2,7 +2,8 @@
 
 import { TopBar } from '../components/TopBar.jsx';
 import { drawerWidth } from '../components/Nav.jsx';
-import DashboardGraph from '../components/DashboardGraph';
+import DashboardGraph from '../components/DashboardComp/DashboardGraph';
+import OverViewStocks from '../components/DashboardComp/OverViewStocks';
 
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
@@ -27,7 +28,8 @@ export default function Dashboard() {
                         textAlign: 'center',
                         alignContent: 'center'
                     }}>
-                        <h5>TopBar to display the popular stocks</h5>
+                        <OverViewStocks />
+                        
                         </Grid>
 
                     <Grid item xs={12} md={8} sx={{

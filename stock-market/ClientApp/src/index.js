@@ -29,10 +29,10 @@ const customTheme = createTheme({
             default: '#27262B'
         },
         error: {
-            main: '#CB6508'
+            main: '#f5374a'
         },
         success: {
-            main: '#65CC14'
+            main: '#4fa579'
         },
     }
 });

@@ -17,7 +17,7 @@ export const TopBar = ({ title }) => {
     return (
         <AppBar
             position='relative'
-            elevation={ 0 } //No shadow;
+            elevation={ 0 } //No shadow.
             sx={{
                 ml: drawerWidth + 'px',
                 height: topBarHeight + 'px',
