@@ -4,6 +4,7 @@ import AppBar from '@mui/material/AppBar';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
+import MyAvatar from './DashboardComp/Avatar.jsx';
 
 
 import { drawerWidth } from './Nav.jsx';
@@ -33,8 +34,8 @@ export const TopBar = ({ title }) => {
                 {title}
             </Typography>
 
-           
-        </AppBar>
+            <MyAvatar />
 
+        </AppBar>
         );
 }
