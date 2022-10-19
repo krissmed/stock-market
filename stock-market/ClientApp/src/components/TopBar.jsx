@@ -3,9 +3,7 @@
 import AppBar from '@mui/material/AppBar';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import MyAvatar from './DashboardComp/Avatar.jsx';
-
+import MyAvatar from './Avatar.jsx';
 
 import { drawerWidth } from './Nav.jsx';
 
@@ -18,24 +16,30 @@ export const TopBar = ({ title }) => {
     return (
         <AppBar
             position='relative'
-            elevation={ 0 } //No shadow.
+            elevation={ 0 } //No shadow
             sx={{
                 ml: drawerWidth + 'px',
-                height: topBarHeight + 'px',
+                mr: 2,
+                padding: 1,
                 width: 'auto',
                 backgroundColor: customTheme.palette.background.default,
-                justifyContent: 'center',
-                textAlign: 'center',
-                alignItems: 'center'
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between'
             }}
 
         >
-            <Typography variant="h4">
-                {title}
-            </Typography>
 
-            <MyAvatar />
+                <Typography variant="h4" sx={{
+                    display: 'inline-block',
+                flexGrow: 1,
+                    textAlign: 'center'
+                }}>
+                    {title}
+                </Typography>
 
-        </AppBar>
+                <MyAvatar />
+         </AppBar>
         );
 }
