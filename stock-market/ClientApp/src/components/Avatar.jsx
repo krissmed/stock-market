@@ -22,9 +22,9 @@ export default function MyAvatar() {
     const handleClose = () => {
         setAnchorEl(null);
     };
-    const [username, setUsername] = React.useState("Choose a user");
+    const [username, setUsername] = React.useState(users[0].username);
 
-    const [balance, setBalance] = React.useState("N/A");
+    const [balance, setBalance] = React.useState(users[0].balance);
 
 
     const handleUserChange = (user) => {

@@ -16,6 +16,8 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import AddShoppingCartOutlinedIcon from '@mui/icons-material/AddShoppingCartOutlined';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 
 //Object to store variables showed
 export const stockObj = [
@@ -91,11 +93,15 @@ const ExpandableRows = ({children, curStock, ...otherArgs}) => {
                 {children}
 
                 <TableCell padding='checkbox'>
-                    <IconButton sx={{color: customTheme.palette.primary.contrastText}}
+                    <IconButton sx={{
+                        color: customTheme.palette.primary.contrastText,
+                        padding: 3,
+                        fontSize: 10
+                    }}
                                 onClick={() => setIsExpanded(!isExpanded)}>
                         {isExpanded ?
-                            <KeyboardArrowUpIcon/>
-                            : <KeyboardArrowDownIcon/>}
+                            <KeyboardArrowUpIcon sx={{fontSize: 35}} />
+                            : <KeyboardArrowDownIcon sx={{fontSize: 35}}/>}
                     </IconButton>
                 </TableCell>
             </TableRow>
@@ -158,10 +164,9 @@ export default function StockTable() {
                             <Typography variant='h6'
                                         color={customTheme.palette.primary.contrastText}> Name </Typography>
                         </TableCell>
-                        <TableCell align="right">
+                        <TableCell align="right" sx={{textAlign:'center'}}>
                             <Typography variant='h6' color={customTheme.palette.primary.contrastText}>Value</Typography>
                         </TableCell>
-                        <TableCell padding='checkbox'/>
                         <TableCell padding='checkbox'/>
                         <TableCell padding='checkbox'/>
                         <TableCell padding="checkbox"/>
@@ -186,30 +191,27 @@ export default function StockTable() {
                                 </Typography>
                             </TableCell>
 
-                            <TableCell align="right">
+                            <TableCell align="right" sx={{textAlign:'center'}}>
                                 <Typography variant='body1' color={customTheme.palette.primary.contrastText}>
-                                    {stock.value} NOK
+                                    {stock.value}$
                                 </Typography>
                             </TableCell>
 
                             <TableCell align="right">
-                                <Button color='success'
+                                <Button variant='outlined'
+                                        color='success'
+                                        endIcon={<AddShoppingCartOutlinedIcon />}
                                         onClick={() => buyStock(stock.ticker)}>
-                                    Buy Stock
+                                    Buy
                                 </Button>
                             </TableCell>
 
                             <TableCell align="right">
-                                <Button color='secondary'
-                                        onClick={() => updateStock(stock.ticker)}>
-                                    Update Stock
-                                </Button>
-                            </TableCell>
-
-                            <TableCell align="right">
-                                <Button color='error'
+                                <Button variant='outlined'
+                                        color='error'
+                                        endIcon={<DeleteOutlineOutlinedIcon />}
                                         onClick={() => deleteStock(stock.ticker)}>
-                                    Delete Stock
+                                    Delete
                                 </Button>
                             </TableCell>
 
