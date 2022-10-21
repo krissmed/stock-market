@@ -27,7 +27,7 @@ export default function DashboardGraph() {
     const cOptions = {
         chart: {
             foreColor: customTheme.palette.primary.contrastText,
-            height: 350,
+            height: 'auto',
             type: 'line',
             toolbar: {
                 show: false

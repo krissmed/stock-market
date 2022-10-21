@@ -25,12 +25,16 @@
     <None Remove="ClientApp\src\js\" />
     <None Remove="Microsoft.EntityFrameworkCore" />
     <None Remove="ClientApp\src\pages\" />
+    <None Remove="ClientApp\src\components\DashboardComp\" />
+    <None Remove="ClientApp\src\components\StocksComp\" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="ClientApp\src\css\" />
     <Folder Include="ClientApp\src\js\" />
     <Folder Include="ClientApp\src\pages\" />
+    <Folder Include="ClientApp\src\components\DashboardComp\" />
+    <Folder Include="ClientApp\src\components\StocksComp\" />
   </ItemGroup>
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->

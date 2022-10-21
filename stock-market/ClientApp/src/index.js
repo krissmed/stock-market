@@ -26,7 +26,7 @@ const customTheme = createTheme({
             contrastText: '#FEFEFE'
         },
         background: {
-            default: '#27262B'
+            default: '#27262B',
         },
         error: {
             main: '#f5374a'
@@ -34,7 +34,7 @@ const customTheme = createTheme({
         success: {
             main: '#4fa579'
         },
-    }
+    },
 });
 
 ReactDOM.render(
