@@ -7,12 +7,9 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
 
-export default function MyAvatar() {
-    const users = [
-        { username: "Ole-Jørgen Knoph", balance: 69 },
-        { username: "Kristian Smedsrød", balance: 20 },
-    ];
+import { allUsers } from './Models/UserModel';
 
+export default function MyAvatar() {
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
@@ -22,13 +19,22 @@ export default function MyAvatar() {
     const handleClose = () => {
         setAnchorEl(null);
     };
-    const [username, setUsername] = React.useState(users[0].username);
 
-    const [balance, setBalance] = React.useState(users[0].balance);
+    //Getting the global variable declared in index.js
+    const [username, setUsername] = React.useState(window.$name);
 
+    //Finding the whole user whom maches the is
+    const currentUser = allUsers.find(user => {
+        return user.username === username;
+    })
 
+    //Init the balance of said user
+    const [balance, setBalance] = React.useState(currentUser.balance);
+
+    //Handles the userchange. Sets window name to keep the global variable uptodate
     const handleUserChange = (user) => {
         setUsername(user.username);
+        window.$name = user.username;
         setBalance(user.balance);
     };
 
@@ -37,8 +43,13 @@ export default function MyAvatar() {
         <React.Fragment>
             <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
                 <div>
-                    <Typography variant="subtitle1">{username}</Typography>
-                    <Typography variant="subtitle2">Balance: {balance}$</Typography>
+                    <Typography variant="subtitle1">
+                        {username}
+                    </Typography>
+
+                    <Typography variant="subtitle2">
+                        Balance: <b>{balance}$</b>
+                    </Typography>
 
                 </div>
                 <Tooltip title="Profile">
@@ -50,7 +61,7 @@ export default function MyAvatar() {
                         aria-haspopup="true"
                         aria-expanded={open ? 'true' : undefined}
                     >
-                        <Avatar sx={{ width: 40, height: 40 }} alt={username}></Avatar>
+                        <Avatar sx={{ width: 40, height: 40 }}>{username.charAt(0)}</Avatar>
                     </IconButton>
                 </Tooltip>
             </Box>
@@ -89,15 +100,15 @@ export default function MyAvatar() {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
-
-                {users.map(user => (
-                    <MenuItem
-                        key={user.username}
-                        onClick={() => handleUserChange(user)}>
-                        <Avatar /> { user.username }
-                    </MenuItem>
-                )
+                {allUsers.map(user => (
+                        <MenuItem
+                            key={user.username}
+                            onClick={() => handleUserChange(user)}>
+                            <Avatar /> { user.username }
+                        </MenuItem>
+                    )
                 )}
+
             </Menu>
         </React.Fragment>
     );
