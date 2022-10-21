@@ -57,39 +57,39 @@ namespace stock_market.Controllers
             } catch { return false; }
         }
 
-        public bool DeleteUser(int id)
+        public async Task<bool> DeleteUser(int id)
         {
             try
             {
-                User user = _db.Users.Find(id);
+                User user = await _db.Users.FindAsync(id);
                 _db.Users.Remove(user);
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
                 return true;
             } catch { return false; }
             
         }
 
-        public bool EditUser(User editUser) //Edits User, get current vaulues with GET and send new ones with POST. This is meant for the user to be able to change his own name.
+        public async Task<bool> EditUser(User editUser) //Edits User, get current vaulues with GET and send new ones with POST. This is meant for the user to be able to change his own name.
         {
             try
             {
-                User user = _db.Users.Find(editUser.id);
-                user.first_name=editUser.first_name;
-                user.last_name=editUser.last_name;
-                _db.SaveChanges();
+                var edit = await _db.Users.FindAsync(editUser.id);
+                edit.first_name=editUser.first_name;
+                edit.last_name=editUser.last_name;
+                await _db.SaveChangesAsync();
                 return true;
             } catch { return false; }
         }
 
-        public bool EditUserBalance(User editUser) //Edits balance of user, get current calues with GET and send new ones with POST. This is meant for when user sell/buy stock
+        public async Task<bool> EditUserBalance(User editUser) //Edits balance of user, get current calues with GET and send new ones with POST. This is meant for when user sell/buy stock
         {
             try
             {
-                User user = _db.Users.Find(editUser.id);
-                user.curr_balance =editUser.curr_balance;
-                user.curr_balance_liquid = editUser.curr_balance_liquid;
-                user.curr_balance_stock = editUser.curr_balance_stock;
-                _db.SaveChanges();
+                var edit = await _db.Users.FindAsync(editUser.id);
+                edit.curr_balance =editUser.curr_balance;
+                edit.curr_balance_liquid = editUser.curr_balance_liquid;
+                edit.curr_balance_stock = editUser.curr_balance_stock;
+                await _db.SaveChangesAsync();
                 return true;
             } catch { return false; }
         }
