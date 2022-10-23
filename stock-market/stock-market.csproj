@@ -13,6 +13,9 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.28" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="3.1.0" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.9" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,9 +27,18 @@
     <None Remove="ClientApp\src\css\" />
     <None Remove="ClientApp\src\js\" />
     <None Remove="Microsoft.EntityFrameworkCore" />
+
+    <None Remove="Microsoft.EntityFrameworkCore.Sqlite" />
+    <None Remove="Microsoft.EntityFrameworkCore.Proxies" />
+    <None Remove="main.db-wal" />
+    <None Remove="main.db-shm" />
+    <None Remove="Microsoft.AspNet.WebApi.Client" />
+    <None Remove="main.db-shm" />
+
     <None Remove="ClientApp\src\pages\" />
     <None Remove="ClientApp\src\components\DashboardComp\" />
     <None Remove="ClientApp\src\components\StocksComp\" />
+
   </ItemGroup>
 
   <ItemGroup>

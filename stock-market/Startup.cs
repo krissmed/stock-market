@@ -2,9 +2,11 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using stock_market.Model;
 
 namespace stock_market
 {
@@ -22,6 +24,9 @@ namespace stock_market
         {
 
             services.AddControllersWithViews();
+            services.AddDbContext<mainDB>(options => options.UseSqlite("Data source=main.db"));
+            services.AddScoped<IDbInitializer, DbInitializer>();
+
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -49,6 +54,15 @@ namespace stock_market
             app.UseSpaStaticFiles();
 
             app.UseRouting();
+
+            var scopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
+            using (var scope = scopeFactory.CreateScope())
+            {
+                var dbInitializer = scope.ServiceProvider.GetService<IDbInitializer>();
+                dbInitializer.Initialize();
+                dbInitializer.SeedData();
+            }
+
 
             app.UseEndpoints(endpoints =>
             {
