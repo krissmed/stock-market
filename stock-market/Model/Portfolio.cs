@@ -5,10 +5,12 @@ namespace stock_market.Model
 {
     public class Portfolio
     {
-        public int total_value;
-        public int stock_value;
-        public int liquid_value;
-        virtual public List<BaseStock> stocks { get; set; }
+        public int id { get; set; }
+        virtual public User user { get; set; }
+        public double total_value { get; set; }
+        public double stock_value { get; set; }
+        public double liquid_value { get; set; }
+        virtual public List<HistoricalStock> HistoricalStocks { get; set; }
         virtual public Timestamp timestamp { get; set; }
     }
 }
