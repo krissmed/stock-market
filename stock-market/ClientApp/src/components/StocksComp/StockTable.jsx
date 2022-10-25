@@ -1,5 +1,6 @@
 ﻿import React from 'react';
-import {useState} from 'react';
+import { useState } from 'react';
+import axios from 'axios';
 
 import StockGraph from "./StockGraph";
 
@@ -64,19 +65,32 @@ const ExpandableRows = ({ children, curStock, ...otherArgs}) => {
 }
 
 //Functions to execute the buttons
-function buyStock(ticker) {
-    alert('You bought ' + ticker);
-}
 
-function updateStock(ticker) {
-    alert('You updated ' + ticker);
+function buyStock(ticker) {
+    const amount = prompt("Please enter desired amount to buy", 1);
+
+    axios.get('transaction/buystock?ticker=' + ticker + '&amount=' + amount)
+        .then((response) => {
+            if (response) {
+                alert('Successfully bought ' + amount + ' shares of ' + ticker);
+            }
+            else {
+                alert('You dont have enough money...;/');
+            }
+        })
 }
 
 function deleteStock(ticker) {
-    alert('You deleted ' + ticker);
+    axios.get('stock/deletestock?ticker=' + ticker)
+        .then((response) => {
+            if (response) {
+                window.location.reload();
+            }
+        })
 }
 
 //Component to list out the table with the data
+
 export default function StockTable({ stockObj }) {
 
     const customTheme = useTheme();
@@ -117,6 +131,7 @@ export default function StockTable({ stockObj }) {
 
                 <TableBody>
                     {stockObj.map(stock => (
+
                         <ExpandableRows
                             key={stock.ticker}
                             curStock={stock}
@@ -135,7 +150,7 @@ export default function StockTable({ stockObj }) {
 
                             <TableCell align="right" sx={{textAlign:'center'}}>
                                 <Typography variant='body1' color={customTheme.palette.primary.contrastText}>
-                                    {stock.value}$
+                                    {stock.current_price} $
                                 </Typography>
                             </TableCell>
 

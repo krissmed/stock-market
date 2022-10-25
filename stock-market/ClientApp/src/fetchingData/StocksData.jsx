@@ -14,41 +14,40 @@ export default function StockData() {
         id: null,
         ticker: "",
         name: "",
-        value: null,
-        history: null
+        current_price: null,
     }]);
     const [fetching, setFetching] = useState('true');
 
     
-    //Fetching all stocks with axios get-request;
+    //Fetching all stocks with axios get-request; Effect to update once on new render;
 
-    fetch('http://localhost:44394/stock/getstocks')
-        .then(response => {
-            JSON.stringify(response);
-            console.log(JSON.stringify(response));
-        })
-        .then((data) => {
-            setStocks(data);
-            setFetching('false');
-            console.log('fetching');
-            console.log(data);
-        })
-    
+    useEffect(() => {
+
+        axios.get('stock/getstocks')
+            .then((res) => {
+                setStocks(res.data);
+            })
+
+        setFetching('false');
+
+    }, []);
 
 
-    //console.log(stocks);
+    console.log(stocks);
 
     return (
         fetching
             ?
-            <div
-                style={{
-                    display: "flex",
-                    justifyContent: "center"
-                }}>
-                <CircularProgress />
-            </div>
+           <StockTable stockObj = { stocks } />
             :
-            <StockTable stockObj={stocks} />
+         
+        < div
+            style = {{
+                display: "flex",
+                    justifyContent: "center",
+                    alignItems: 'center'
+                }}>
+                <CircularProgress style={{color: "#FEFEFE"}} />
+            </div>
     )
 }
