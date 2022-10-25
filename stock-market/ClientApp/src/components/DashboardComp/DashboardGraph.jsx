@@ -2,7 +2,6 @@
 import Chart from "react-apexcharts";
 import Box from '@mui/material/Box';
 
-
 import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 
@@ -18,11 +17,11 @@ export default function DashboardGraph() {
     {
         name: 'Stock Worth',
         data: [20, 29, 57, 36, 44, 45, 50, 58],
-        },
-        {
+    },
+    {
             name: 'Total Value',
             data: [43, 29+24, 57+25, 36+15, 44+25, 45+28, 50+38, 58+46],
-        },
+    },
     ];
     const cOptions = {
         chart: {

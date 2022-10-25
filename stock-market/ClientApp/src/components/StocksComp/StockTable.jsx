@@ -19,70 +19,12 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import AddShoppingCartOutlinedIcon from '@mui/icons-material/AddShoppingCartOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 
-//Object to store variables showed
-export const stockObj = [
-    {
-        ticker: 'AAPL',
-        name: 'Apple',
-        value: 143.39,
-        history: [140, 145, 148, 169, 170, 120, 140, 142, 141, 141, 145]
-
-    },
-    {
-        ticker: 'TSLA',
-        name: 'Tesla',
-        value: 143.39,
-        history: [140, 145, 148, 169, 170, 120, 140, 142, 141, 141, 145]
-
-    },
-    {
-        ticker: 'MCR',
-        name: 'Microsoft',
-        value: 143.39,
-        history: [140, 145, 148, 169, 170, 120, 140, 142, 141, 141, 145]
-    },
-    {
-        ticker: 'NTFX',
-        name: 'Netflix',
-        value: 143.39,
-        history: [140, 145, 148, 169, 170, 120, 140, 142, 141, 141, 145]
-    },
-    {
-        ticker: 'AMZN',
-        name: 'Amazon',
-        value: 143.39,
-        history: [140, 145, 148, 169, 170, 120, 140, 142, 141, 141, 145]
-    },
-    {
-        ticker: 'ADB',
-        name: 'Adobe',
-        value: 143.39,
-        history: [140, 145, 148, 169, 170, 120, 140, 142, 141, 141, 145]
-    },
-    {
-        ticker: 'TSC',
-        name: 'Tesco',
-        value: 143.39,
-        history: [140, 145, 148, 169, 170, 120, 140, 142, 141, 141, 145]
-    },
-    {
-        ticker: 'KP',
-        name: 'Kiloprice',
-        value: 143.39,
-        history: [140, 145, 148, 169, 170, 120, 140, 142, 141, 141, 145]
-    },
-    {
-        ticker: 'VDF',
-        name: 'Vodafone',
-        value: 143.39,
-        history: [140, 145, 148, 169, 170, 120, 140, 142, 141, 141, 145]
-    },
-];
+//Object to store variables showed. Fetched data;
 
 //Customized to enable expandable row when icon is clicked
-const ExpandableRows = ({children, curStock, ...otherArgs}) => {
+const ExpandableRows = ({ children, curStock, ...otherArgs}) => {
 
-    //Hook to determine if expanded and set it to expanded or not
+    //Hook to determine if expanded and set it to expanded or not;
     const [isExpanded, setIsExpanded] = useState(false);
     const customTheme = useTheme();
     return (
@@ -135,7 +77,7 @@ function deleteStock(ticker) {
 }
 
 //Component to list out the table with the data
-export default function StockTable() {
+export default function StockTable({ stockObj }) {
 
     const customTheme = useTheme();
 
