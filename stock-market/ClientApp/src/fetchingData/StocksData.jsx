@@ -22,7 +22,7 @@ export default function StockData() {
     
     //Fetching all stocks with axios get-request;
 
-    fetch('BaseStock/GetStocks')
+    fetch('http://localhost:44394/stock/getstocks')
         .then(response => {
             JSON.stringify(response);
             console.log(JSON.stringify(response));
