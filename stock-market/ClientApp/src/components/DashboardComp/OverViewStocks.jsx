@@ -4,6 +4,8 @@ import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import ListItem from '@mui/material/ListItem';
+import Marquee from "react-fast-marquee";
+
 
 
 export default function OverViewStocks() {
@@ -26,8 +28,13 @@ export default function OverViewStocks() {
                     display: 'flex',
                     flexWrap: 'noWrap',
                     justifyContent: 'space-evenly',
-                    alignContent: 'center'
-            }}>
+                    alignContent: 'center',
+                    background: customTheme.palette.primary.main,
+                    borderRadius: '20px',
+                    overflow:'hidden'
+
+        }}>
+           
                 {dummyData.map(
                     (r) =>
                         <ListItem
@@ -36,23 +43,25 @@ export default function OverViewStocks() {
 
                             }}
                         >
-
                             <Typography
                                 variant='subtitle2'
                                 sx={{
+
                                     color: r.value > 40 ?
                                         customTheme.palette.success.main
                                         :
                                         customTheme.palette.error.main,
-                                    cursor: 'default'
+                                    cursor: 'default',
+                                    whiteSpace: 'nowrap'
                                 }}
                             >
                                 {r.key} {r.value}kr
-                            </Typography>
+                                </Typography>
                            
 
                             </ListItem>
-            )}
-            </Box>
+                )}
+        </Box>
+
         );
 }
