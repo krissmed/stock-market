@@ -7,7 +7,7 @@ import {useTheme} from '@mui/material/styles';
 export default function StockGraph({stock}) {
     const customTheme = useTheme();
     const series = [{
-        name: stock.name,
+        name: stock.ticker,
         data: stock.history
     }];
 

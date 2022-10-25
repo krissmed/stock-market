@@ -33,8 +33,6 @@ export default function StockData() {
     }, []);
 
 
-    console.log(stocks);
-
     return (
         fetching
             ?
@@ -47,7 +45,7 @@ export default function StockData() {
                     justifyContent: "center",
                     alignItems: 'center'
                 }}>
-                <CircularProgress style={{color: "#FEFEFE"}} />
+                <CircularProgress />
             </div>
     )
 }

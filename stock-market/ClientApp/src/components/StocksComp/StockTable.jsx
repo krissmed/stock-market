@@ -23,6 +23,7 @@ import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined
 //Object to store variables showed. Fetched data;
 
 //Customized to enable expandable row when icon is clicked
+
 const ExpandableRows = ({ children, curStock, ...otherArgs}) => {
 
     //Hook to determine if expanded and set it to expanded or not;
@@ -51,7 +52,7 @@ const ExpandableRows = ({ children, curStock, ...otherArgs}) => {
 
             {isExpanded && (
                 <TableRow>
-                    <TableCell padding="checkbox"/>
+                    <TableCell padding="checkbox" />
                     <TableCell colSpan="5">
                         <StockGraph stock={curStock}/>
                     </TableCell>
@@ -85,6 +86,19 @@ function deleteStock(ticker) {
         .then((response) => {
             if (response) {
                 window.location.reload();
+                alert("Successfull deletion");
+            }
+        })
+}
+
+function addStock() {
+    const chosenTicker = prompt("Enter the ticker of the stock you want to add", 'GOOGL').toUpperCase();
+
+    axios.get('stock/addstock?ticker=' + chosenTicker)
+        .then((response) => {
+            if (response) {
+                window.location.reload();
+                alert('Successfully added ' + chosenTicker);
             }
         })
 }
@@ -102,7 +116,7 @@ export default function StockTable({ stockObj }) {
 
         }}>
             <Button variant='contained' color='success'
-                    onClick={() => alert('Here you can add another stock')}
+                    onClick={() => addStock()}
                     sx={{
                         float: 'right',
                         mt: 1,
