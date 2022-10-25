@@ -10,7 +10,6 @@ namespace stock_market.Controllers
     [Route("[controller]/[action]")]
     public class UserController : ControllerBase
     {
-        /*
         private readonly UserContext _db;
 
         public UserController(UserContext db)
@@ -31,7 +30,6 @@ namespace stock_market.Controllers
                 return false;
             }
         }
-        */
     }
 
 
