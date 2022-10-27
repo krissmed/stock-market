@@ -19,6 +19,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import AddShoppingCartOutlinedIcon from '@mui/icons-material/AddShoppingCartOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 
+
 //Object to store variables showed
 export const stockObj = [
     {
@@ -85,8 +86,10 @@ const ExpandableRows = ({children, curStock, ...otherArgs}) => {
     //Hook to determine if expanded and set it to expanded or not
     const [isExpanded, setIsExpanded] = useState(false);
     const customTheme = useTheme();
+
     return (
         <>
+
 
             <TableRow {...otherArgs}>
 
@@ -108,11 +111,9 @@ const ExpandableRows = ({children, curStock, ...otherArgs}) => {
 
             {isExpanded && (
                 <TableRow>
-                    <TableCell padding="checkbox"/>
                     <TableCell colSpan="5">
                         <StockGraph stock={curStock}/>
                     </TableCell>
-                    <TableCell padding="checkbox"/>
                 </TableRow>
             )}
 
@@ -159,17 +160,20 @@ export default function StockTable() {
             <Table aria-label='Table with all Stocks'>
                 <TableHead>
                     <TableRow>
-                        <TableCell padding='checkbox'/>
-                        <TableCell align="right">
+                        <TableCell>
                             <Typography variant='h6'
-                                        color={customTheme.palette.primary.contrastText}> Name </Typography>
+                                color={customTheme.palette.primary.contrastText}> Name </Typography>
                         </TableCell>
-                        <TableCell align="right" sx={{textAlign:'center'}}>
+                        <TableCell>
+                            <Typography variant='h6'
+                                        color={customTheme.palette.primary.contrastText}> Full Name </Typography>
+                        </TableCell>
+                        <TableCell>
                             <Typography variant='h6' color={customTheme.palette.primary.contrastText}>Value</Typography>
                         </TableCell>
                         <TableCell padding='checkbox'/>
                         <TableCell padding='checkbox'/>
-                        <TableCell padding="checkbox"/>
+                        <TableCell padding='checkbox'/>
                     </TableRow>
                 </TableHead>
 
@@ -179,25 +183,25 @@ export default function StockTable() {
                             key={stock.ticker}
                             curStock={stock}
                         >
-                            <TableCell sx={{maxWidth: 2}}>
+                            <TableCell >
                                 <Typography variant='body1' color={customTheme.palette.primary.contrastText}>
                                     {stock.ticker}
                                 </Typography>
                             </TableCell>
 
-                            <TableCell align="right">
+                            <TableCell>
                                 <Typography variant='body1' color={customTheme.palette.primary.contrastText}>
                                     {stock.name}
                                 </Typography>
                             </TableCell>
 
-                            <TableCell align="right" sx={{textAlign:'center'}}>
+                            <TableCell>
                                 <Typography variant='body1' color={customTheme.palette.primary.contrastText}>
                                     {stock.value}$
                                 </Typography>
                             </TableCell>
 
-                            <TableCell align="right">
+                            <TableCell>
                                 <Button variant='outlined'
                                         color='success'
                                         endIcon={<AddShoppingCartOutlinedIcon />}
