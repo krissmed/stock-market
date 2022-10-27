@@ -1,17 +1,17 @@
 ﻿import React from 'react';
 
 import { TopBar } from '../components/TopBar.jsx';
-import { drawerWidth } from '../components/Nav.jsx';
 import DashboardGraph from '../components/DashboardComp/DashboardGraph';
 import OverViewStocks from '../components/DashboardComp/OverViewStocks';
-
+import { isMobile } from './Layout'
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-
+// isMobile == Undefined. Finn ut hvordan hente ut variabel fra en funksjon. 
 
 
 export default function Dashboard() {
-
+    const drawerWidth = isMobile ? 0 : 220; 
+    console.log(isMobile, drawerWidth)
     return (
         <>
             <TopBar title='My Dashboard' />

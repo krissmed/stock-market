@@ -4,15 +4,14 @@ import AppBar from '@mui/material/AppBar';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import MyAvatar from './Avatar.jsx';
-
-import { drawerWidth } from './Nav.jsx';
+import { isMobile } from '../pages/Layout'
 
 export const topBarHeight = 100;
 
 export const TopBar = ({ title }) => {
 
     const customTheme = useTheme();
-
+    const drawerWidth = isMobile ? 0 : 220;
     return (
         <AppBar
             position='relative'
