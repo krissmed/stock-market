@@ -20,7 +20,7 @@ namespace stock_market.Controllers
         private const string URL = "https://api.marketstack.com/v1/intraday";
         private const string parameters_before_sym = "?access_key=cb0917fe9d7a54323143c281fa427aa2&symbols=";
         private const string parameters_after_sym = "&interval=5min&date_from=" + date_from + "&date_to=";
-
+        
 
         public StockController(mainDB db)
         {

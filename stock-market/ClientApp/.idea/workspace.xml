@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="dfbe15b3-cb2e-4fcd-b8f9-70399a4ab2d6" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/components/Avatar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Avatar.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/StocksComp/StockTable.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/StocksComp/StockTable.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,6 +21,9 @@
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectId" id="2GQgHj4kYnAxHX8mo40V7KtGp03" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -46,7 +48,7 @@
       <option name="presentableId" value="Default" />
       <updated>1666326144337</updated>
       <workItem from="1666326151588" duration="15516000" />
-      <workItem from="1666356891318" duration="4814000" />
+      <workItem from="1666356891318" duration="9553000" />
     </task>
     <servers />
   </component>
