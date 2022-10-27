@@ -22,7 +22,9 @@ import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined
 import CircularProgress from '@mui/material/CircularProgress';
 
 
+
 //Object to store variables showed. Fetched data;
+
 
 //Customized to enable expandable row when icon is clicked
 
@@ -31,8 +33,10 @@ const ExpandableRows = ({ children, curStock, ...otherArgs }) => {
     //Hook to determine if expanded and set it to expanded or not;
     const [isExpanded, setIsExpanded] = useState(false);
     const customTheme = useTheme();
+
     return (
         <>
+
 
             <TableRow {...otherArgs}>
 
@@ -55,10 +59,12 @@ const ExpandableRows = ({ children, curStock, ...otherArgs }) => {
             {isExpanded && (
                 <TableRow>
                     <TableCell padding="checkbox" />
+
                     <TableCell colSpan="5">
                         <StockGraphData ticker={curStock.ticker} />
                     </TableCell>
                     <TableCell padding="checkbox" />
+
                 </TableRow>
             )}
 
@@ -156,6 +162,7 @@ export default function StockTable({ stockObj }) {
             <Typography variant='subtitle1'>
                 + Add Stock
                 </Typography>
+
         </Button>
         <Table aria-label='Table with all Stocks'>
             <TableHead>
@@ -196,6 +203,7 @@ export default function StockTable({ stockObj }) {
                         <TableCell align="right" sx={{ textAlign: 'center' }}>
                             <Typography variant='body1' color={customTheme.palette.primary.contrastText}>
                                 {stock.current_price} $
+
                                 </Typography>
                         </TableCell>
 
@@ -205,6 +213,7 @@ export default function StockTable({ stockObj }) {
                                 endIcon={<AddShoppingCartOutlinedIcon />}
                                 onClick={() => buyStock(stock.ticker)}>
                                 Buy
+
                                 </Button>
                         </TableCell>
 
