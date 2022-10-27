@@ -73,7 +73,7 @@ export default function StockGraph({ ticker, seriesHistory }) {
     return (
 
             <Box sx={{
-                maxWidth: '600px'
+                maxWidth: '100%'
             }}>
                 <Chart
                     options={options}
