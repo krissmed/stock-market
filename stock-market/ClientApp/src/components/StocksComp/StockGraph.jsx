@@ -71,7 +71,7 @@ export default function StockGraph({stock}) {
     return (
         <>
             <Box sx={{
-                maxWidth: '600px'
+                maxWidth: '100%'
             }}>
                 <Chart
                     options={options}
