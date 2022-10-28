@@ -3,9 +3,9 @@
 import AppBar from '@mui/material/AppBar';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
-import MyAvatar from './Avatar.jsx';
 
 import { drawerWidth } from './Nav.jsx';
+import { AllUsers } from '../fetchingData/FetchUsers.js';
 
 export const topBarHeight = 100;
 
@@ -38,7 +38,7 @@ export const TopBar = ({ title }) => {
                     {title}
                 </Typography>
 
-                <MyAvatar />
+                <AllUsers />
          </AppBar>
         );
 }
