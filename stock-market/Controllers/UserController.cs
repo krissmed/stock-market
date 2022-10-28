@@ -43,18 +43,24 @@ namespace stock_market.Controllers
         {
             //For now returns 1 as there is only 1 user in the system - John Doe.
             return 1;
-            //Mulig løsning: User user = _db.Users.Find(id); return user ??
+            //Mulig lï¿½sning: User user = _db.Users.Find(id); return user ??
         }
 
         public bool CreateUser (User innUser)
         {
             try
             {
-                // Front-End må benytte seg av Post for å sende inn data, denne tar da og lagrer det mot DB.
+                // Front-End mï¿½ benytte seg av Post for ï¿½ sende inn data, denne tar da og lagrer det mot DB.
                 _db.Users.Add(innUser);
                 _db.SaveChanges();
                 return true;
             } catch { return false; }
+        }
+
+        public List<User> GetAll()
+        {
+            List<User> allUsers = _db.Users.ToList();
+            return allUsers;
         }
 
         public async Task<bool> DeleteUser(int id)
@@ -93,6 +99,8 @@ namespace stock_market.Controllers
                 return true;
             } catch { return false; }
         }
+
+
     }
 
 }
