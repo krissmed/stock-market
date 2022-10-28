@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Chart from "react-apexcharts";
 import Box from '@mui/material/Box';
-import {useTheme} from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
 
+export default function StockGraph({ ticker, seriesHistory }) {
 
-export default function StockGraph({stock}) {
     const customTheme = useTheme();
     const series = [{
-        name: stock.name,
-        data: stock.history
+        name: ticker,
+        data: seriesHistory
     }];
 
     const options = {
@@ -27,26 +27,28 @@ export default function StockGraph({stock}) {
             width: 1
         },
         title: {
-            text: stock.name + ' value history',
+            text: ticker + ' price history',
             align: 'left'
         },
         yaxis: {
             title: {
-                text: 'Value (NOK)'
+                text: 'Value (USD)'
             },
             labels: {
                 formatter: function (val) {
-                    return val.toFixed(2) + 'kr';
+                    return val.toFixed() + '$';
                 }
             }
         },
         xaxis: {
             type: 'datetime',
-            categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z", "2018-09-19T07:30:00.000Z", "2018-09-19T08:30:00.000Z", "2018-09-19T09:30:00.000Z", "2018-09-19T10:30:00.000Z"]
+            labels: {
+                datetimeUTC: false
+            }
         },
         tooltip: {
             x: {
-                format: 'dd/MM/yy HH:mm'
+                format: 'dddd d MMM - HH:mm:ss'
             },
             theme: 'dark'
         },
@@ -69,7 +71,7 @@ export default function StockGraph({stock}) {
 
 
     return (
-        <>
+
             <Box sx={{
                 maxWidth: '100%'
             }}>
@@ -79,6 +81,6 @@ export default function StockGraph({stock}) {
                     type='area'
                 />
             </Box>
-        </>
+       
     );
 }

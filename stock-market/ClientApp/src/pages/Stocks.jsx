@@ -3,6 +3,7 @@
 import { TopBar } from '../components/TopBar.jsx';
 import StockTable from '../components/StocksComp/StockTable';
 import isMobile from '../components/RespNav'
+import StocksData from '../fetchingData/StocksData';
 import Container from '@mui/material/Container';
 import { useTheme } from '@mui/material/styles';
 
@@ -20,7 +21,7 @@ export default function Dashboard() {
                 ml: drawerWidth+'px',
                 width: 'auto',
             }}>
-                <StockTable />
+                <StocksData />
             </Container>
         </>
     );
