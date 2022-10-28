@@ -28,12 +28,11 @@ export const TopBar = ({ title }) => {
                 alignItems: 'center',
                 justifyContent: 'space-between'
             }}
-
         >
 
                 <Typography variant="h4" sx={{
                     display: 'inline-block',
-                flexGrow: 1,
+                    flexGrow: 1,
                     textAlign: 'center'
                 }}>
                     {title}

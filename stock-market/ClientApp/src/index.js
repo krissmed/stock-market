@@ -4,6 +4,8 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import registerServiceWorker from './registerServiceWorker';
 
+import { users } from './fetchingData/FetchUsers';
+
 import Dashboard from './pages/Dashboard';
 import Portfolio from './pages/Portfolio';
 import Stocks from './pages/Stocks';
@@ -11,7 +13,7 @@ import Transactions from './pages/Transactions';
 import Watchlist from './pages/Watchlist';
 
 import { Layout } from './pages/Layout';
-import { AllUsers } from './fetchingData/FetchUsers';
+
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -21,8 +23,8 @@ const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
 const rootElement = document.getElementById('root');
 
 //Setting to default value
-
-window.$name = AllUsers[0].username;
+console.log(users);
+window.$name = users[0].name;
 
 
 const customTheme = createTheme({

@@ -7,7 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
 
-import { AllUsers } from '../fetchingData/FetchUsers';
+import { users } from '../fetchingData/FetchUsers';
 
 export default function MyAvatar() {
 
@@ -23,20 +23,21 @@ export default function MyAvatar() {
     //Getting the global variable declared in index.js
     const [username, setUsername] = React.useState(window.$name);
 
-    //Finding the whole user whom maches the is
-    const currentUser = AllUsers.find(user => {
-        return user.username === username;
+    //Finding the whole user whom maches the is.
+
+    const currentUser = users.find(user => {
+        return user.name === username;
     })
 
     //Init the balance of said user
 
-    const [balance, setBalance] = React.useState(currentUser.balance);
+    const [balance, setBalance] = React.useState(currentUser.curr_balance);
 
     //Handles the userchange. Sets window name to keep the global variable uptodate
     const handleUserChange = (user) => {
-        setUsername(user.username);
-        window.$name = user.username;
-        setBalance(user.balance);
+        setUsername(user.name);
+        window.$name = user.name;
+        setBalance(user.curr_balance);
     };
 
 
@@ -101,11 +102,11 @@ export default function MyAvatar() {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
-                {AllUsers.map(user => (
+                {users.map(user => (
                         <MenuItem
-                            key={user.username}
+                            key={user.id}
                             onClick={() => handleUserChange(user)}>
-                            <Avatar /> { user.username }
+                            <Avatar /> { user.name }
                         </MenuItem>
                     )
                 )}
