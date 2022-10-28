@@ -7,7 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
 
-import { allUsers } from './Models/UserModel';
+import { allUsers } from './Models/Models';
 
 export default function MyAvatar() {
 

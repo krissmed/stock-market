@@ -33,8 +33,10 @@ export default function OverViewStocks() {
                         <ListItem
                             key={r.key}
                             sx={{
+                                backgroundColor: customTheme.palette.primary.main
 
-                            }}
+                                }
+                            }
                         >
 
                             <Typography
@@ -44,7 +46,8 @@ export default function OverViewStocks() {
                                         customTheme.palette.success.main
                                         :
                                         customTheme.palette.error.main,
-                                    cursor: 'default'
+                                    cursor: 'default',
+                                    whiteSpace: 'nowrap'
                                 }}
                             >
                                 {r.key} {r.value}kr
