@@ -7,7 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
 
-import { allUsers } from './Models/UserModel';
+import { AllUsers } from '../fetchingData/FetchUsers';
 
 export default function MyAvatar() {
 
@@ -24,11 +24,12 @@ export default function MyAvatar() {
     const [username, setUsername] = React.useState(window.$name);
 
     //Finding the whole user whom maches the is
-    const currentUser = allUsers.find(user => {
+    const currentUser = AllUsers.find(user => {
         return user.username === username;
     })
 
     //Init the balance of said user
+
     const [balance, setBalance] = React.useState(currentUser.balance);
 
     //Handles the userchange. Sets window name to keep the global variable uptodate
@@ -100,7 +101,7 @@ export default function MyAvatar() {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
-                {allUsers.map(user => (
+                {AllUsers.map(user => (
                         <MenuItem
                             key={user.username}
                             onClick={() => handleUserChange(user)}>
