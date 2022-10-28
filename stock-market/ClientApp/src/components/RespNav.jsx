@@ -8,8 +8,6 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
 import Logo from '../assets/LOGO.svg';
 import { useTheme, styled } from '@mui/material/styles';
@@ -31,22 +29,30 @@ export default function RespNav() {
 
     const list = () => (
         <Box
+            sx={{
+                backgroundColor: customTheme.palette.primary.main,
+                height: '100%'
+            }}
             role="presentation"
             onClick={toggleDrawer(false)}
             onKeyDown={toggleDrawer(false)}
         >
                     <Link to="/"> 
-                        <img src={Logo} alt="LOGO" />
+                <img
+                    src={Logo}
+                    alt="LOGO"
+
+                />
                     </Link>
                 
             <List>
                 {menuItems.map(item => (
                     <ListItem key={item.listName} disablePadding>
                         <ListItemButton>
-                                <ListItemIcon>
+                            <ListItemIcon sx={{ color: 'white' }}>
                                     {item.listIcon}
                                 </ListItemIcon>
-                                <ListItemText primary={item.listName} />
+                            <ListItemText primary={item.listName} sx={{ color: 'white'} } />
                         </ListItemButton>
                     </ListItem>
                 ))}
@@ -57,8 +63,13 @@ export default function RespNav() {
     return (
         <div>
             <React.Fragment>
-                <MenuIcon onClick={toggleDrawer(true)} sx={{ color: 'white' }} />
-                    <Drawer
+                <MenuIcon onClick={toggleDrawer(true)} sx={{
+                    color: 'white',
+                    marginLeft: '20px',
+                    transform: 'scale(2)'
+                }} />
+                <Drawer
+
                         open={drawer}
                         onClose={toggleDrawer(false)}
                     >

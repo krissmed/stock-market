@@ -2,6 +2,7 @@
 import {useState} from 'react';
 
 import StockGraph from "./StockGraph";
+import isMobile from '../../pages/Layout'
 
 import {useTheme} from '@mui/material/styles';
 import Table from '@mui/material/Table';
@@ -202,21 +203,38 @@ export default function StockTable() {
                             </TableCell>
 
                             <TableCell>
-                                <Button variant='outlined'
+                                {isMobile() ?
+                                    <Button variant='outlined'
+                                        color='success'
+                                        onClick={() => buyStock(stock.ticker)}>
+                                        <AddShoppingCartOutlinedIcon />
+                                    </Button>
+                                    :
+                                    <Button variant='outlined'
                                         color='success'
                                         endIcon={<AddShoppingCartOutlinedIcon />}
                                         onClick={() => buyStock(stock.ticker)}>
-                                    Buy
-                                </Button>
+                                        Buy
+                                    </Button>
+                                }
                             </TableCell>
-
                             <TableCell align="right">
-                                <Button variant='outlined'
-                                        color='error'
-                                        endIcon={<DeleteOutlineOutlinedIcon />}
-                                        onClick={() => deleteStock(stock.ticker)}>
+                            {isMobile() ? 
+                                <Button
+                                    variant='outlined'
+                                    color='error'
+                                    onClick={() => deleteStock(stock.ticker)}>
+                                    <DeleteOutlineOutlinedIcon />
+                                 </Button>
+                                :
+                                <Button 
+                                    variant='outlined'
+                                    color='error'
+                                    endIcon={<DeleteOutlineOutlinedIcon />}
+                                    onClick={() => deleteStock(stock.ticker)}>
                                     Delete
-                                </Button>
+                                 </Button>
+                                }
                             </TableCell>
 
                         </ExpandableRows>

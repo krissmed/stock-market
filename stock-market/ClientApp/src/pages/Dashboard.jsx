@@ -6,11 +6,10 @@ import OverViewStocks from '../components/DashboardComp/OverViewStocks';
 import { isMobile } from './Layout'
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-// isMobile == Undefined. Finn ut hvordan hente ut variabel fra en funksjon. 
 
 
 export default function Dashboard() {
-    const drawerWidth = isMobile ? 0 : 220; 
+    const drawerWidth = isMobile() ? 0 : 220; 
     return (
         <>
             <TopBar title='My Dashboard' />
@@ -22,14 +21,13 @@ export default function Dashboard() {
                     width: 'auto'
                 }}>
 
-                    <Grid item xs={12} sx={{
+                    {/* <Grid item xs={12} sx={{
                         minHeight: '120px',
                         textAlign: 'center',
                         alignContent: 'center'
                     }}>
-                        <OverViewStocks />
                         
-                        </Grid>
+                    </Grid>*/}
 
                     <Grid item xs={12} md={8} sx={{
                             minHeight: '350px'
