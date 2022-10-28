@@ -2,8 +2,6 @@
 import { useState } from 'react';
 import axios from 'axios';
 
-import StockGraph from "./StockGraph";
-import isMobile from '../../pages/Layout'
 import StockGraphData from "../../fetchingData/StockGraphData";
 
 import {useTheme} from '@mui/material/styles';
@@ -207,42 +205,30 @@ export default function StockTable({ stockObj }) {
                                 {stock.current_price} $
 
                                 </Typography>
-                            </TableCell>
+                        </TableCell>
 
-                            <TableCell>
-                                {isMobile() ?
-                                    <Button variant='outlined'
-                                        color='success'
-                                        onClick={() => buyStock(stock.ticker)}>
-                                        <AddShoppingCartOutlinedIcon />
-                                    </Button>
-                                    :
-                                    <Button variant='outlined'
-                                        color='success'
-                                        endIcon={<AddShoppingCartOutlinedIcon />}
-                                        onClick={() => buyStock(stock.ticker)}>
-                                        Buy
-                                    </Button>
-                                }
-                            </TableCell>
-                            <TableCell align="right">
-                            {isMobile() ? 
-                                <Button
-                                    variant='outlined'
-                                    color='error'
-                                    onClick={() => deleteStock(stock.ticker)}>
-                                    <DeleteOutlineOutlinedIcon />
-                                 </Button>
-                                :
-                                <Button 
-                                    variant='outlined'
-                                    color='error'
-                                    endIcon={<DeleteOutlineOutlinedIcon />}
-                                    onClick={() => deleteStock(stock.ticker)}>
-                                    Delete
-                                 </Button>
-                                }
-                            </TableCell>
+                        <TableCell align="right">
+                            <Button variant='outlined'
+                                color='success'
+                                endIcon={<AddShoppingCartOutlinedIcon />}
+                                onClick={() => buyStock(stock.ticker)}>
+                                Buy
+
+                                </Button>
+                        </TableCell>
+
+                        <TableCell align="right">
+                            <Button variant='outlined'
+                                color='error'
+                                endIcon={<DeleteOutlineOutlinedIcon />}
+                                onClick={() => deleteStock(stock.ticker)}>
+                                Delete
+                                </Button>
+                        </TableCell>
+
+                    </ExpandableRows>
+                ))}
+
             </TableBody>
         </Table>
     </Box>

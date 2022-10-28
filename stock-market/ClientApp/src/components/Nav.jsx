@@ -21,13 +21,14 @@ import PaidRoundedIcon from '@mui/icons-material/PaidRounded';
 import QueryStatsRoundedIcon from '@mui/icons-material/QueryStatsRounded';
 
 //Width of drawer
+export const drawerWidth = 220;
 
 //Applying custom style to Drawer, because theme cannot be applied
 //to this MUI-component..
 const Drawer = styled(MuiDrawer)(
     ({theme}) => ({
         '& .MuiDrawer-paper': {
-            width: '220px',
+            width: drawerWidth,
             backgroundColor: theme.palette.primary.main,
             color: theme.palette.primary.contrastText
         },
