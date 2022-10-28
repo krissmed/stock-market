@@ -13,6 +13,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
 import Logo from '../assets/LOGO.svg';
 import { useTheme, styled } from '@mui/material/styles';
+import { menuItems } from './Models/Models'
 
 
 
@@ -39,13 +40,13 @@ export default function RespNav() {
                     </Link>
                 
             <List>
-                {['Dashboard', 'Buy Stocks', 'Portfolio', 'Watchlist', 'Transactions'].map((text, index) => (
-                    <ListItem key={text} disablePadding>
+                {menuItems.map(item => (
+                    <ListItem key={item.listName} disablePadding>
                         <ListItemButton>
                                 <ListItemIcon>
-                                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                                    {item.listIcon}
                                 </ListItemIcon>
-                                <ListItemText primary={text} />
+                                <ListItemText primary={item.listName} />
                         </ListItemButton>
                     </ListItem>
                 ))}
