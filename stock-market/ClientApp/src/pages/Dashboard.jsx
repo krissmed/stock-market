@@ -11,7 +11,6 @@ import Grid from '@mui/material/Grid';
 
 export default function Dashboard() {
     const drawerWidth = isMobile ? 0 : 220; 
-    console.log(isMobile, drawerWidth) // Test
     return (
         <>
             <TopBar title='My Dashboard' />
