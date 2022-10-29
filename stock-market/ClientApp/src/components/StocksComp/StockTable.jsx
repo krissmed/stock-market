@@ -12,6 +12,7 @@ import TableRow from '@mui/material/TableRow';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { isMobile } from '../../pages/Layout'
 
 import IconButton from '@mui/material/IconButton';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -148,7 +149,6 @@ export default function StockTable({ stockObj }) {
     <Box sx={{
         width: 'auto',
                 overflowX: 'auto',
-                marginLeft: isMobile() ? '0px' : '220px'
     }}>
         <Button variant='contained' color='success'
             onClick={() => addStock()}

@@ -12,7 +12,7 @@ export const topBarHeight = 100;
 export const TopBar = ({ title }) => {
 
     const customTheme = useTheme();
-    const drawerWidth = isMobile ? 0 : 220;
+    const drawerWidth = isMobile() ? 0 : 220;
     return (
         <AppBar
             position='relative'

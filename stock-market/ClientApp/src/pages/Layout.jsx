@@ -1,4 +1,4 @@
-﻿import React from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { Outlet } from "react-router-dom";
 import Nav from '../components/Nav';
 
@@ -14,11 +14,10 @@ export function isMobile() {
 
     }
     useEffect(() => {
-
         updateDimensions();
 
         window.addEventListener("resize", updateDimensions);
-    })
+    },[])
 
     const isMobile = width < 640;
     return isMobile;

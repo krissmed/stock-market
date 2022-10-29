@@ -11,7 +11,7 @@ import Grid from '@mui/material/Grid';
 
 
 export default function Dashboard() {
-
+    const drawerWidth = isMobile() ? 0 : 220;
     return (
         <>
             <TopBar title='My Dashboard' />
@@ -29,7 +29,7 @@ export default function Dashboard() {
                         alignContent: 'center'
                     }}>
                         
-                        </Grid>
+                        </Grid>*/}
 
                     <Grid item xs={12} md={8} sx={{
                             minHeight: '350px'
