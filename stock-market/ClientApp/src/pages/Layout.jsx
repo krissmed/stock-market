@@ -30,7 +30,7 @@ export function Layout() {
 
 return (
         <>
-            {isMobile() ? <RespNav /> : <Nav />}
+            {isMobile() ? <></> : <Nav />}
 
             <Outlet />
         </>

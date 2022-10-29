@@ -1,4 +1,4 @@
-﻿/// <reference path="nav.jsx" />
+﻿<reference path="nav.jsx" />
 import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import { Link } from "react-router-dom";
@@ -8,8 +8,6 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
 import Logo from '../assets/LOGO.svg';
 import { useTheme, styled } from '@mui/material/styles';
@@ -57,7 +55,14 @@ export default function RespNav() {
     return (
         <div>
             <React.Fragment>
-                <MenuIcon onClick={toggleDrawer(true)} sx={{ color: 'white' }} />
+                <MenuIcon
+                    onClick={toggleDrawer(true)}
+                    sx={{
+                        color: 'white',
+                        transform: 'scale(1.5)',
+                        marginLeft: '15px'
+                    }}
+                />
                     <Drawer
                         open={drawer}
                         onClose={toggleDrawer(false)}

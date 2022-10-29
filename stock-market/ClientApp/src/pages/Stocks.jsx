@@ -16,7 +16,6 @@ export default function Dashboard() {
     return (
         <>
             <TopBar title='All Stocks' />
-
             <Container sx={{
                 ml: drawerWidth+'px',
                 width: 'auto',

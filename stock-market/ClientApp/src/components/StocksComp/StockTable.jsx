@@ -1,4 +1,4 @@
-﻿import React { useState } from 'react';  
+﻿import React, { useState } from 'react';  
 import axios from 'axios';
 
 import StockGraph from "./StockGraph";
@@ -64,7 +64,6 @@ const ExpandableRows = ({ children, curStock, ...otherArgs }) => {
                     <TableCell colSpan="5">
                         <StockGraphData ticker={curStock.ticker} />
                     </TableCell>
-                    <TableCell padding="checkbox" />
 
                 </TableRow>
             )}
@@ -150,8 +149,8 @@ export default function StockTable({ stockObj }) {
 
     <Box sx={{
         width: 'auto',
-        overflowX: 'auto',
-
+                overflowX: 'auto',
+                marginLeft: isMobile() ? '0px' : '220px'
     }}>
         <Button variant='contained' color='success'
             onClick={() => addStock()}
@@ -165,14 +164,16 @@ export default function StockTable({ stockObj }) {
                 </Typography>
 
         </Button>
-        <Table aria-label='Table with all Stocks'>
+                <Table aria-label='Table with all Stocks' >
             <TableHead>
                 <TableRow>
-                    <TableCell padding='checkbox' />
-                    <TableCell align="right">
+                    <TableCell>
                         <Typography variant='h6'
-                            color={customTheme.palette.primary.contrastText}> Name </Typography>
-                    </TableCell>
+                                    color={customTheme.palette.primary.contrastText}> Name </Typography>
+
+                            </TableCell>
+                            <TableCell padding='checkbox' />
+
                     <TableCell align="right" sx={{ textAlign: 'center' }}>
                         <Typography variant='h6' color={customTheme.palette.primary.contrastText}>Value</Typography>
                     </TableCell>
@@ -216,7 +217,7 @@ export default function StockTable({ stockObj }) {
                                         Buy
                                     </Button>
                                 </TableCell>
-
+                                
                                 <TableCell align="right">
                                     <Button variant='outlined'
                                         color='error'
