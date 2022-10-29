@@ -23,7 +23,7 @@ export default function StockGraph({ ticker, seriesHistory }) {
 
         },
         stroke: {
-            curve: 'smooth',
+            curve: 'straight',
             width: 1
         },
         title: {

@@ -7,7 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
 
-import { allUsers } from './Models/UserModel';
+import { allUsers } from './Models/Models';
 
 export default function MyAvatar() {
 
@@ -56,7 +56,7 @@ export default function MyAvatar() {
                     <IconButton
                         onClick={handleClick}
                         size="small"
-                        sx={{ ml: 2 }}
+                        sx={{ paddingLeft: 2 }}
                         aria-controls={open ? 'account-menu' : undefined}
                         aria-haspopup="true"
                         aria-expanded={open ? 'true' : undefined}
