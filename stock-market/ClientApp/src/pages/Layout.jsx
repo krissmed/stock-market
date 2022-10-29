@@ -1,7 +1,6 @@
-﻿import React, { useState, useEffect } from 'react';
+﻿import React from 'react';
 import { Outlet } from "react-router-dom";
 import Nav from '../components/Nav';
-import RespNav from '../components/RespNav'
 
 
 export function isMobile() {
@@ -36,4 +35,3 @@ return (
         </>
     );
 }
-export default isMobile

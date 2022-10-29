@@ -1,8 +1,6 @@
 ﻿import React, { useState } from 'react';  
 import axios from 'axios';
 
-import StockGraph from "./StockGraph";
-import isMobile from '../../pages/Layout'
 import StockGraphData from "../../fetchingData/StockGraphData";
 
 import {useTheme} from '@mui/material/styles';
