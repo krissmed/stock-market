@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,6 +18,78 @@ namespace stock_market.Controllers
         public TransactionController(mainDB db)
         {
             _db = db;
+        }
+
+        public bool SellStock(string ticker, int amount)
+        {
+            {
+                try
+                {
+                    if (!_db.baseStocks.Any(s => s.ticker == ticker))
+                    {
+                        return false;
+                    }
+
+                    BaseStock stock = _db.baseStocks.First(s => s.ticker == ticker);
+                    User user = _db.Users.First();
+                    Timestamp timestamp = _db.timestamps.OrderByDescending(t => t.time).First();
+
+                    //find the portfolio for the user and the timestamp
+                    Portfolio portfolio = _db.portfolios
+                        .Include(p => p.stock_counter)
+                        .ThenInclude(p => p.historical)
+                        .ThenInclude(p => p.baseStock)
+                        .First(p => p.user == user && p.timestamp == timestamp);
+
+                    //find the stock counter for the stock                        
+                    BaseStockCounter stock_counter = portfolio.stock_counter.First(s => s.historical.baseStock == stock);
+
+                    //check if the user has enough stocks to sell
+                    if (stock_counter.count < amount)
+                    {
+                        return false;
+                    }
+
+                    //sell the stock
+
+                    stock_counter.count -= amount;
+                    portfolio.stock_value -= amount * stock_counter.historical.price;
+                    portfolio.liquid_value += amount * stock_counter.historical.price;
+                    portfolio.total_value = portfolio.stock_value + portfolio.liquid_value;
+
+                    //update the user's balance
+
+                    user.curr_balance_liquid += amount * stock_counter.historical.price;
+                    user.curr_balance_stock -= amount * stock_counter.historical.price;
+                    user.curr_balance = user.curr_balance_liquid + user.curr_balance_stock;
+
+                    //Create a new transaction
+
+                    Transaction transaction = new Transaction
+                    {
+                        ticker = stock.ticker,
+                        price = stock_counter.historical.price,
+                        user = user,
+                        quantity = amount,
+                        timestamp = timestamp,
+                        type = "SELL"
+                    };
+
+                    if (stock_counter.count == 0)
+                    {
+                        portfolio.stock_counter.Remove(stock_counter);
+                    }
+
+                    _db.transactions.Add(transaction);
+                    _db.SaveChanges();
+
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    return false;
+                }
+            }
         }
 
         public bool BuyStock(string ticker, int amount)
@@ -62,7 +135,7 @@ namespace stock_market.Controllers
                     portfolio.stock_counter = new List<BaseStockCounter>();
                 }
 
-                if (!portfolio.stock_counter.Any(sc => sc.historical == historical_stock && sc.historical.timestamp == timestamp))
+                if (!portfolio.stock_counter.Any(sc => sc.historical == historical_stock))
                 {
                     BaseStockCounter counter_object = new BaseStockCounter();
                     counter_object.historical = historical_stock;
@@ -71,7 +144,7 @@ namespace stock_market.Controllers
                 }
                 else
                 {
-                    var counter_object = portfolio.stock_counter.First(sc => sc.historical == historical_stock && sc.historical.timestamp == timestamp);
+                    var counter_object = portfolio.stock_counter.First(sc => sc.historical == historical_stock);
                     counter_object.count += amount;
                 }
 
