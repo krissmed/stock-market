@@ -34,7 +34,7 @@ export default function PortfolioTable({ data }) {
     if (data.length == 0) {
         return (
             <Box sx={{ textAlign: 'center', mt: 2, height: 500 + 'px' }}>
-                <Typography variant='h6' color={customTheme.palette.primary.contrastText}>There is no current transactions... </Typography>
+                <Typography variant='h6' color={customTheme.palette.primary.contrastText}>Your portfolio is empty... </Typography>
             </Box>
         );
     }
@@ -113,6 +113,7 @@ export default function PortfolioTable({ data }) {
                             <Typography variant='body2' color={customTheme.palette.primary.contrastText} align='left'>
                                 <Button variant='outlined'
                                     color='error'
+                                    
                                     endIcon={<DeleteOutlineOutlinedIcon />}
                                     >
                                     Sell
