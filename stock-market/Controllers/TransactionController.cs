@@ -87,6 +87,7 @@ namespace stock_market.Controllers
                 }
                 catch (Exception e)
                 {
+                    Console.WriteLine(e);
                     return false;
                 }
             }
@@ -192,7 +193,10 @@ namespace stock_market.Controllers
         public List<Transaction> ListAll()
         {
             //include user and timestamp
-            List<Transaction> transactions = _db.transactions.Include(t => t.user).Include(t => t.timestamp).ToList();
+            List<Transaction> transactions = _db.transactions
+                .Include(t => t.user)
+                .Include(t => t.timestamp)
+                .ToList();
             return transactions;
         }
 

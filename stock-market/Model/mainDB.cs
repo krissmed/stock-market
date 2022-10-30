@@ -17,6 +17,7 @@ namespace stock_market.Model
             this.ChangeTracker.LazyLoadingEnabled = false;
         }
 
+        //public bool readable { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Transaction> transactions { get; set; }
         public DbSet<HistoricalStock> historicalStocks { get; set; }
@@ -24,12 +25,8 @@ namespace stock_market.Model
         public DbSet<BaseStock> baseStocks { get; set; }
         public DbSet<Portfolio> portfolios { get; set; }
         public DbSet<BaseStockCounter> stockCounter { get; set; }
-
-
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-        }
+        public DbSet<Watchlist> watchlist { get; set; }
+        public DbSet<WatchlistStock> wls { get; set; }
 
 
     }

@@ -179,6 +179,26 @@ public class DbInitializer : IDbInitializer
         }
 
     }
+    public void InitializeWatchlist()
+    {
+        using (var serviceScope = _scopeFactory.CreateScope())
+        {
+            using (var _db = serviceScope.ServiceProvider.GetService<mainDB>())
+            {
+                List<Watchlist> all_watchlists = new List<Watchlist>();
+                Console.WriteLine("Filling watchlists");
+                List<User> all_users = _db.Users.ToList();
+                foreach (var u in all_users)
+                {
+                    Watchlist watchlist = new Watchlist();
+                    watchlist.user = u;
+                    all_watchlists.Add(watchlist);
+                }
+            _db.watchlist.AddRange(all_watchlists);
+            }
+        }
+    }
+
 
     public void InitializePortfolio()
     {
@@ -525,6 +545,7 @@ public class DbInitializer : IDbInitializer
         }
     }
 
+
     public void UpdateStocks()
     {
         using (var serviceScope = _scopeFactory.CreateScope())
@@ -572,6 +593,9 @@ public class DbInitializer : IDbInitializer
                     //Initialize User
                     InitializeUser();
 
+                    //Initialize watchlist
+                    InitializeWatchlist();
+                    
                     //Initialize Timestamps
                     InitializeTimestamps();
 
@@ -600,6 +624,7 @@ public class DbInitializer : IDbInitializer
                     while (true)
                     {
                         await Task.Delay(60000);
+                        //create a lock around the function updatestocks
                         UpdateStocks();
                     }
                 });
