@@ -28,33 +28,12 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     }
 }));
 
-export default function PortfolioTable({ data }) {
+export default function PortfolioTable({ portfolio }) {
     const customTheme = useTheme();
 
-    if (data.length == 0) {
-        return (
-            <Box sx={{ textAlign: 'center', mt: 2, height: 500 + 'px' }}>
-                <Typography variant='h6' color={customTheme.palette.primary.contrastText}>Your portfolio is empty... </Typography>
-            </Box>
-        );
-    }
-
     //Inputtig into different array to display seperate
-    const buy = [];
-    const sell = []
 
-    data.map((item) => {
-
-        //Converting to readable datetime
-
-        item.timestampid = new Date(item.timestampid).toDateString();
-        if (item.type == 'BUY') {
-            buy.push(item)
-        }
-        else {
-            sell.push(item)
-        }
-    });
+    };
 
     return (
         <Table sx={{ minWidth: 400 }}
