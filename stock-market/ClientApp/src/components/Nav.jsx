@@ -17,13 +17,14 @@ import { menuItems } from './Models/Models'
 
 
 //Width of drawer
-
+export const drawerWidth = 220;
 //Applying custom style to Drawer, because theme cannot be applied
 //to this MUI-component..
+
 const Drawer = styled(MuiDrawer)(
     ({theme}) => ({
         '& .MuiDrawer-paper': {
-            width: 220,
+            width: drawerWidth,
             backgroundColor: theme.palette.primary.main,
             color: theme.palette.primary.contrastText
         },
@@ -60,7 +61,7 @@ export default function Nav() {
 
 
                     {menuItems.map(item => (
-                        <Link to={item.listLink} style={{
+                        <Link to={item.listLink} key={item.listName} style={{
                             textDecoration: 'none',
 
                         }}>
