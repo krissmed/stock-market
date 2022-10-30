@@ -144,7 +144,8 @@ public class DbInitializer : IDbInitializer
                                 {
                                     ex_stock.price = Convert.ToDouble(j.last, CultureInfo.InvariantCulture);
                                 }
-
+                                
+                                ex_stock.price = Math.Round(ex_stock.price, 3);
                                 Timestamp ts = all_timestamps.Find(t => t.time == j.date);
                                 ex_stock.timestamp = ts;
 
@@ -194,13 +195,15 @@ public class DbInitializer : IDbInitializer
                     {
                         foreach (var user in _db.Users)
                         {
-                            Portfolio portfolio = new Portfolio();
-                            portfolio.timestamp = ts;
-                            portfolio.user = user;
-                            portfolio.total_value = user.curr_balance;
-                            portfolio.stock_value = 0;
-                            portfolio.liquid_value = user.curr_balance;
-                            portfolio.stock_counter = new List<BaseStockCounter>();
+                            Portfolio portfolio = new Portfolio
+                            {
+                                timestamp = ts,
+                                user = user,
+                                total_value = user.curr_balance,
+                                stock_value = 0,
+                                liquid_value = user.curr_balance,
+                                stock_counter = new List<BaseStockCounter>()
+                            };
                             all_portfolios.Add(portfolio);
                         }
                     }
@@ -221,9 +224,12 @@ public class DbInitializer : IDbInitializer
 
                 List<HistoricalStock> new_historical_stocks = new List<HistoricalStock>();
                 List<HistoricalStock> replaced_historical_stocks = new List<HistoricalStock>();
-                List<HistoricalStock> all_historical_stocks = _db.historicalStocks.ToList();
+                List<HistoricalStock> all_historical_stocks = _db.historicalStocks
+                    .Include(h => h.baseStock)
+                    .ToList();
                 List<BaseStock> all_base_stocks = _db.baseStocks.ToList();
                 List<Timestamp> all_timestamps = _db.timestamps.ToList();
+                
                 Timestamp latest_timestamp = _db.timestamps.OrderBy(t => t.time).Last();
                 latest_timestamp.time = latest_timestamp.time.AddDays(-1);
 
@@ -277,10 +283,11 @@ public class DbInitializer : IDbInitializer
 
                                 Timestamp ts = all_timestamps.Find(t => t.time == j.date);
 
-                                if (!all_historical_stocks.Any(h => h.timestamp == ts && h.baseStock == base_stock))
+                                if (all_historical_stocks.Any(h => h.timestamp == ts && h.baseStock == base_stock))
                                 {
                                     replaced_historical_stocks.Add(all_historical_stocks.Find(h => h.timestamp == ts && h.baseStock == base_stock));
                                 }
+
                                 ex_stock.timestamp = ts;
                                 ex_stock.baseStock = base_stock;
                                 new_historical_stocks.Add(ex_stock);
@@ -291,6 +298,7 @@ public class DbInitializer : IDbInitializer
 
                 foreach (BaseStock base_stock in all_base_stocks)
                 {
+
                     base_stock.current_price = new_historical_stocks.OrderByDescending(h => h.timestamp.time).First(h => h.baseStock == base_stock).price;
                 }
 
@@ -299,6 +307,7 @@ public class DbInitializer : IDbInitializer
                 _db.SaveChanges();
                 _db.historicalStocks.AddRange(new_historical_stocks);
                 _db.SaveChanges();
+
             }
         }
     }
@@ -364,8 +373,7 @@ public class DbInitializer : IDbInitializer
                 List<BaseStock> all_base_stocks = _db.baseStocks.ToList();
                 all_timestamps.Sort((x, y) => x.unix.CompareTo(y.unix));
 
-
-
+                
                 foreach (var ts in all_timestamps)
                 {
                     foreach (var base_stock in all_base_stocks)
@@ -373,6 +381,7 @@ public class DbInitializer : IDbInitializer
                         //check if the historical stock exists in the list of historical stocks
                         if (!all_historical_stocks.Any(h => h.timestamp == ts && h.baseStock == base_stock))
                         {
+
                             Timestamp time = all_timestamps.Find(t => t.time == ts.time.AddMinutes(-1));
                             //Console.WriteLine("TEST: " + time);
                             //Console.WriteLine("Tried to find: " + time);
@@ -380,12 +389,14 @@ public class DbInitializer : IDbInitializer
 
                             if (prev_hs != null)
                             {
+
                                 HistoricalStock historical_stock = new HistoricalStock();
                                 historical_stock.baseStock = base_stock;
                                 historical_stock.timestamp = ts;
                                 historical_stock.price = prev_hs.price;
                                 all_ffilled_historical_stocks.Add(historical_stock);
                                 all_historical_stocks.Add(historical_stock);
+
                             }
                         }
                     }
@@ -461,6 +472,7 @@ public class DbInitializer : IDbInitializer
 
                                 if (prev_port != null)
                                 {
+
                                     Portfolio historical_portfolio = new Portfolio
                                     {
                                         user = user,
@@ -505,7 +517,7 @@ public class DbInitializer : IDbInitializer
                         }
                     }
 
-                    Console.WriteLine(all_filled_portfolios[0].stock_counter.Count);
+                    //Console.WriteLine(all_filled_portfolios[0].stock_counter.Count);
                     _db.portfolios.AddRange(all_filled_portfolios);
                     _db.SaveChanges();
                 }
@@ -577,7 +589,12 @@ public class DbInitializer : IDbInitializer
                 //run UpdateStocks asyncronously every minute
                 
                 UpdateStocks();
+
+
+                //run UpdateStocks syncronously every minute
                 
+                
+
                 await Task.Run(async () =>
                 {
                     while (true)
