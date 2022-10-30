@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 
 namespace stock_market.Model
 {
@@ -25,11 +26,10 @@ namespace stock_market.Model
 
 
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsbuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //optionsbuilder.UseLazyLoadingProxies();
-            //this.ChangeTracker.LazyLoadingEnabled = false;
         }
+
 
     }
 }

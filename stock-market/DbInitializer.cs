@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using stock_market.Model;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -165,6 +166,12 @@ public class DbInitializer : IDbInitializer
                         }
                     }
                 }
+
+                foreach (var b in all_base_stocks)
+                {
+                    b.current_price = all_historical_stocks.FindAll(h => h.baseStock == b).Last().price;
+                }
+
                 _db.baseStocks.AddRange(all_base_stocks);
                 _db.historicalStocks.AddRange(all_historical_stocks);
                 _db.SaveChanges();
@@ -236,7 +243,7 @@ public class DbInitializer : IDbInitializer
 
                     client.DefaultRequestHeaders.Accept.Add(
                         new MediaTypeWithQualityHeaderValue("application/json"));
-                    
+
                     string param = parameters_before_sym + ticker + parameters_after_sym + date_to;
                     HttpResponseMessage response = client.GetAsync(param).Result;
 
@@ -280,6 +287,13 @@ public class DbInitializer : IDbInitializer
                         }
                     }
                 }
+
+                foreach (var b in all_base_stocks)
+                {
+                    b.current_price = all_historical_stocks.FindAll(h => h.baseStock == b).Last().price;
+                }
+
+                _db.SaveChanges();
                 _db.historicalStocks.AddRange(new_historical_stocks);
                 _db.SaveChanges();
             }
@@ -301,7 +315,7 @@ public class DbInitializer : IDbInitializer
                 List<Timestamp> all_timestamps = _db.timestamps.ToList();
                 List<BaseStock> all_base_stocks = _db.baseStocks.ToList();
                 all_timestamps.Sort((x, y) => x.unix.CompareTo(y.unix));
-                
+
                 foreach (var ts in all_timestamps)
                 {
                     foreach (var base_stock in all_base_stocks)
@@ -309,7 +323,7 @@ public class DbInitializer : IDbInitializer
                         //check if the historical stock exists in the list of historical stocks
                         if (!all_historical_stocks.Any(h => h.timestamp == ts && h.baseStock == base_stock))
                         {
-                            HistoricalStock prev_hs = all_historical_stocks.Find(h => h.baseStock == base_stock && h.timestamp.unix == ts.unix-60);
+                            HistoricalStock prev_hs = all_historical_stocks.Find(h => h.baseStock == base_stock && h.timestamp.unix == ts.unix - 60);
 
                             if (prev_hs != null)
                             {
@@ -337,7 +351,7 @@ public class DbInitializer : IDbInitializer
             {
                 //For every timestamp, check if every stock has a historicalStock object for that timestamp
 
-                Console.WriteLine("Filling historical stocks from " + from);
+                //Console.WriteLine("Filling historical stocks from " + from);
 
                 List<HistoricalStock> all_ffilled_historical_stocks = new List<HistoricalStock>();
 
@@ -357,8 +371,8 @@ public class DbInitializer : IDbInitializer
                         if (!all_historical_stocks.Any(h => h.timestamp == ts && h.baseStock == base_stock))
                         {
                             Timestamp time = all_timestamps.Find(t => t.time == ts.time.AddMinutes(-1));
-                            Console.WriteLine("TEST: " + time);
-                            Console.WriteLine("Tried to find: " + time);
+                            //Console.WriteLine("TEST: " + time);
+                            //Console.WriteLine("Tried to find: " + time);
                             HistoricalStock prev_hs = all_historical_stocks.Find(h => h.baseStock == base_stock && h.timestamp == time);
 
                             if (prev_hs != null)
@@ -389,7 +403,6 @@ public class DbInitializer : IDbInitializer
                 Console.WriteLine("Filling timestamps");
                 List<Timestamp> all_timestamps = new List<Timestamp>();
 
-
                 while (latest_db < now)
                 {
                     latest_db = latest_db.AddMinutes(1);
@@ -403,6 +416,69 @@ public class DbInitializer : IDbInitializer
                 _db.timestamps.AddRange(all_timestamps);
                 _db.SaveChanges();
                 Console.WriteLine("Timestamps added");
+            }
+        }
+    }
+
+    public void FillPortfolio(DateTime latest_timestamp)
+    {
+        {
+            using (var serviceScope = _scopeFactory.CreateScope())
+            {
+                using (var _db = serviceScope.ServiceProvider.GetService<mainDB>())
+                {
+                    List<Portfolio> all_filled_portfolios = new List<Portfolio>();
+
+                    List<Portfolio> all_portfolios = _db.portfolios.ToList();
+
+                    List<Timestamp> all_timestamps = _db.timestamps.Where(t => t.time >= latest_timestamp.AddMinutes(-30)).ToList();
+                    List<User> all_users = _db.Users.ToList();
+                    all_timestamps.Sort((x, y) => x.unix.CompareTo(y.unix));
+
+
+                    foreach (var ts in all_timestamps)
+                    {
+                        foreach (var user in all_users)
+                        {
+                            //check if the historical stock exists in the list of historical stocks
+                            if (!all_portfolios.Any(h => h.timestamp == ts && h.user == user))
+                            {
+                                Timestamp time = all_timestamps.Find(t => t.time == ts.time.AddMinutes(-1));
+                                //Console.WriteLine("TEST: " + time);
+                                //Console.WriteLine("Tried to find: " + time);
+                                Portfolio prev_port = all_portfolios.Find(p => p.timestamp == time && p.user == user);
+                                
+                                if (prev_port != null)
+                                {
+                                    Portfolio historical_portfolio = new Portfolio
+                                    {
+                                        user = user,
+                                        liquid_value = prev_port.liquid_value,
+                                        HistoricalStocks = prev_port.HistoricalStocks,
+                                        stock_value = 0
+                                    };
+                                    if (prev_port.HistoricalStocks != null)
+                                    {
+                                        foreach (var hs in prev_port.HistoricalStocks)
+                                        {
+                                            BaseStock base_stock = _db.baseStocks.Find(hs.baseStock.id);
+                                            historical_portfolio.stock_value += base_stock.current_price;
+                                        }
+                                    }
+
+                                    historical_portfolio.total_value = historical_portfolio.stock_value
+                                        + historical_portfolio.liquid_value;
+                                    historical_portfolio.timestamp = ts;
+                                    all_filled_portfolios.Add(historical_portfolio);
+                                    Console.WriteLine("Adding: " + historical_portfolio.timestamp.time);
+                                    all_portfolios.Add(historical_portfolio);
+                                }
+                            }
+                        }
+                    }
+                    _db.portfolios.AddRange(all_filled_portfolios);
+                    _db.SaveChanges();
+                }
             }
         }
     }
@@ -448,11 +524,13 @@ public class DbInitializer : IDbInitializer
                     {
                         //fill up the timestamps
                         FillTimestamps(latest_date, now);
-                        Console.WriteLine("latest: " + latest_date.ToString() + " now: " + now.ToString());
 
                         //Fill stocks
                         FillHistoricalStocks();
-                            
+                        
+                        //Fill portfolio
+                        FillPortfolio(latest_date);
+
                         //FFill HistoricalStocks
                         FFillHistoricalStocks(latest_date);
                     }

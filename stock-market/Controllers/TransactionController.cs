@@ -30,10 +30,10 @@ namespace stock_market.Controllers
 
                 var stock = _db.baseStocks.First(s => s.ticker == ticker);
                 var user = _db.Users.First();
-                var timestamp = _db.timestamps.OrderByDescending(t => t.unix).First();
+                var timestamp = _db.timestamps.OrderByDescending(t => t.time).First();
 
 
-                if (user.curr_balance_liquid < stock.current_price)
+                if (user.curr_balance_liquid < stock.current_price*amount)
                 {
                     return false;
                 }
@@ -44,14 +44,17 @@ namespace stock_market.Controllers
                 _db.SaveChanges();
 
                 //find the portfolio for the user and the timestamp
-                var portfolio = _db.portfolios.First(p => p.user.id == user.id && p.timestamp.unix == timestamp.unix);
+                var portfolio = _db.portfolios.First(p => p.user == user && p.timestamp == timestamp);
 
                 //find the basestock
                 var baseStock = _db.baseStocks.First(s => s.ticker == ticker);
 
-                //find the historicalstock with the highest timestamp id
-                var historicalStock = _db.historicalStocks.OrderByDescending(h => h.timestamp.unix).First(h => h.baseStock.ticker == ticker);
+                var historicalStock = _db.historicalStocks.First(h => h.baseStock.ticker == ticker && h.timestamp == timestamp);
 
+                if (portfolio.HistoricalStocks == null)
+                {
+                    portfolio.HistoricalStocks = new List<HistoricalStock>();
+                }
                 for (int i = 0; i < amount; i++)
                 {
                     portfolio.HistoricalStocks.Add(historicalStock);
@@ -62,16 +65,18 @@ namespace stock_market.Controllers
                 portfolio.stock_value = user.curr_balance_stock;
                 _db.SaveChanges();
 
-                _db.transactions.Add(new Transaction
+                Transaction new_transaction = new Transaction
                 {
                     ticker = ticker,
                     quantity = amount,
                     price = stock.current_price,
-                    timestamp = timestamp,
-                    type = "BUY"
-                });
+                    timestamp = _db.timestamps.OrderByDescending(t => t.time).First(),
+                    type = "BUY",
+                    user = user
+                };
+                
+                _db.transactions.Add(new_transaction);
 
-                user.transactions.Add(_db.transactions.Last());
                 _db.SaveChanges();
 
                 return true;
@@ -83,38 +88,12 @@ namespace stock_market.Controllers
             }
         }
 
-        public bool CreateTransaction(string ticker, int price, int userid)
-        {
-            try
-            {
 
-                Transaction transaction = new Transaction();
-                transaction.ticker = ticker;
-                transaction.price = price;
-
-                User user = _db.Users.Find(userid);
-                RegisterTransaction(transaction, user);
-
-                _db.transactions.Add(transaction);
-                _db.SaveChanges();
-                return true;
-
-            }
-            catch
-            {
-                return false;
-            }
-
-        }
-
-        private static void RegisterTransaction(Transaction transaction, User user)
-        {
-            user.transactions.Add(transaction);
-        }
 
         public List<Transaction> ListAll()
         {
-            List<Transaction> transactions = _db.transactions.ToList();
+            //include user and timestamp
+            List<Transaction> transactions = _db.transactions.Include(t => t.user).Include(t => t.timestamp).ToList();
             return transactions;
         }
 
