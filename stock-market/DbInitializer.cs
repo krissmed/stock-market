@@ -11,8 +11,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Cryptography.Xml;
 using System.Security.Policy;
-
-
+using System.Threading.Tasks;
 
 public class DbInitializer : IDbInitializer
 {
@@ -482,9 +481,40 @@ public class DbInitializer : IDbInitializer
             }
         }
     }
- 
 
-    public void SeedData()
+    public async Task UpdateStocks()
+    {
+        using (var serviceScope = _scopeFactory.CreateScope())
+        {
+            using (var _db = serviceScope.ServiceProvider.GetService<mainDB>())
+            {
+                Console.WriteLine("Updating timestamps");
+                //find the latest Timestamp
+                Timestamp latest_ts = _db.timestamps.OrderByDescending(t => t.time).First();
+                DateTime latest_date = latest_ts.time;
+
+                // If the latest_ts.unix is not now, then fill up untill today with
+                DateTime now = DateTime.Now;
+
+                if (latest_date != now)
+                {
+                    //fill up the timestamps
+                    FillTimestamps(latest_date, now);
+
+                    //Fill stocks
+                    FillHistoricalStocks();
+
+                    //Fill portfolio
+                    FillPortfolio(latest_date);
+
+                    //FFill HistoricalStocks
+                    FFillHistoricalStocks(latest_date);
+                }
+            }
+        }
+    }
+
+    public async Task SeedData()
     {
         using (var serviceScope = _scopeFactory.CreateScope())
         {
@@ -511,31 +541,19 @@ public class DbInitializer : IDbInitializer
                     FFillHistoricalStocks();
 
                 }
-                else if (_db.Users.Any())
+
+                //run UpdateStocks asyncronously every minute
+
+                await Task.Run(async () =>
                 {
-                    //find the latest Timestamp
-                    Timestamp latest_ts = _db.timestamps.OrderByDescending(t => t.time).First();
-                    DateTime latest_date = latest_ts.time;
-
-                    // If the latest_ts.unix is not now, then fill up untill today with
-                    DateTime now = DateTime.Now;
-                    
-                    if (latest_date != now)
+                    while (true)
                     {
-                        //fill up the timestamps
-                        FillTimestamps(latest_date, now);
-
-                        //Fill stocks
-                        FillHistoricalStocks();
-                        
-                        //Fill portfolio
-                        FillPortfolio(latest_date);
-
-                        //FFill HistoricalStocks
-                        FFillHistoricalStocks(latest_date);
+                        await UpdateStocks();
+                        await Task.Delay(60000);
                     }
-                }
+                });
+
+            }
             }
         }
     }
-}

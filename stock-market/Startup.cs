@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using stock_market.Model;
+using System.Threading;
 
 namespace stock_market
 {
@@ -26,7 +27,6 @@ namespace stock_market
             services.AddControllersWithViews();
             services.AddDbContext<mainDB>(options => options.UseSqlite("Data source=main.db"));
             services.AddScoped<IDbInitializer, DbInitializer>();
-
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
