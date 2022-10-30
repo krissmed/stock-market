@@ -1,6 +1,10 @@
 ﻿import React from 'react';
 import NavBar from '../components/Nav.jsx';
 import { TopBar } from '../components/TopBar.jsx';
+import { drawerWidth } from '../components/Nav';
+import TransactionData from '../fetchingData/FetchTransactions';
+
+import Container from '@mui/material/Container';
 
 export default function Dashboard() {
 
@@ -8,6 +12,12 @@ export default function Dashboard() {
         <>
             <NavBar />
             <TopBar title='Transactions' />
+            <Container sx={{
+                ml: drawerWidth + 'px',
+                width: 'auto',
+            }}>
+                <TransactionData />
+            </Container>
         </>
     );
 }

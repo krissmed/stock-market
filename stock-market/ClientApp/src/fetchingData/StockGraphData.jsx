@@ -70,9 +70,6 @@ export default function StockGraphData({ ticker }) {
 
     seriesHistory.reverse();
 
-    console.log(seriesHistory);
-
-
     return (
         isLoading === true
             ?
