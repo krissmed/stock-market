@@ -9,9 +9,9 @@ import Portfolio from './pages/Portfolio';
 import Stocks from './pages/Stocks';
 import Transactions from './pages/Transactions';
 import Watchlist from './pages/Watchlist';
+import Edituser from './pages/Edituser';
 
 import { Layout } from './pages/Layout';
-
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
@@ -52,6 +52,7 @@ ReactDOM.render(
                 <Route path="portfolio" element={<Portfolio />} />
                 <Route path="watchlist" element={<Watchlist />} />
                 <Route path="transactions" element={<Transactions />} />
+                <Route path="edituser" element={<Edituser />} />
             </Route>
         </Routes>
 
