@@ -23,39 +23,39 @@ namespace stock_market.Controllers
             _db = db;
         }
 
-        public string GetFullWatchlist()
+        public async Task<string> GetFullWatchlist()
         {
-            User user = _db.Users.First();
+            User user = await _db.Users.FirstAsync();
 
-            if (!_db.watchlist.Any(w => w.user == user))
+            if (!await _db.watchlist.AnyAsync(w => w.user == user))
             {
                 Watchlist watch_list = new Watchlist();
                 watch_list.user = user;
                 watch_list.stocks = new List<WatchlistStock>();
-                _db.watchlist.Add(watch_list);
-                _db.SaveChanges();
+                await _db.watchlist.AddAsync(watch_list);
+                await _db.SaveChangesAsync();
             }
 
-            Watchlist watchlist = _db.watchlist
+            Watchlist watchlist = await _db.watchlist
                 .Include(w => w.stocks)
                 .ThenInclude(s => s.stock)
-                .First(w => w.user == user);
+                .FirstAsync(w => w.user == user);
             string json = JsonConvert.SerializeObject(watchlist);
             return json;
         }
 
         
-        public bool AddStock(string ticker, int amount, double target_price)
+        public async Task<bool> AddStock(string ticker, int amount, double target_price)
         {
             try
             {
-                if (!_db.baseStocks.Any(s => s.ticker == ticker))
+                if (! await _db.baseStocks.AnyAsync(s => s.ticker == ticker))
                 {
                     return false;
                 }
 
-                BaseStock stock = _db.baseStocks.First(s => s.ticker == ticker);
-                User user = _db.Users.First();
+                BaseStock stock = await _db.baseStocks.FirstAsync(s => s.ticker == ticker);
+                User user =await  _db.Users.FirstAsync();
 
                 //check if the user already has a watchlist
                 /*if (!_db.watchlist.Any(w => w.user == user))
@@ -66,11 +66,9 @@ namespace stock_market.Controllers
                     _db.SaveChanges();
                 }*/
 
-                Watchlist watchlist = _db.watchlist
+                Watchlist watchlist = await _db.watchlist
                     .Include(w => w.stocks)
-                    .First(w => w.user == user);
-
-                Console.WriteLine(watchlist.user.first_name);
+                    .FirstAsync(w => w.user == user);
 
                 WatchlistStock wls = new WatchlistStock
                 {
@@ -81,8 +79,8 @@ namespace stock_market.Controllers
                 
                 
                 watchlist.stocks.Add(wls);
-                _db.wls.Add(wls);
-                _db.SaveChanges();
+                await _db.wls.AddAsync(wls);
+                await _db.SaveChangesAsync();
                 return true;
             }
             catch (Exception e)
@@ -93,14 +91,14 @@ namespace stock_market.Controllers
 
         }
 
-        public bool DeleteStock(int id)
+        public async Task<bool> DeleteStock(int id)
         {
             {
                 try
                 {
-                    WatchlistStock wls = _db.wls.First(w => w.id == id);
+                    WatchlistStock wls = await _db.wls.FirstAsync(w => w.id == id);
                     _db.wls.Remove(wls);
-                    _db.SaveChanges();
+                    await _db.SaveChangesAsync();
                     return true;
                 }
                 catch (Exception e)
@@ -111,14 +109,14 @@ namespace stock_market.Controllers
             }
         }
 
-        public bool UpdateStock(int id, int amount, double target_price)
+        public async Task<bool> UpdateStock(int id, int amount, double target_price)
         {
             try
             {
-                WatchlistStock wls = _db.wls.First(w => w.id == id);
+                WatchlistStock wls = await _db.wls.FirstAsync(w => w.id == id);
                 wls.amount = amount;
                 wls.target_price = target_price;
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
                 return true;
             }
             catch (Exception e)
@@ -127,6 +125,5 @@ namespace stock_market.Controllers
                 return false;
             }
         }
-
     }
 }

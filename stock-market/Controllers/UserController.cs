@@ -20,26 +20,25 @@ namespace stock_market.Controllers
         }
 
 
-        public string GetFullName(int userid)
+        public async Task<string> GetFullName(int userid)
         {
-            string fname = _db.Users.Find(userid).first_name;
-            string lname = _db.Users.Find(userid).last_name;
-            return fname + " " + lname;
+            User user = await _db.Users.FindAsync(userid);
+            return user.first_name + " " + user.last_name;
         }
 
-        public string GetFName(int userid)
+        public async Task<string> GetFName(int userid)
         {
-            string fname = _db.Users.Find(userid).first_name;
-            return fname;
+            User user = await _db.Users.FindAsync(userid);
+            return user.first_name;
         }
 
-        public string GetLName(int userid)
+        public async Task<string> GetLName(int userid)
         {
-            string lname = _db.Users.Find(userid).last_name;
-            return lname;
+            User user = await _db.Users.FindAsync(userid);
+            return user.last_name;
         }
 
-        public int GetUserID()
+        public async Task<int> GetUserID()
         {
             //For now returns 1 as there is only 1 user in the system - John Doe.
             return 1;
@@ -47,21 +46,21 @@ namespace stock_market.Controllers
 
         }
 
-        public bool CreateUser (User innUser)
+        public async Task<bool> CreateUser (User innUser)
         {
             try
             {
                 // Front-End m� benytte seg av Post for � sende inn data, denne tar da og lagrer det mot DB.
 
-                _db.Users.Add(innUser);
-                _db.SaveChanges();
+                await _db.Users.AddAsync(innUser);
+                await _db.SaveChangesAsync();
                 return true;
             } catch { return false; }
         }
 
-        public List<User> GetAll()
+        public async Task<List<User>> GetAll()
         {
-            List<User> allUsers = _db.Users.ToList();
+            List<User> allUsers = await _db.Users.ToListAsync();
             return allUsers;
         }
 

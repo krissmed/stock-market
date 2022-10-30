@@ -22,35 +22,29 @@ namespace stock_market.Controllers
             _db = db;
         }
 
-        public string GetHistoricalPrice(string ticker)
+        public async Task<string> GetHistoricalPrice(string ticker)
         {
 
             if (ticker == null)
             {
-                return "Please enter a ticker";
+                var ret = "Please enter a ticker";
+                return ret;
             }
-            //time this function
-            var watch = System.Diagnostics.Stopwatch.StartNew();
-            BaseStock stock = _db.baseStocks.Where(s => s.ticker == ticker).FirstOrDefault();
+            //rewrite the code under to use async await
+
+            BaseStock stock = await _db.baseStocks.FirstAsync(s => s.ticker == ticker);
+
 
             //get all entries where in historicalstocks where h.baseStock == stock
-            List<HistoricalStock> historicalstock = _db.historicalStocks.Where(h => h.baseStock == stock).Include(h => h.timestamp).ToList();
+            List<HistoricalStock> historicalstock = await _db.historicalStocks
+                .Where(h => h.baseStock == stock)
+                .Include(h => h.timestamp)
+                .ToListAsync();
 
             //sort the list by timestamp
             historicalstock.Sort((x, y) => x.timestamp.time.CompareTo(y.timestamp.time));
-
             string json = JsonConvert.SerializeObject(historicalstock);
-
-            watch.Stop();
-            var elapsedMs = watch.ElapsedMilliseconds;
-            Console.WriteLine(elapsedMs.ToString());
-
-
             return json;
-
-
         }
-
-
     }
 }

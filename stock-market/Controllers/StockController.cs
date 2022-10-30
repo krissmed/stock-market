@@ -23,21 +23,24 @@ namespace stock_market.Controllers
             _db = db;
         }
 
-        public bool AddStock(string ticker)
+        public async Task<bool> AddStock(string ticker)
         {
             try
             {
                 List<HistoricalStock> all_historical_stocks = new List<HistoricalStock>();
-                List<Timestamp> all_timestamps = _db.timestamps.ToList();
+                List<Timestamp> all_timestamps = await _db.timestamps
+                    .ToListAsync();
                 List<BaseStock> all_base_stocks = new List<BaseStock>();
 
-                Timestamp earliest_timestamp = _db.timestamps.OrderBy(t => t.unix).First();
+                Timestamp earliest_timestamp = await _db.timestamps
+                    .OrderBy(t => t.unix)
+                    .FirstAsync();
                 string date_from = earliest_timestamp.time.ToString("yyyy-MM-dd");
                 string URL = "https://api.marketstack.com/v1/intraday";
                 string parameters_before_sym = "?access_key=cb0917fe9d7a54323143c281fa427aa2&symbols=";
                 string parameters_after_sym = "&interval=1min&date_from=" + date_from + "&date_to=";
 
-                if (_db.baseStocks.Any(s => s.ticker == ticker))
+                if (await _db.baseStocks.AnyAsync(s => s.ticker == ticker))
                 {
                     return false;
                 }
@@ -94,24 +97,28 @@ namespace stock_market.Controllers
                                     current_price = ex_stock.price
                                 };
                                 all_base_stocks.Add(base_stock);
-                                _db.baseStocks.Add(base_stock);
-                                _db.SaveChanges();
+                                await _db.baseStocks.AddAsync(base_stock);
+                                await _db.SaveChangesAsync();
                             }
                             ex_stock.baseStock = base_stock;
                             all_historical_stocks.Add(ex_stock);
                         }
 
                     }
-                    _db.historicalStocks.AddRange(all_historical_stocks);
-                    _db.SaveChanges();
+                    await _db.historicalStocks.AddRangeAsync(all_historical_stocks);
+                    await _db.SaveChangesAsync();
 
                     //For every timestamp, check if the stock has a historicalStock object for that timestamp
                     Console.WriteLine("Filling historical stocks");
 
                     List<HistoricalStock> all_ffilled_historical_stocks = new List<HistoricalStock>();
-                    all_historical_stocks = _db.historicalStocks.Where(s => s.baseStock.ticker == ticker).ToList();
+                    all_historical_stocks = await _db.historicalStocks
+                        .Where(s => s.baseStock.ticker == ticker)
+                        .ToListAsync();
                     all_timestamps.Sort((x, y) => x.unix.CompareTo(y.unix));
-                    BaseStock stock = _db.baseStocks.Where(s => s.ticker == ticker).First();
+                    BaseStock stock = await _db.baseStocks
+                        .Where(s => s.ticker == ticker)
+                        .FirstAsync();
 
                     foreach (var ts in all_timestamps)
                     {
@@ -131,8 +138,8 @@ namespace stock_market.Controllers
                             }
                         }
                     }
-                    _db.historicalStocks.AddRange(all_ffilled_historical_stocks);
-                    _db.SaveChanges();
+                    await _db.historicalStocks.AddRangeAsync(all_ffilled_historical_stocks);
+                    await _db.SaveChangesAsync();
 
                     return true;
                 }
@@ -147,27 +154,33 @@ namespace stock_market.Controllers
             }
         }
 
-        public List<BaseStock> GetStocks()
+        public async Task<List<BaseStock>> GetStocks()
         {
-            return _db.baseStocks.ToList();
+            return await _db.baseStocks.ToListAsync();
         }
 
-        public bool DeleteStock(string ticker)
+        public async Task<bool> DeleteStock(string ticker)
         {
             try
             {
 
                 Console.WriteLine("Deleting stock with ticker: " + ticker);
-                BaseStock stock = _db.baseStocks.Where(s => s.ticker == ticker).FirstOrDefault();
+                BaseStock stock = await _db.baseStocks
+                    .Where(s => s.ticker == ticker)
+                    .FirstOrDefaultAsync();
+                
                 if (stock == null)
                 {
                     return false;
                 }
 
-                List<HistoricalStock> historicalStocks = _db.historicalStocks.Where(s => s.baseStock == stock).ToList();
+                List<HistoricalStock> historicalStocks = await _db.historicalStocks
+                    .Where(s => s.baseStock == stock)
+                    .ToListAsync();
+                
                 _db.historicalStocks.RemoveRange(historicalStocks);
                 _db.baseStocks.Remove(stock);
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
 
                 return true;
             }

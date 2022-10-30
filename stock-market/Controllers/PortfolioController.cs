@@ -20,17 +20,18 @@ namespace stock_market.Controllers
             _db = db;
         }
 
-        public string GetCurrentPortfolio()
+        public async Task<string> GetCurrentPortfolio()
         {
             
-            var user = _db.Users.First();
+            var user = await _db.Users.FirstAsync();
             
-            var portfolio = _db.portfolios
-                .Include(p => p.stock_counter).ThenInclude(p => p.historical)
+            var portfolio = await _db.portfolios
+                .Include(p => p.stock_counter)
+                .ThenInclude(p => p.historical)
                 .ThenInclude(p => p.baseStock)
                 .Include(p => p.timestamp)
                 .OrderByDescending(p => p.timestamp.time)
-                .First(p => p.user.id == user.id);
+                .FirstAsync(p => p.user.id == user.id);
 
             Console.WriteLine(portfolio.stock_counter.Count);
 
@@ -38,11 +39,13 @@ namespace stock_market.Controllers
             return json;
         }
 
-        public string GetHistoricalPortfolios()
+        public async Task<string> GetHistoricalPortfolios()
         {
-            var user = _db.Users.First();
-            var portfolios = _db.portfolios.Where(p => p.user.id == user.id).ToList();
-            //return portfolios
+            var user = await _db.Users.FirstAsync();
+            var portfolios = await _db.portfolios
+                .Where(p => p.user.id == user.id)
+                .ToListAsync();
+
             string json = JsonConvert.SerializeObject(portfolios);
             return json;
         }

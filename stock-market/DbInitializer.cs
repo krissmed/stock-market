@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using stock_market.Controllers;
 using stock_market.Model;
 using System;
 using System.Collections;
@@ -30,18 +31,18 @@ public class DbInitializer : IDbInitializer
         this._scopeFactory = scopeFactory;
     }
 
-    public void Initialize()
+    public async Task Initialize()
     {
         using (var serviceScope = _scopeFactory.CreateScope())
         {
             using (var context = serviceScope.ServiceProvider.GetService<mainDB>())
             {
-                context.Database.Migrate();
+                await context.Database.MigrateAsync();
             }
         }
     }
-
-    public void InitializeTimestamps()
+    
+    public async Task InitializeTimestamps()
     {
         using (var serviceScope = _scopeFactory.CreateScope())
         {
@@ -59,14 +60,14 @@ public class DbInitializer : IDbInitializer
                     timestamp.unix = (int)date.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
                     all_timestamps.Add(timestamp);
                 }
-                _db.timestamps.AddRange(all_timestamps);
-                _db.SaveChanges();
+                await _db.timestamps.AddRangeAsync(all_timestamps);
+                await _db.SaveChangesAsync();
                 Console.WriteLine("Timestamps added");
             }
         }
     }
 
-    public void InitializeUser()
+    public async Task InitializeUser()
     {
         using (var serviceScope = _scopeFactory.CreateScope())
         {
@@ -79,14 +80,14 @@ public class DbInitializer : IDbInitializer
                 john_doe.curr_balance_stock = 0;
                 john_doe.first_name = "John";
                 john_doe.last_name = "Doe";
-                _db.Users.Add(john_doe);
+                await _db.Users.AddAsync(john_doe);
 
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
             }
         }
     }
-
-    public void InitializeStocks()
+    
+    public async Task InitializeStocks()
     {
         using (var serviceScope = _scopeFactory.CreateScope())
         {
@@ -172,14 +173,14 @@ public class DbInitializer : IDbInitializer
                     b.current_price = all_historical_stocks.FindAll(h => h.baseStock == b).First().price;
                 }
 
-                _db.baseStocks.AddRange(all_base_stocks);
-                _db.historicalStocks.AddRange(all_historical_stocks);
-                _db.SaveChanges();
+                await _db.baseStocks.AddRangeAsync(all_base_stocks);
+                await _db.historicalStocks.AddRangeAsync(all_historical_stocks);
+                await _db.SaveChangesAsync();
             }
         }
 
     }
-    public void InitializeWatchlist()
+    public async Task InitializeWatchlist()
     {
         using (var serviceScope = _scopeFactory.CreateScope())
         {
@@ -187,20 +188,21 @@ public class DbInitializer : IDbInitializer
             {
                 List<Watchlist> all_watchlists = new List<Watchlist>();
                 Console.WriteLine("Filling watchlists");
-                List<User> all_users = _db.Users.ToList();
+                List<User> all_users = await _db.Users.ToListAsync();
                 foreach (var u in all_users)
                 {
                     Watchlist watchlist = new Watchlist();
                     watchlist.user = u;
                     all_watchlists.Add(watchlist);
                 }
-            _db.watchlist.AddRange(all_watchlists);
+                await _db.watchlist.AddRangeAsync(all_watchlists);
+                await _db.SaveChangesAsync();
             }
         }
     }
 
-
-    public void InitializePortfolio()
+    
+    public async Task InitializePortfolio()
     {
         {
             using (var serviceScope = _scopeFactory.CreateScope())
@@ -227,15 +229,15 @@ public class DbInitializer : IDbInitializer
                             all_portfolios.Add(portfolio);
                         }
                     }
-                    _db.portfolios.AddRange(all_portfolios);
-                    _db.SaveChanges();
+                    await _db.portfolios.AddRangeAsync(all_portfolios);
+                    await _db.SaveChangesAsync();
                 }
             }
         }
     }
 
-
-    public void FillHistoricalStocks()
+    
+    public async Task FillHistoricalStocks()
     {
         using (var serviceScope = _scopeFactory.CreateScope())
         {
@@ -244,14 +246,20 @@ public class DbInitializer : IDbInitializer
 
                 List<HistoricalStock> new_historical_stocks = new List<HistoricalStock>();
                 List<HistoricalStock> replaced_historical_stocks = new List<HistoricalStock>();
-                List<HistoricalStock> all_historical_stocks = _db.historicalStocks
+                List<HistoricalStock> all_historical_stocks = await _db.historicalStocks
                     .Include(h => h.baseStock)
-                    .ToList();
-                List<BaseStock> all_base_stocks = _db.baseStocks.ToList();
-                List<Timestamp> all_timestamps = _db.timestamps.ToList();
+                    .ToListAsync();
+                List<BaseStock> all_base_stocks = await _db.baseStocks.ToListAsync();
+                List<Timestamp> all_timestamps = await _db.timestamps.ToListAsync();
                 
-                Timestamp latest_timestamp = _db.timestamps.OrderBy(t => t.time).Last();
+                Timestamp latest_timestamp = await _db.timestamps.OrderBy(t => t.time).LastAsync();
+                
                 latest_timestamp.time = latest_timestamp.time.AddDays(-1);
+
+                if (latest_timestamp.time.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    latest_timestamp.time = latest_timestamp.time.AddDays(-1);
+                }
 
 
                 string date_from = latest_timestamp.time.ToString("yyyy-MM-dd");
@@ -260,6 +268,7 @@ public class DbInitializer : IDbInitializer
                 string parameters_after_sym = "&interval=1min&date_from=" + date_from + "&date_to=";
                 string date_to = DateTime.Today.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
 
+                Console.WriteLine("H");
                 foreach (BaseStock base_stock in all_base_stocks) {
                     
                     string ticker = base_stock.ticker;
@@ -322,17 +331,16 @@ public class DbInitializer : IDbInitializer
                     base_stock.current_price = new_historical_stocks.OrderByDescending(h => h.timestamp.time).First(h => h.baseStock == base_stock).price;
                 }
 
-
                 _db.historicalStocks.RemoveRange(replaced_historical_stocks);
-                _db.SaveChanges();
-                _db.historicalStocks.AddRange(new_historical_stocks);
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
+                await _db.historicalStocks.AddRangeAsync(new_historical_stocks);
+                await _db.SaveChangesAsync();
 
             }
         }
     }
 
-    public void FFillHistoricalStocks()
+    public async Task FFillHistoricalStocks()
     {
         using (var serviceScope = _scopeFactory.CreateScope())
         {
@@ -343,9 +351,9 @@ public class DbInitializer : IDbInitializer
                 Console.WriteLine("Filling historical stocks");
 
                 List<HistoricalStock> all_ffilled_historical_stocks = new List<HistoricalStock>();
-                List<HistoricalStock> all_historical_stocks = _db.historicalStocks.ToList();
-                List<Timestamp> all_timestamps = _db.timestamps.ToList();
-                List<BaseStock> all_base_stocks = _db.baseStocks.ToList();
+                List<HistoricalStock> all_historical_stocks = await _db.historicalStocks.ToListAsync();
+                List<Timestamp> all_timestamps = await _db.timestamps.ToListAsync();
+                List<BaseStock> all_base_stocks = await _db.baseStocks.ToListAsync();
                 all_timestamps.Sort((x, y) => x.unix.CompareTo(y.unix));
 
                 foreach (var ts in all_timestamps)
@@ -369,13 +377,13 @@ public class DbInitializer : IDbInitializer
                         }
                     }
                 }
-                _db.historicalStocks.AddRange(all_ffilled_historical_stocks);
-                _db.SaveChanges();
+                await _db.historicalStocks.AddRangeAsync(all_ffilled_historical_stocks);
+                await _db.SaveChangesAsync();
             }
         }
     }
 
-    public void FFillHistoricalStocks(DateTime from)
+    public async Task FFillHistoricalStocks(DateTime from)
     {
         using (var serviceScope = _scopeFactory.CreateScope())
         {
@@ -387,10 +395,10 @@ public class DbInitializer : IDbInitializer
 
                 List<HistoricalStock> all_ffilled_historical_stocks = new List<HistoricalStock>();
 
-                List<HistoricalStock> all_historical_stocks = _db.historicalStocks.ToList();
+                List<HistoricalStock> all_historical_stocks = await _db.historicalStocks.ToListAsync();
 
-                List<Timestamp> all_timestamps = _db.timestamps.Where(t => t.time >= from.AddMinutes(-30)).ToList();
-                List<BaseStock> all_base_stocks = _db.baseStocks.ToList();
+                List<Timestamp> all_timestamps = await _db.timestamps.Where(t => t.time >= from.AddMinutes(-30)).ToListAsync();
+                List<BaseStock> all_base_stocks = await _db.baseStocks.ToListAsync();
                 all_timestamps.Sort((x, y) => x.unix.CompareTo(y.unix));
 
                 
@@ -421,13 +429,13 @@ public class DbInitializer : IDbInitializer
                         }
                     }
                 }
-                _db.historicalStocks.AddRange(all_ffilled_historical_stocks);
-                _db.SaveChanges();
+                await _db.historicalStocks.AddRangeAsync(all_ffilled_historical_stocks);
+                await _db.SaveChangesAsync();
             }
         }
     }
 
-    public void FillTimestamps(DateTime latest_db, DateTime now)
+    public async Task FillTimestamps(DateTime latest_db, DateTime now)
     {
         using (var serviceScope = _scopeFactory.CreateScope())
         {
@@ -447,14 +455,14 @@ public class DbInitializer : IDbInitializer
                     };
                     all_timestamps.Add(timestamp);
                 }
-                _db.timestamps.AddRange(all_timestamps);
-                _db.SaveChanges();
+                await _db.timestamps.AddRangeAsync(all_timestamps);
+                await _db.SaveChangesAsync();
                 Console.WriteLine("Timestamps added");
             }
         }
     }
 
-    public void FillPortfolio(DateTime latest_timestamp)
+    public async Task FillPortfolio(DateTime latest_timestamp)
     {
         {
             using (var serviceScope = _scopeFactory.CreateScope())
@@ -463,19 +471,25 @@ public class DbInitializer : IDbInitializer
                 {
                     List<Portfolio> all_filled_portfolios = new List<Portfolio>();
 
-                    List<Portfolio> all_portfolios = _db.portfolios.Include(p => p.stock_counter)
+                    List<Portfolio> all_portfolios = await _db.portfolios.Include(p => p.stock_counter)
                         .ThenInclude(p => p.historical)
                         .ThenInclude(p => p.baseStock)
                         .Include(p => p.timestamp)
-                        .ToList();
+                        .ToListAsync();
 
-                    List<Timestamp> all_timestamps = _db.timestamps.Where(t => t.time >= latest_timestamp.AddMinutes(-30)).ToList();
-                    List<HistoricalStock> all_historical_stocks = _db.historicalStocks
+                    List<Timestamp> all_timestamps = await _db.timestamps
+                        .Where(t => t.time >= latest_timestamp
+                        .AddMinutes(-30))
+                        .ToListAsync();
+                    
+                    List<HistoricalStock> all_historical_stocks = await _db.historicalStocks
                         .Include(h => h.baseStock)
                         .Include(h => h.timestamp)
-                        .Where(h => h.timestamp.time >= latest_timestamp.AddMinutes(-30)).ToList();
+                        .Where(h => h.timestamp.time >= latest_timestamp
+                        .AddMinutes(-30))
+                        .ToListAsync();
                     
-                    List<User> all_users = _db.Users.ToList();
+                    List<User> all_users = await _db.Users.ToListAsync();
                     all_timestamps.Sort((x, y) => x.unix.CompareTo(y.unix));
 
 
@@ -512,11 +526,11 @@ public class DbInitializer : IDbInitializer
                                                 count = hs.count,
                                             };
 
-                                            HistoricalStock historical_stock = _db.historicalStocks
+                                            HistoricalStock historical_stock = await _db.historicalStocks
                                                 .Include(h => h.baseStock)
                                                 .Include(h => h.timestamp)
                                                 .Where(h => h.baseStock == hs.historical.baseStock && h.timestamp == ts)
-                                                .FirstOrDefault();
+                                                .FirstOrDefaultAsync();
 
                                             temp.historical = historical_stock;
 
@@ -538,15 +552,59 @@ public class DbInitializer : IDbInitializer
                     }
 
                     //Console.WriteLine(all_filled_portfolios[0].stock_counter.Count);
-                    _db.portfolios.AddRange(all_filled_portfolios);
-                    _db.SaveChanges();
+                    await _db.portfolios.AddRangeAsync(all_filled_portfolios);
+                    await _db.SaveChangesAsync();
                 }
             }
         }
     }
 
+    
+    public async Task CheckWatchlists()
+    {
+        {
+            using (var serviceScope = _scopeFactory.CreateScope())
+            {
+                using (var _db = serviceScope.ServiceProvider.GetService<mainDB>())
+                {
 
-    public void UpdateStocks()
+                    List<Watchlist> all_watchlists = await _db.watchlist
+                        .Include(w => w.user)
+                        .Include(w => w.stocks)
+                        .ThenInclude(w => w.stock)
+                        .ToListAsync();
+
+                    foreach (var watchlist in all_watchlists)
+                    {
+                        foreach (var stock in watchlist.stocks)
+                        {
+                            Console.WriteLine(stock.stock.ticker + " " + stock.stock.current_price);
+                            Console.WriteLine(stock.target_price);
+                            if (stock.stock.current_price >= stock.target_price)
+                            {
+
+                                //buy the stock using the buystock method of the transactioncontroller
+                                bool buy = await new TransactionController(_db).BuyStock(stock.stock.ticker, stock.amount);
+
+                                if (buy)
+                                {
+                                    _db.wls.Remove(stock);
+                                    await _db.SaveChangesAsync();
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Failed to buy");
+                                }
+                            }
+                        }
+                    }
+                    await _db.SaveChangesAsync();
+                }
+            }
+        }
+    }
+
+    public async Task UpdateStocks()
     {
         using (var serviceScope = _scopeFactory.CreateScope())
         {
@@ -554,7 +612,10 @@ public class DbInitializer : IDbInitializer
             {
                 Console.WriteLine("Updating timestamps");
                 //find the latest Timestamp
-                Timestamp latest_ts = _db.timestamps.OrderByDescending(t => t.time).First();
+                Timestamp latest_ts = await _db.timestamps
+                    .OrderByDescending(t => t.time)
+                    .FirstAsync();
+                
                 DateTime latest_date = latest_ts.time;
 
                 // If the latest_ts.unix is not now, then fill up untill today with
@@ -563,16 +624,19 @@ public class DbInitializer : IDbInitializer
                 if (latest_date != now)
                 {
                     //fill up the timestamps
-                    FillTimestamps(latest_date, now);
+                    await FillTimestamps(latest_date, now);
 
                     //Fill stocks
-                    FillHistoricalStocks();
+                    await FillHistoricalStocks();
 
                     //FFill HistoricalStocks
-                    FFillHistoricalStocks(latest_date);
-
+                    await FFillHistoricalStocks(latest_date);
+                    
                     //Fill portfolio
-                    FillPortfolio(latest_date);
+                    await FillPortfolio(latest_date);
+
+                    //Check watchlists if any purchases should be fulfilled
+                    await CheckWatchlists();
 
                 }
             }
@@ -591,28 +655,28 @@ public class DbInitializer : IDbInitializer
                     // This runs if main.db does not exist, or if it is empty
 
                     //Initialize User
-                    InitializeUser();
+                    await InitializeUser();
 
                     //Initialize watchlist
-                    InitializeWatchlist();
-                    
+                    await InitializeWatchlist();
+
                     //Initialize Timestamps
-                    InitializeTimestamps();
+                    await InitializeTimestamps();
 
                     //Initialize HistoricalStocks and BaseStocks
-                    InitializeStocks();
+                    await InitializeStocks();
 
                     //Initialize Portfolio
-                    InitializePortfolio();
+                    await InitializePortfolio();
 
                     //FFill HistoricalStocks
-                    FFillHistoricalStocks();
+                    await FFillHistoricalStocks();
 
                 }
 
                 //run UpdateStocks asyncronously every minute
-                
-                UpdateStocks();
+
+                await UpdateStocks();
 
 
                 //run UpdateStocks syncronously every minute
@@ -625,7 +689,7 @@ public class DbInitializer : IDbInitializer
                     {
                         await Task.Delay(60000);
                         //create a lock around the function updatestocks
-                        UpdateStocks();
+                        await UpdateStocks();
                     }
                 });
 

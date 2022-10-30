@@ -20,26 +20,26 @@ namespace stock_market.Controllers
             _db = db;
         }
 
-        public bool SellStock(string ticker, int amount)
+        public async Task<bool> SellStock(string ticker, int amount)
         {
             {
                 try
                 {
-                    if (!_db.baseStocks.Any(s => s.ticker == ticker))
+                    if (!await _db.baseStocks.AnyAsync(s => s.ticker == ticker))
                     {
                         return false;
                     }
 
-                    BaseStock stock = _db.baseStocks.First(s => s.ticker == ticker);
-                    User user = _db.Users.First();
-                    Timestamp timestamp = _db.timestamps.OrderByDescending(t => t.time).First();
+                    BaseStock stock = await _db.baseStocks.FirstAsync(s => s.ticker == ticker);
+                    User user = await _db.Users.FirstAsync();
+                    Timestamp timestamp = await _db.timestamps.OrderByDescending(t => t.time).FirstAsync();
 
                     //find the portfolio for the user and the timestamp
-                    Portfolio portfolio = _db.portfolios
+                    Portfolio portfolio = await _db.portfolios
                         .Include(p => p.stock_counter)
                         .ThenInclude(p => p.historical)
                         .ThenInclude(p => p.baseStock)
-                        .First(p => p.user == user && p.timestamp == timestamp);
+                        .FirstAsync(p => p.user == user && p.timestamp == timestamp);
 
                     //find the stock counter for the stock                        
                     BaseStockCounter stock_counter = portfolio.stock_counter.First(s => s.historical.baseStock == stock);
@@ -80,8 +80,8 @@ namespace stock_market.Controllers
                         portfolio.stock_counter.Remove(stock_counter);
                     }
 
-                    _db.transactions.Add(transaction);
-                    _db.SaveChanges();
+                    await _db.transactions.AddAsync(transaction);
+                    await _db.SaveChangesAsync();
 
                     return true;
                 }
@@ -93,18 +93,19 @@ namespace stock_market.Controllers
             }
         }
 
-        public bool BuyStock(string ticker, int amount)
+        public async Task<bool> BuyStock(string ticker, int amount)
         {
             try
             {
-                if (!_db.baseStocks.Any(s => s.ticker == ticker))
+                if (!await _db.baseStocks.AnyAsync(s => s.ticker == ticker))
                 {
                     return false;
                 }
 
-                var stock = _db.baseStocks.First(s => s.ticker == ticker);
-                var user = _db.Users.First();
-                var timestamp = _db.timestamps.OrderByDescending(t => t.time).First();
+                var stock = await _db.baseStocks.FirstAsync(s => s.ticker == ticker);
+                var user = await _db.Users.FirstAsync();
+                var timestamp = await _db.timestamps.OrderByDescending(t => t.time)
+                    .FirstAsync();
 
 
                 if (user.curr_balance_liquid < stock.current_price*amount)
@@ -115,7 +116,7 @@ namespace stock_market.Controllers
                 user.curr_balance_liquid -= (stock.current_price*amount);
                 user.curr_balance_stock += (stock.current_price*amount);
                 user.curr_balance = user.curr_balance_stock + user.curr_balance_liquid;
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
 
                 //find the portfolio for the user and the timestamp
                 var portfolio = _db.portfolios
@@ -125,11 +126,11 @@ namespace stock_market.Controllers
                     .First(p => p.user == user && p.timestamp == timestamp);
 
                 //find the historical stock for the stock and the timestamp
-                var historical_stock = _db.historicalStocks
+                var historical_stock = await _db.historicalStocks
                     .Include(h => h.baseStock)
-                    .First(h => h.baseStock == stock && h.timestamp == timestamp);
+                    .FirstAsync(h => h.baseStock == stock && h.timestamp == timestamp);
 
-                Console.WriteLine(historical_stock.baseStock.ticker);
+                //Console.WriteLine(historical_stock.baseStock.ticker);
 
                 if (portfolio.stock_counter == null)
                 {
@@ -163,21 +164,21 @@ namespace stock_market.Controllers
                 portfolio.liquid_value = user.curr_balance_liquid;
                 portfolio.total_value = portfolio.liquid_value + portfolio.stock_value;
                 
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
 
                 Transaction new_transaction = new Transaction
                 {
                     ticker = ticker,
                     quantity = amount,
                     price = stock.current_price,
-                    timestamp = _db.timestamps.OrderByDescending(t => t.time).First(),
+                    timestamp = await _db.timestamps.OrderByDescending(t => t.time).FirstAsync(),
                     type = "BUY",
                     user = user
                 };
                 
-                _db.transactions.Add(new_transaction);
+                await _db.transactions.AddAsync(new_transaction);
 
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
 
                 return true;
             }
@@ -190,13 +191,13 @@ namespace stock_market.Controllers
 
 
 
-        public List<Transaction> ListAll()
+        public async Task<List<Transaction>> ListAll()
         {
             //include user and timestamp
-            List<Transaction> transactions = _db.transactions
+            List<Transaction> transactions = await _db.transactions
                 .Include(t => t.user)
                 .Include(t => t.timestamp)
-                .ToList();
+                .ToListAsync();
             return transactions;
         }
 
