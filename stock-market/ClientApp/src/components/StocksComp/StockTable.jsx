@@ -57,8 +57,6 @@ const ExpandableRows = ({ children, curStock, ...otherArgs }) => {
 
             {isExpanded && (
                 <TableRow>
-                    <TableCell padding="checkbox" />
-
                     <TableCell colSpan="5">
                         <StockGraphData ticker={curStock.ticker} />
                     </TableCell>
