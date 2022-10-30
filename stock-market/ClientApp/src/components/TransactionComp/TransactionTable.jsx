@@ -22,9 +22,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:last-child td, &:last-child th': {
         border: 0,
     },
-    textAlign: {
-
-    }
 }));
 
 export default function TransactionTable({data}) {
@@ -129,7 +126,8 @@ export default function TransactionTable({data}) {
                         <Typography variant='subtitle2' color={customTheme.palette.primary.contrastText}>
                             Date Sold
                         </Typography>
-                    </TableCell>                    <TableCell>
+                    </TableCell>
+                    <TableCell>
                         <Typography variant='subtitle2' color={customTheme.palette.primary.contrastText} align='left'>
                             Ticker
                         </Typography>
