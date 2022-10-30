@@ -29,14 +29,23 @@ namespace stock_market.Controllers
             {
                 return "Please enter a ticker";
             }
+            //time this function
+            var watch = System.Diagnostics.Stopwatch.StartNew();
+            BaseStock stock = _db.baseStocks.Where(s => s.ticker == ticker).FirstOrDefault();
 
-            List<HistoricalStock> historicalStocks = _db.historicalStocks
-                .Include(hs => hs.baseStock)
-                .Where(hs => hs.baseStock.ticker == ticker)
-                .ToList();
+            //get all entries where in historicalstocks where h.baseStock == stock
+            List<HistoricalStock> historicalstock = _db.historicalStocks.Where(h => h.baseStock == stock).Include(h => h.timestamp).ToList();
 
-            //convert to json
-            string json = JsonConvert.SerializeObject(historicalStocks);
+            //sort the list by timestamp
+            historicalstock.Sort((x, y) => x.timestamp.time.CompareTo(y.timestamp.time));
+
+            string json = JsonConvert.SerializeObject(historicalstock);
+
+            watch.Stop();
+            var elapsedMs = watch.ElapsedMilliseconds;
+            Console.WriteLine(elapsedMs.ToString());
+
+
             return json;
 
 

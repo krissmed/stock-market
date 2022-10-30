@@ -10,8 +10,8 @@ namespace stock_market.Model
         public double total_value { get; set; }
         public double stock_value { get; set; }
         public double liquid_value { get; set; }
-        virtual public List<HistoricalStock> HistoricalStocks { get; set; }
-        virtual public Timestamp timestamp { get; set; }
+        public List<HistoricalStock> HistoricalStocks { get; set; }
+        public Timestamp timestamp { get; set; }
     }
 }
 

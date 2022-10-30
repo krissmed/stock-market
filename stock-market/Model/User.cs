@@ -15,8 +15,7 @@ namespace stock_market.Model
         public double curr_balance { get; set; }
         public double curr_balance_liquid { get; set; }
         public double curr_balance_stock { get; set; }
-
-        virtual public List<Transaction> transactions { get; set; }
+        public List<Transaction> transactions { get; set; }
     }
 }
 
