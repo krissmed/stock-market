@@ -32,21 +32,37 @@ export default function RespNav() {
             role="presentation"
             onClick={toggleDrawer(false)}
             onKeyDown={toggleDrawer(false)}
+            sx={{
+                height: '100%',
+                backgroundColor: customTheme.palette.primary.main
+            }}
         >
                     <Link to="/"> 
                         <img src={Logo} alt="LOGO" />
                     </Link>
                 
-            <List>
+            <List >
                 {menuItems.map(item => (
+                    <Link to={item.listLink }>
                     <ListItem key={item.listName} disablePadding>
                         <ListItemButton>
-                                <ListItemIcon>
+                                <ListItemIcon
+                                    sx={{
+                                        color: customTheme.palette.primary.contrastText
+                                    }}
+                                >
                                     {item.listIcon}
                                 </ListItemIcon>
-                                <ListItemText primary={item.listName} />
+                                <ListItemText
+                                    primary={item.listName}
+                                    sx={{
+                                        color: customTheme.palette.primary.contrastText,
+                                        textDecoration: 'none'
+                                    }}
+                                />
                         </ListItemButton>
-                    </ListItem>
+                        </ListItem>
+                    </Link>
                 ))}
             </List>
         </Box>
