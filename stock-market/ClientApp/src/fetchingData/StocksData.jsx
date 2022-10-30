@@ -13,6 +13,8 @@ export default function StockData() {
         time: null
     }])
 
+    //Just dummyVariable to not create infinite rendering
+
     const [dependency, setDependency] = useState(false);
 
     const [stocks, setStocks] = useState([{
@@ -24,8 +26,6 @@ export default function StockData() {
     }]);
 
     const [fetching, setFetching] = useState(false);
-
-    console.log(fetching + " init")
 
     //Fetching all stocks with axios get-request; Effect to update once on mount;
 

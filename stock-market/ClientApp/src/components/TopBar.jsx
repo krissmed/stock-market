@@ -3,7 +3,10 @@
 import AppBar from '@mui/material/AppBar';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
-import MyAvatar from './Avatar.jsx';
+
+import { drawerWidth } from './Nav.jsx';
+import { AllUsers } from '../fetchingData/FetchUsers.js';
+
 import { isMobile } from '../pages/Layout'
 import RespNav from './RespNav.jsx';
 
@@ -32,13 +35,13 @@ export const TopBar = ({ title }) => {
             {isMobile() ? <RespNav /> : <></>}
                 <Typography variant="h4" sx={{
                     display: 'inline-block',
-                flexGrow: 1,
+                    flexGrow: 1,
                     textAlign: 'center'
                 }}>
                     {title}
                 </Typography>
 
-                <MyAvatar />
+                <AllUsers />
          </AppBar>
         );
 }

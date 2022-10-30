@@ -11,7 +11,6 @@ import Transactions from './pages/Transactions';
 import Watchlist from './pages/Watchlist';
 
 import { Layout } from './pages/Layout';
-import { allUsers } from './components/Models/Models';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -20,7 +19,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
 const rootElement = document.getElementById('root');
 
-window.$name = allUsers[0].username;
 
 
 const customTheme = createTheme({
