@@ -101,13 +101,6 @@ namespace stock_market.Controllers
                 return true;
             } catch { return false; }
         }
-
-        
-        public List<User> GetAll()
-        {
-            List<User> allUsers = _db.Users.ToList();
-            return allUsers;
-        }
     }
 
 }
