@@ -30,7 +30,7 @@ export default function StockGraph({ ticker, seriesHistory }) {
         },
         stroke: {
             curve: 'straight',
-            width: 2,
+            width: 1,
         },
         title: {
             text: ticker + ' price history',

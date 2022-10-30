@@ -3,6 +3,15 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 Below you will find some information on how to perform common tasks.<br>
 You can find the most recent version of this guide [here](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md).
 
+### Tatt ut av package.json
+Den feilet hele applikasjonen. Får den til å se etter en annen versjon av flowtype enn den som er installert. Kan tas ut da flowtype ikke benyttes
+    /* denne kræsja applikasjonen
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  */
+
+
 ## Table of Contents
 
 - [Updating to New Releases](#updating-to-new-releases)
