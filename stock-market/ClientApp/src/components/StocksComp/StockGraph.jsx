@@ -36,7 +36,7 @@ export default function StockGraph({ ticker, seriesHistory }) {
             },
             labels: {
                 formatter: function (val) {
-                    return val.toFixed() + '$';
+                    return val.toFixed(2) + '$';
                 }
             }
         },
