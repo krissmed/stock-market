@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 
 namespace stock_market.Model
 {
@@ -22,14 +23,14 @@ namespace stock_market.Model
         public DbSet<Timestamp> timestamps { get; set; }
         public DbSet<BaseStock> baseStocks { get; set; }
         public DbSet<Portfolio> portfolios { get; set; }
+        public DbSet<BaseStockCounter> stockCounter { get; set; }
 
 
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsbuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //optionsbuilder.UseLazyLoadingProxies();
-            //this.ChangeTracker.LazyLoadingEnabled = false;
         }
+
 
     }
 }

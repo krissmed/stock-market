@@ -24,9 +24,16 @@ namespace stock_market.Controllers
         {
             
             var user = _db.Users.First();
-            var timestamp = _db.timestamps.OrderByDescending(t => t.unix).First();
             
-            var portfolio = _db.portfolios.First(p => p.user.id == user.id && p.timestamp.unix == timestamp.unix);
+            var portfolio = _db.portfolios
+                .Include(p => p.stock_counter).ThenInclude(p => p.historical)
+                .ThenInclude(p => p.baseStock)
+                .Include(p => p.timestamp)
+                .OrderByDescending(p => p.timestamp.time)
+                .First(p => p.user.id == user.id);
+
+            Console.WriteLine(portfolio.stock_counter.Count);
+
             string json = JsonConvert.SerializeObject(portfolio);
             return json;
         }

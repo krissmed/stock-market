@@ -1,6 +1,8 @@
-﻿public interface IDbInitializer
+﻿using System.Threading.Tasks;
+
+public interface IDbInitializer
 {
     void Initialize();
-    void SeedData();
+    Task SeedData();
 
 }
