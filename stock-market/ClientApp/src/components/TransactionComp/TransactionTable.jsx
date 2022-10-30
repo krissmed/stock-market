@@ -46,7 +46,7 @@ export default function TransactionTable({data}) {
 
         //Converting to readable datetime
 
-        item.timestampid = new Date(item.timestampid).toDateString();
+        item.timestamp.time = new Date(item.timestamp.time).toDateString();
         if (item.type == 'BUY') {
             buy.push(item)
         }
@@ -95,7 +95,7 @@ export default function TransactionTable({data}) {
                     >
                         <TableCell component="th" scope="row">
                             <Typography variant='body2' color={customTheme.palette.primary.contrastText}>
-                                {row.timestampid}
+                                {row.timestamp.time}
                             </Typography>
                         </TableCell>
                         <TableCell align="right">
@@ -153,7 +153,7 @@ export default function TransactionTable({data}) {
                             >
                                 <TableCell component="th" scope="row">
                                     <Typography variant='body2' color={customTheme.palette.primary.contrastText}>
-                                        {row.timestampid}
+                                        {row.timestamp.time}
                                     </Typography>
                                 </TableCell>
                                 <TableCell align="right">

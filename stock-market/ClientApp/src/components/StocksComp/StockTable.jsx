@@ -109,7 +109,7 @@ export default function StockTable({ stockObj }) {
     }
 
     function addStock() {
-        const chosenTicker = prompt("Enter the ticker of the stock you want to add", 'GOOGL').toUpperCase();
+        const chosenTicker = prompt("Enter the ticker of the stock you want to add. Has to be a legit ticker from https://iextrading.com/trading/eligible-symbols/", 'GOOGL').toUpperCase();
 
         setIsLoading(true);
         axios.get('stock/addstock?ticker=' + chosenTicker)
