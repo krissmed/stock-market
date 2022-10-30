@@ -13,9 +13,9 @@ export const allUsers = [
 ];
 
 export const menuItems = [
-    { listName: 'Dashboard', listIcon: <DashboardRoundedIcon /> },
-    { listName: 'Buy Stocks', listIcon: <QueryStatsRoundedIcon /> },
-    { listName: 'Portfolio', listIcon: <ContactPageRoundedIcon /> },
-    { listName: 'Watchlist', listIcon: <VisibilityRoundedIcon /> },
-    { listName: 'Transactions', listIcon: <PaidRoundedIcon /> }
+    { listName: 'Dashboard', listIcon: <DashboardRoundedIcon />, listLink: '/' },
+    { listName: 'Buy Stocks', listIcon: <QueryStatsRoundedIcon />, listLink: '/stocks' },
+    { listName: 'Portfolio', listIcon: <ContactPageRoundedIcon />, listLink: '/portfolio' },
+    { listName: 'Watchlist', listIcon: <VisibilityRoundedIcon />, listLink: '/watchlist' },
+    { listName: 'Transactions', listIcon: <PaidRoundedIcon />, listLink: '/transactions' }
 ];
