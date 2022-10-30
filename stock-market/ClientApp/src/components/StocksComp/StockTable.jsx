@@ -102,7 +102,6 @@ export default function StockTable({ stockObj }) {
         axios.get('stock/deletestock?ticker=' + ticker)
             .then((response) => {
                 if (response) {
-                    window.location.reload();
                     setIsLoading(false);  
                 }
                 else {
