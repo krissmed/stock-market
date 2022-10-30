@@ -25,7 +25,7 @@ namespace stock_market.Controllers
             
             var user = _db.Users.First();
             var timestamp = _db.timestamps.OrderByDescending(t => t.unix).First();
-
+            
             var portfolio = _db.portfolios.First(p => p.user.id == user.id && p.timestamp.unix == timestamp.unix);
             string json = JsonConvert.SerializeObject(portfolio);
             return json;

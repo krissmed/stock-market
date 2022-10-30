@@ -20,11 +20,17 @@ export default function StockGraph({ ticker, seriesHistory }) {
                 enabled: true,
                 autoScaleYaxis: true
             },
+            animations: {
+                enabled: false,
+            },
+            markers: {
+                size: 0,
+            }
 
         },
         stroke: {
-            curve: 'smooth',
-            width: 1
+            curve: 'straight',
+            width: 2,
         },
         title: {
             text: ticker + ' price history',

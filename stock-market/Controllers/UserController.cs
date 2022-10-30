@@ -44,6 +44,7 @@ namespace stock_market.Controllers
             //For now returns 1 as there is only 1 user in the system - John Doe.
             return 1;
             //Mulig l�sning: User user = _db.Users.Find(id); return user ??
+
         }
 
         public bool CreateUser (User innUser)
@@ -51,6 +52,7 @@ namespace stock_market.Controllers
             try
             {
                 // Front-End m� benytte seg av Post for � sende inn data, denne tar da og lagrer det mot DB.
+
                 _db.Users.Add(innUser);
                 _db.SaveChanges();
                 return true;
@@ -100,7 +102,12 @@ namespace stock_market.Controllers
             } catch { return false; }
         }
 
-
+        
+        public List<User> GetAll()
+        {
+            List<User> allUsers = _db.Users.ToList();
+            return allUsers;
+        }
     }
 
 }

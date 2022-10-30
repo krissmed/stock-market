@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using stock_market.Model;
 
 namespace stock_market.Controllers
@@ -69,6 +70,8 @@ namespace stock_market.Controllers
                     timestamp = timestamp,
                     type = "BUY"
                 });
+
+                user.transactions.Add(_db.transactions.Last());
                 _db.SaveChanges();
 
                 return true;

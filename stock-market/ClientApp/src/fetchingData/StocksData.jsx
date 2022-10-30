@@ -42,7 +42,7 @@ export default function StockData() {
 
     }, [dependency]);
 
-    return (
+     return (
         fetching === true
             ?
             <div
@@ -57,3 +57,8 @@ export default function StockData() {
            <StockTable stockObj = { stocks } />
     )
 }
+
+//make an async function that fetches the data and then set the state with the data
+
+//then call the function in the useEffect
+

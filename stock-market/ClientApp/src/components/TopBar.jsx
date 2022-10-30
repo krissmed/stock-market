@@ -7,16 +7,19 @@ import { useTheme } from '@mui/material/styles';
 import { drawerWidth } from './Nav.jsx';
 import { AllUsers } from '../fetchingData/FetchUsers.js';
 
+import { isMobile } from '../pages/Layout'
+import RespNav from './RespNav.jsx';
+
 export const topBarHeight = 100;
 
 export const TopBar = ({ title }) => {
 
     const customTheme = useTheme();
-
+    const drawerWidth = isMobile() ? 0 : 220;
     return (
         <AppBar
             position='relative'
-            elevation={ 0 } //No shadow
+            elevation={0} //No shadow
             sx={{
                 ml: drawerWidth + 'px',
                 mr: 2,
@@ -29,7 +32,7 @@ export const TopBar = ({ title }) => {
                 justifyContent: 'space-between'
             }}
         >
-
+            {isMobile() ? <RespNav /> : <></>}
                 <Typography variant="h4" sx={{
                     display: 'inline-block',
                     flexGrow: 1,

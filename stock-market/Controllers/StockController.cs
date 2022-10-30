@@ -16,10 +16,6 @@ namespace stock_market.Controllers
     public class StockController : ControllerBase
     {
         private readonly mainDB _db;
-        private const string date_from = "2022-10-18";
-        private const string URL = "https://api.marketstack.com/v1/intraday";
-        private const string parameters_before_sym = "?access_key=cb0917fe9d7a54323143c281fa427aa2&symbols=";
-        private const string parameters_after_sym = "&interval=5min&date_from=" + date_from + "&date_to=";
         
 
         public StockController(mainDB db)
@@ -31,6 +27,16 @@ namespace stock_market.Controllers
         {
             try
             {
+                List<HistoricalStock> all_historical_stocks = new List<HistoricalStock>();
+                List<Timestamp> all_timestamps = _db.timestamps.ToList();
+                List<BaseStock> all_base_stocks = new List<BaseStock>();
+
+                Timestamp earliest_timestamp = _db.timestamps.OrderBy(t => t.unix).First();
+                string date_from = earliest_timestamp.time.ToString("yyyy-MM-dd");
+                string URL = "https://api.marketstack.com/v1/intraday";
+                string parameters_before_sym = "?access_key=cb0917fe9d7a54323143c281fa427aa2&symbols=";
+                string parameters_after_sym = "&interval=1min&date_from=" + date_from + "&date_to=";
+
                 if (_db.baseStocks.Any(s => s.ticker == ticker))
                 {
                     return false;
@@ -41,7 +47,7 @@ namespace stock_market.Controllers
                 string date_to = DateTime.Today.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
 
                 client.DefaultRequestHeaders.Accept.Add(
-                new MediaTypeWithQualityHeaderValue("application/json"));
+                    new MediaTypeWithQualityHeaderValue("application/json"));
                 string param = parameters_before_sym + ticker + parameters_after_sym + date_to;
                 HttpResponseMessage response = client.GetAsync(param).Result;
 
@@ -74,41 +80,60 @@ namespace stock_market.Controllers
                                 ex_stock.price = Convert.ToDouble(j.last, CultureInfo.InvariantCulture);
                             }
 
-                            Timestamp ts = _db.timestamps.Where(t => t.time == j.date).FirstOrDefault();
-
-                            if (ts == null)
-                            {
-                                Timestamp timestamp = new Timestamp();
-                                timestamp.time = j.date;
-                                timestamp.unix = (int)j.date.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
-                                _db.timestamps.Add(timestamp);
-                                _db.SaveChanges();
-
-                            }
-
+                            Timestamp ts = all_timestamps.Find(t => t.time == j.date);
                             ex_stock.timestamp = ts;
 
                             //if there is not a stock with the same ticker in basestock, add it to the database
 
-                            BaseStock base_stock = _db.baseStocks.Where(s => s.ticker == ticker).FirstOrDefault();
+                            BaseStock base_stock = all_base_stocks.Find(s => s.ticker == ticker);
                             if (base_stock == null)
                             {
-                                base_stock = new BaseStock();
-                                base_stock.ticker = ticker;
-                                base_stock.current_price = ex_stock.price;
+                                base_stock = new BaseStock
+                                {
+                                    ticker = ticker,
+                                    current_price = ex_stock.price
+                                };
+                                all_base_stocks.Add(base_stock);
                                 _db.baseStocks.Add(base_stock);
                                 _db.SaveChanges();
-
                             }
-
                             ex_stock.baseStock = base_stock;
-                            _db.historicalStocks.Add(ex_stock);
+                            all_historical_stocks.Add(ex_stock);
                         }
-                        _db.SaveChanges();
 
                     }
-
+                    _db.historicalStocks.AddRange(all_historical_stocks);
                     _db.SaveChanges();
+
+                    //For every timestamp, check if the stock has a historicalStock object for that timestamp
+                    Console.WriteLine("Filling historical stocks");
+
+                    List<HistoricalStock> all_ffilled_historical_stocks = new List<HistoricalStock>();
+                    all_historical_stocks = _db.historicalStocks.Where(s => s.baseStock.ticker == ticker).ToList();
+                    all_timestamps.Sort((x, y) => x.unix.CompareTo(y.unix));
+                    BaseStock stock = _db.baseStocks.Where(s => s.ticker == ticker).First();
+
+                    foreach (var ts in all_timestamps)
+                    {
+                        //check if the historical stock exists in the list of historical stocks
+                        if (!all_historical_stocks.Any(h => h.timestamp == ts))
+                        {
+                            HistoricalStock prev_hs = all_historical_stocks.Find(h => h.timestamp.unix == ts.unix - 60);
+
+                            if (prev_hs != null)
+                            {
+                                HistoricalStock historical_stock = new HistoricalStock();
+                                historical_stock.baseStock = stock;
+                                historical_stock.timestamp = ts;
+                                historical_stock.price = prev_hs.price;
+                                all_ffilled_historical_stocks.Add(historical_stock);
+                                all_historical_stocks.Add(historical_stock);
+                            }
+                        }
+                    }
+                    _db.historicalStocks.AddRange(all_ffilled_historical_stocks);
+                    _db.SaveChanges();
+
                     return true;
                 }
                 else
@@ -140,16 +165,9 @@ namespace stock_market.Controllers
                 }
 
                 List<HistoricalStock> historicalStocks = _db.historicalStocks.Where(s => s.baseStock == stock).ToList();
-                foreach (var i in historicalStocks)
-                {
-                    _db.historicalStocks.Remove(i);
-                    _db.SaveChanges();
-                }
-
-
+                _db.historicalStocks.RemoveRange(historicalStocks);
                 _db.baseStocks.Remove(stock);
                 _db.SaveChanges();
-
 
                 return true;
             }

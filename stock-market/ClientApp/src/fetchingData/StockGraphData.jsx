@@ -41,16 +41,16 @@ export default function StockGraphData({ ticker }) {
     }])
 
 
-    //Fetching the data
-
+    //get the data from the api asyncronously and then update setIsLoading
     useEffect(() => {
-        axios.get('historicalstock/gethistoricalprice?ticker=' + ticker)
-            .then((response) => {
-                setHistoricalData(response.data);
-            })
-        setIsLoading(false);
+        async function fetchData() {
+            const response = await axios.get('historicalstock/gethistoricalprice?ticker=' + ticker);
+            setHistoricalData(response.data);
+            setIsLoading(false);
+        }
+        fetchData();
     }, [])
-
+    
 
     //Formatting correct into the arrays
     //Starting at 1 since init value is null
@@ -69,12 +69,6 @@ export default function StockGraphData({ ticker }) {
     //So its shows from earliest to newest price.
 
     seriesHistory.reverse();
-
-    //Sorting. There was a bug in the API that the dates were not ordered so the graph was weird
-
-    seriesHistory.sort((a, b) => {
-        return (a[0] < b[0]) ? -1 : 1;
-    })
 
     console.log(seriesHistory);
 

@@ -13,6 +13,7 @@ namespace stock_market.Model
         public mainDB (DbContextOptions<mainDB> options) : base(options)
         {
             Database.EnsureCreated();
+            this.ChangeTracker.LazyLoadingEnabled = false;
         }
 
         public DbSet<User> Users { get; set; }
@@ -26,7 +27,8 @@ namespace stock_market.Model
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsbuilder)
         {
-            optionsbuilder.UseLazyLoadingProxies();
+            //optionsbuilder.UseLazyLoadingProxies();
+            //this.ChangeTracker.LazyLoadingEnabled = false;
         }
 
     }

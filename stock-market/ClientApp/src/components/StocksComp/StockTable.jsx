@@ -1,5 +1,4 @@
-﻿import React from 'react';  
-import { useState } from 'react';
+﻿import React, { useState } from 'react';  
 import axios from 'axios';
 
 import StockGraphData from "../../fetchingData/StockGraphData";
@@ -13,7 +12,7 @@ import TableRow from '@mui/material/TableRow';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-
+import { isMobile } from '../../pages/Layout'
 import IconButton from '@mui/material/IconButton';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
@@ -63,7 +62,6 @@ const ExpandableRows = ({ children, curStock, ...otherArgs }) => {
                     <TableCell colSpan="5">
                         <StockGraphData ticker={curStock.ticker} />
                     </TableCell>
-                    <TableCell padding="checkbox" />
 
                 </TableRow>
             )}
@@ -149,7 +147,6 @@ export default function StockTable({ stockObj }) {
     <Box sx={{
         width: 'auto',
         overflowX: 'auto',
-
     }}>
         <Button variant='contained' color='success'
             onClick={() => addStock()}
@@ -163,14 +160,16 @@ export default function StockTable({ stockObj }) {
                 </Typography>
 
         </Button>
-        <Table aria-label='Table with all Stocks'>
+                <Table aria-label='Table with all Stocks' >
             <TableHead>
                 <TableRow>
-                    <TableCell padding='checkbox' />
-                    <TableCell align="right">
+                    <TableCell>
                         <Typography variant='h6'
-                            color={customTheme.palette.primary.contrastText}> Name </Typography>
-                    </TableCell>
+                                    color={customTheme.palette.primary.contrastText}> Name </Typography>
+
+                            </TableCell>
+                            <TableCell padding='checkbox' />
+
                     <TableCell align="right" sx={{ textAlign: 'center' }}>
                         <Typography variant='h6' color={customTheme.palette.primary.contrastText}>Value</Typography>
                     </TableCell>
@@ -181,54 +180,52 @@ export default function StockTable({ stockObj }) {
             </TableHead>
 
             <TableBody>
-                {stockObj.map(stock => (
+                        {stockObj.map(stock => (
 
-                    <ExpandableRows
-                        key={stock.ticker}
-                        curStock={stock}
-                    >
-                        <TableCell sx={{ maxWidth: 2 }}>
-                            <Typography variant='body1' color={customTheme.palette.primary.contrastText}>
-                                {stock.ticker}
-                            </Typography>
-                        </TableCell>
+                            <ExpandableRows
+                                key={stock.ticker}
+                                curStock={stock}
+                            >
+                                <TableCell sx={{ maxWidth: 2 }}>
+                                    <Typography variant='body1' color={customTheme.palette.primary.contrastText}>
+                                        {stock.ticker}
+                                    </Typography>
+                                </TableCell>
 
-                        <TableCell align="right">
-                            <Typography variant='body1' color={customTheme.palette.primary.contrastText}>
-                                {stock.name}
-                            </Typography>
-                        </TableCell>
+                                <TableCell align="right">
+                                    <Typography variant='body1' color={customTheme.palette.primary.contrastText}>
+                                        {stock.name}
+                                    </Typography>
+                                </TableCell>
 
-                        <TableCell align="right" sx={{ textAlign: 'center' }}>
-                            <Typography variant='body1' color={customTheme.palette.primary.contrastText}>
-                                {stock.current_price} $
+                                <TableCell align="right" sx={{ textAlign: 'center' }}>
+                                    <Typography variant='body1' color={customTheme.palette.primary.contrastText}>
+                                        {stock.current_price} $
 
-                                </Typography>
-                        </TableCell>
+                                    </Typography>
+                                </TableCell>
 
-                        <TableCell align="right">
-                            <Button variant='outlined'
-                                color='success'
-                                endIcon={<AddShoppingCartOutlinedIcon />}
-                                onClick={() => buyStock(stock.ticker)}>
-                                Buy
+                                <TableCell>
+                                    <Button variant='outlined'
+                                        color='success'
+                                        endIcon={<AddShoppingCartOutlinedIcon />}
+                                        onClick={() => buyStock(stock.ticker)}>
+                                        Buy
+                                    </Button>
+                                </TableCell>
+                                
+                                <TableCell align="right">
+                                    <Button variant='outlined'
+                                        color='error'
+                                        endIcon={<DeleteOutlineOutlinedIcon />}
+                                        onClick={() => deleteStock(stock.ticker)}>
+                                        Delete
+                                    </Button>
+                                </TableCell>
 
-                                </Button>
-                        </TableCell>
-
-                        <TableCell align="right">
-                            <Button variant='outlined'
-                                color='error'
-                                endIcon={<DeleteOutlineOutlinedIcon />}
-                                onClick={() => deleteStock(stock.ticker)}>
-                                Delete
-                                </Button>
-                        </TableCell>
-
-                    </ExpandableRows>
-                ))}
-
-            </TableBody>
+                            </ExpandableRows>
+                        ))}
+                    </TableBody>
         </Table>
     </Box>
 
