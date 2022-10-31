@@ -6,12 +6,14 @@ import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
-import { AllUsers } from '../fetchingData/FetchUsers';
 import { isMobile } from '../pages/Layout'
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import { Link } from "react-router-dom";
+import { useTheme, styled } from '@mui/material/styles';
 
 
 export default function MyAvatar({ users }) {
-
+    const customTheme = useTheme()
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -20,7 +22,6 @@ export default function MyAvatar({ users }) {
     const handleClose = () => {
         setAnchorEl(null);
     };
-    console.log(isMobile())
     const [user, setUser] = React.useState(users[0]);
 
     const handleUserChange = (user) => {
@@ -94,6 +95,15 @@ export default function MyAvatar({ users }) {
                             <Avatar /> {aUser.first_name + ' ' + aUser.last_name}
                         </MenuItem>
                     ))}
+                    <Link to='/edituser' style={{ textDecoration: 'none' }}>    
+                        <MenuItem sx={{
+                            color: '#29282c'
+
+                        } }>
+                            <ManageAccountsIcon sx={{ color: '#27262b', paddingLeft: '2px'}} />
+                            <Typography sx={{paddingLeft: '12px'} }>Edit User</Typography>
+                        </MenuItem>
+                    </Link>
                 </Menu>
             </>
         );
