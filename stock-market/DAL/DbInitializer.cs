@@ -21,10 +21,6 @@ public class DbInitializer : IDbInitializer
 
     private List<string> tickers = new List<string>();
 
-    private const string date_from = "2022-10-15";
-    private const string URL = "https://api.marketstack.com/v1/intraday";
-    private const string parameters_before_sym = "?access_key=cb0917fe9d7a54323143c281fa427aa2&symbols=";
-    private const string parameters_after_sym = "&interval=1min&date_from=" + date_from + "&date_to=";
 
 
     public DbInitializer(IServiceScopeFactory scopeFactory)
@@ -49,6 +45,11 @@ public class DbInitializer : IDbInitializer
         {
             using (var _db = serviceScope.ServiceProvider.GetService<mainDB>())
             {
+                string date_from = DateTime.Now.AddDays(-14).ToString("yyyy-MM-dd");
+                string URL = "https://api.marketstack.com/v1/intraday";
+                string parameters_before_sym = "?access_key=cb0917fe9d7a54323143c281fa427aa2&symbols=";
+                string parameters_after_sym = "&interval=1min&date_from=" + date_from + "&date_to=";
+
                 // Create a Timestamp object for every minute since date_from
                 DateTime date = DateTime.ParseExact(date_from, "yyyy-MM-dd", CultureInfo.InvariantCulture);
                 DateTime now = DateTime.Now;
@@ -94,6 +95,11 @@ public class DbInitializer : IDbInitializer
         {
             using (var _db = serviceScope.ServiceProvider.GetService<mainDB>())
             {
+                string date_from = DateTime.Now.AddDays(-14).ToString("yyyy-MM-dd");
+                string URL = "https://api.marketstack.com/v1/intraday";
+                string parameters_before_sym = "?access_key=cb0917fe9d7a54323143c281fa427aa2&symbols=";
+                string parameters_after_sym = "&interval=1min&date_from=" + date_from + "&date_to=";
+
 
                 tickers.Add("TSLA");
                 tickers.Add("AMZN");
@@ -332,6 +338,7 @@ public class DbInitializer : IDbInitializer
                     base_stock.current_price = new_historical_stocks.OrderByDescending(h => h.timestamp.time).First(h => h.baseStock == base_stock).price;
                 }
 
+                Console.WriteLine(replaced_historical_stocks.Count);
                 _db.historicalStocks.RemoveRange(replaced_historical_stocks);
                 await _db.SaveChangesAsync();
                 await _db.historicalStocks.AddRangeAsync(new_historical_stocks);
