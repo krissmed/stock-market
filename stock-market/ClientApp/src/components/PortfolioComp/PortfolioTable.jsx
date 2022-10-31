@@ -14,6 +14,7 @@ import IconButton from '@mui/material/IconButton';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { useTheme } from '@mui/material/styles';
+import axios from 'axios';
 
 
 
@@ -28,9 +29,19 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     }
 }));
 
+function sellStock(ticker, amount) {
+    axios.get("transaction/sellstock?ticker=" + ticker + "&amount=" + amount)
+        .then(res => {
+            alert("Sold " + amount + " of " + ticker);
+            window.location.reload();
+        })
+}
+
 //Customized to enable expandable row when icon is clicked
 
 const ExpandableRows = ({ children, curStock, ...otherArgs }) => {
+
+
 
     //Hook to determine if expanded and set it to expanded or not;
     const [isExpanded, setIsExpanded] = useState(false);
@@ -96,6 +107,7 @@ const ExpandableRows = ({ children, curStock, ...otherArgs }) => {
                                             Amount of Shares
                                          </Typography>
                                     </TableCell>
+                                    <TableCell></TableCell>
                                 </TableRow>
                             </TableHead>
 
@@ -118,6 +130,14 @@ const ExpandableRows = ({ children, curStock, ...otherArgs }) => {
                                         color={customTheme.palette.primary.contrastText}>
                                             { stock.count}
                                             </Typography>
+                                    </TableCell>
+                                    <TableCell align='right' sx={{ textAlign: 'center' }}>
+                                        <Button variant='outlined'
+                                            color='success'
+                                            onClick={() => sellStock(stock.historical.baseStock.ticker, stock.count)}
+                                        >
+                                            Sell
+                                        </Button>
                                     </TableCell>
                                 </TableRow>
                             </TableBody>
@@ -188,7 +208,7 @@ export default function PortfolioTable({ portfolio }) {
                                 {portfolio.liquid_value.toFixed(2)}$
 
                                     </Typography>
-                            </TableCell>
+                        </TableCell>
 
                         </ExpandableRows>
                 </TableBody>

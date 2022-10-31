@@ -27,7 +27,8 @@ export default function Dashboard() {
 
             <Box
                 sx={{
-                    marginLeft: drawerWidth + 'px'
+                    marginLeft: drawerWidth + 'px',
+                    marginTop: '25px'
                 }}
             >
             <Container>

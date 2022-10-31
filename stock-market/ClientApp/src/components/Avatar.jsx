@@ -7,6 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
 import { AllUsers } from '../fetchingData/FetchUsers';
+import { isMobile } from '../pages/Layout'
 
 
 export default function MyAvatar({ users }) {
@@ -19,7 +20,7 @@ export default function MyAvatar({ users }) {
     const handleClose = () => {
         setAnchorEl(null);
     };
-
+    console.log(isMobile())
     const [user, setUser] = React.useState(users[0]);
 
     const handleUserChange = (user) => {
@@ -28,16 +29,16 @@ export default function MyAvatar({ users }) {
         return (
             <>
                 <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-                    <div>
-                        <Typography variant="subtitle1">
+                    {isMobile() ? 
+                        <></>
+                        :
+                        <div>
+                        <Typography variant='h6'>
                             {user.first_name + ' ' + user.last_name}
                         </Typography>
 
-                        <Typography variant="subtitle2">
-                            Balance: <b>{user.curr_balance.toFixed(2)}$</b>
-                        </Typography>
+                    </div> }
 
-                    </div>
                     <Tooltip title="Profile">
                         <IconButton
                             onClick={handleClick}

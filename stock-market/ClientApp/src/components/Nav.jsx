@@ -1,9 +1,11 @@
-﻿import React from 'react';
+﻿import React, { useEffect } from 'react';
 import { Link } from "react-router-dom";
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography';
 
 //LOGO;
 import Logo from '../assets/LOGO.svg';
-//Material UI;
+//Material UI.
 import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -13,13 +15,16 @@ import ListItemText from '@mui/material/ListItemText';
 import Toolbar from '@mui/material/Toolbar';
 import { useTheme, styled } from '@mui/material/styles';
 import { menuItems } from './Models/Models'
-//Icons from material UI
+import axios from 'axios';
+import { useState } from 'react';
 
 
 //Width of drawer
 export const drawerWidth = 220;
 //Applying custom style to Drawer, because theme cannot be applied
 //to this MUI-component..
+
+//Fetching balance from user
 
 const Drawer = styled(MuiDrawer)(
     ({theme}) => ({
@@ -37,7 +42,13 @@ const Drawer = styled(MuiDrawer)(
 
 
 export default function Nav() {
-
+    const [balance, setBalance] = useState([]);
+    useEffect(() => {
+        axios.get("user/getall")
+            .then(res => {
+                setBalance(res.data);
+            })
+    }, [])
 
     //Colorpalette;
     const customTheme = useTheme();
@@ -81,7 +92,23 @@ export default function Nav() {
                     ))}
 
                 </List>
-          
+                <Box
+                    sx={{
+                        marginTop: '90%',
+                        marginLeft: '25px'
+                    } }
+                >
+                    <Typography variant='h4'>
+                    Balance:
+                    </Typography>
+                    {balance.map(items => (
+                        <>
+                            <Typography variant='h6'>Liquid: {items.curr_balance_liquid.toFixed(2)}$</Typography>
+                            <Typography variant='h6'>Stocks: {items.curr_balance_stock.toFixed(2)}$</Typography>
+                            <Typography variant='h6'>Total: {items.curr_balance.toFixed(2)}$    </Typography>
+                        </>
+))}
+                </Box>
         </Drawer>
         </>
     )
