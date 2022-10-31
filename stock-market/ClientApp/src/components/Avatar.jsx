@@ -20,7 +20,7 @@ export default function MyAvatar({ users }) {
     const handleClose = () => {
         setAnchorEl(null);
     };
-
+    console.log(isMobile())
     const [user, setUser] = React.useState(users[0]);
 
     const handleUserChange = (user) => {
@@ -29,7 +29,7 @@ export default function MyAvatar({ users }) {
         return (
             <>
                 <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-                    {isMobile ? 
+                    {isMobile() ? 
                         <></>
                         :
                         <div>
