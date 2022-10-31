@@ -2,17 +2,14 @@
 
 import { TopBar } from '../components/TopBar.jsx';
 import DashboardGraph from '../components/DashboardComp/DashboardGraph';
-import OverViewStocks from '../components/DashboardComp/OverViewStocks';
 import DashboardStocks from '../components/DashboardComp/DasboardStocks'
-import { isMobile } from './Layout'
+import { isMobile } from './Layout';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import { useTheme, styled } from '@mui/material/styles';
 import { Typography } from '@mui/material';
 import { Link } from "react-router-dom";
 import Box from '@mui/material/Box';
-import DashboardWatchlist from '../components/DashboardComp/DashboardWatchlist'
-import DashboardTransactions from '../components/DashboardComp/DashboardTransactions'
 
 
 
@@ -35,13 +32,42 @@ export default function Dashboard() {
                 <Grid
                     container spacing={5}
 
-                >
+                    >
+
+                        <Grid item xs={12} sx={{
+                            minHeight: '100px',
+                            backgroundClip: 'content-box',
+                            backgroundColor: customTheme.palette.primary.main,
+                            textAlign: 'center',
+                            mt: 5
+                        }}>
+                            <Typography
+                                variant='h4'
+                                sx={{
+                                    paddingTop: '8px',
+                                    paddingLeft: '8px',
+                                    color: customTheme.palette.primary.contrastText
+                                }}>
+                                Welcome to Kevo Stocks!
+                            </Typography>
+                                <Typography
+                                    variant='h6'
+                                    sx={{
+                                        paddingTop: '8px',
+                                        paddingRight: '8px',
+                                        paddingBottom: '8px',
+                                        color: customTheme.palette.primary.contrastText
+
+                                    }}>
+                                    This is a site to buy, sell and monitor stocks.
+                                </Typography>
+                        </Grid>
 
                         <Grid item xs={12} md={8} zeroMinWidth sx={{
                             minHeight: '150px',
                             backgroundClip: 'content-box',
-                            backgroundColor: customTheme.palette.primary.main
-
+                            backgroundColor: customTheme.palette.primary.main,
+                            pt: 3
                         }}>
                             <DashboardGraph noWrap />
                         </Grid>
@@ -63,7 +89,9 @@ export default function Dashboard() {
                                 >
                                 Stocks
                             </Typography>
+
                             <DashboardStocks />
+
                             <Link to='/stocks'>
                             <Typography
                                 variant='subtitle2'
@@ -75,71 +103,7 @@ export default function Dashboard() {
                                     color: customTheme.palette.primary.contrastText
 
                                 }}>
-                                View more➔
-                                </Typography>
-                            </Link>
-                        </Grid>
-
-                    <Grid item xs={12} md={7.4} sx={{
-                            minHeight: '150px',
-                            backgroundClip: 'content-box',
-                            backgroundColor: customTheme.palette.primary.main
-
-                        }}>
-                            <Typography
-                                variant='h5'
-                                sx={{
-                                    paddingTop: '8px',
-                                    paddingLeft: '8px',
-                                    color: 'white',
-                                }}
-                            >
-                                Watchlist
-                            </Typography>
-                            <DashboardWatchlist />
-                            <Link to='/watchlist'>
-                            <Typography
-                                variant='subtitle2'
-                                align='right'
-                                sx={{
-                                    paddingTop: '8px',
-                                    paddingRight: '8px',
-                                    paddingBottom: '8px',
-                                    color: customTheme.palette.primary.contrastText
-
-                                }}>
-                                View more➔
-                                </Typography>
-                            </Link>
-                        </Grid>
-
-                        <Grid item xs={12} md={7.25} sx={{
-                            minHeight: '150px',
-                            backgroundClip: 'content-box',
-                            backgroundColor: customTheme.palette.primary.main
-                        }}>
-                            <Typography
-                                variant='h5'
-                                sx={{
-                                    paddingTop: '8px',
-                                    paddingLeft: '8px',
-                                    color: customTheme.palette.primary.contrastText
-                                }}>
-                                Transactions
-                            </Typography>
-                            <DashboardTransactions />
-                            <Link to='/transactions'>
-                            <Typography
-                                variant='subtitle2'
-                                align='right'
-                                sx={{
-                                    paddingTop: '8px',
-                                    paddingRight: '8px',
-                                    paddingBottom: '8px',
-                                    color: customTheme.palette.primary.contrastText
-
-                                }}>
-                                View more➔
+                                View more ➔
                                 </Typography>
                             </Link>
                         </Grid>
