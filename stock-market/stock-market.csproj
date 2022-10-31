@@ -52,7 +52,6 @@
 	<ItemGroup>
     <Folder Include="ClientApp\src\css\" />
     <Folder Include="ClientApp\src\pages\" />
-    <Folder Include="ClientApp\src\components\DashboardComp\" />
     <Folder Include="ClientApp\src\fetchingData\" />
   </ItemGroup>
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
