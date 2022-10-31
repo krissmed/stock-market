@@ -60,7 +60,7 @@ export default function StockGraphData({ ticker }) {
     historicalData.map((item) => {
         if (item.price != null && item.timestamp != null) {
 
-            //If both valid add them to array
+            //If both valid add them to array.
             seriesHistory.push([item.timestamp.time, item.price])
         }
                 

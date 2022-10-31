@@ -92,6 +92,7 @@ export default function TransactionTable({data}) {
                     >
                         <TableCell component="th" scope="row">
                             <Typography variant='body2' color={customTheme.palette.primary.contrastText}>
+
                                 {row.timestamp.time}
                             </Typography>
                         </TableCell>

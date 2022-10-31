@@ -8,6 +8,7 @@ import axios from 'axios';
 export default function FetchTransactions() {
     const [isLoading, setIsLoading] = useState(true);
 
+
     const [transactions, setTransactions] = useState([
         {
             Id:0,
@@ -22,6 +23,7 @@ export default function FetchTransactions() {
     useEffect(() => {
         axios.get("transaction/listall")
             .then(res => {
+
                 setTransactions(res.data);                
                 setIsLoading(false);
             })
