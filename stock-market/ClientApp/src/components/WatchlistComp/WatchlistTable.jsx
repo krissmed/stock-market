@@ -52,7 +52,7 @@ export default function WatchlistTable({ data }) {
     }
 
     function addStock() {
-        const chosenTicker = prompt("Enter the ticker of the stock you want to add. Has to be a legit ticker from https://iextrading.com/trading/eligible-symbols/", 'AAPL').toUpperCase();
+        const chosenTicker = prompt("Enter the ticker of the stock you want to add. Has to be a stock available under buy stock", 'AAPL').toUpperCase();
         const desiredAmount = prompt("What is your desired amount of " + chosenTicker + "?", 10);
         const targetValue = prompt("At what stock value do you want an alert?", 85);
 
