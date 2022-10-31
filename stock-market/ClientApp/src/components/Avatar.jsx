@@ -7,11 +7,9 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
 import { isMobile } from '../pages/Layout'
-import { useTheme, styled } from '@mui/material/styles';
 
 
 export default function MyAvatar({ users }) {
-    const customTheme = useTheme()
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
