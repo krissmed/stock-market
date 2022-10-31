@@ -37,10 +37,17 @@ export default function RespNav() {
                 backgroundColor: customTheme.palette.primary.main
             }}
         >
-                    <Link to="/"> 
-                        <img src={Logo} alt="LOGO" />
-                    </Link>
-                
+            <Box
+                sx={{
+                    paddingLeft: '23px',
+                    paddingTop: '10px'
+                }}            >
+            <img
+                src={Logo}
+                alt="LOGO"
+
+                />
+            </Box>
             <List >
                 {menuItems.map(item => (
                     <Link to={item.listLink} key={item.listName}>

@@ -7,6 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
 import { AllUsers } from '../fetchingData/FetchUsers';
+import { isMobile } from '../pages/Layout'
 
 
 export default function MyAvatar({ users }) {
@@ -28,7 +29,10 @@ export default function MyAvatar({ users }) {
         return (
             <>
                 <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-                    <div>
+                    {isMobile ? 
+                        <></>
+                        :
+                        <div>
                         <Typography variant="subtitle1">
                             {user.first_name + ' ' + user.last_name}
                         </Typography>
@@ -37,7 +41,8 @@ export default function MyAvatar({ users }) {
                             Balance: <b>{user.curr_balance.toFixed(2)}$</b>
                         </Typography>
 
-                    </div>
+                    </div> }
+
                     <Tooltip title="Profile">
                         <IconButton
                             onClick={handleClick}
