@@ -14,7 +14,6 @@ import IconButton from '@mui/material/IconButton';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { useTheme } from '@mui/material/styles';
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 
 
 
@@ -123,7 +122,8 @@ const ExpandableRows = ({ children, curStock, ...otherArgs }) => {
                                     </TableCell>
                                     <TableCell align='right' sx={{ textAlign: 'center' }}>
                                         <Button variant='outlined'
-                                            color='error'>
+                                            color='error'
+                                        >
                                             Sell
                                         </Button>
                                     </TableCell>
