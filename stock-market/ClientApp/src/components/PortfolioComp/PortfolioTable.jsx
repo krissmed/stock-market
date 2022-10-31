@@ -14,6 +14,7 @@ import IconButton from '@mui/material/IconButton';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { useTheme } from '@mui/material/styles';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 
 
 
@@ -96,6 +97,7 @@ const ExpandableRows = ({ children, curStock, ...otherArgs }) => {
                                             Amount of Shares
                                          </Typography>
                                     </TableCell>
+                                    <TableCell></TableCell>
                                 </TableRow>
                             </TableHead>
 
@@ -118,6 +120,12 @@ const ExpandableRows = ({ children, curStock, ...otherArgs }) => {
                                         color={customTheme.palette.primary.contrastText}>
                                             { stock.count}
                                             </Typography>
+                                    </TableCell>
+                                    <TableCell align='right' sx={{ textAlign: 'center' }}>
+                                        <Button variant='outlined'
+                                            color='error'>
+                                            Sell
+                                        </Button>
                                     </TableCell>
                                 </TableRow>
                             </TableBody>
@@ -188,7 +196,7 @@ export default function PortfolioTable({ portfolio }) {
                                 {portfolio.liquid_value.toFixed(2)}$
 
                                     </Typography>
-                            </TableCell>
+                        </TableCell>
 
                         </ExpandableRows>
                 </TableBody>
