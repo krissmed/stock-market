@@ -22,10 +22,9 @@ export const TopBar = ({ title }) => {
             elevation={0} //No shadow;
             sx={{
                 ml: drawerWidth + 'px',
-                mr: 2,
                 padding: 1,
                 width: 'auto',
-                backgroundColor: customTheme.palette.background.default,
+                backgroundColor: isMobile() ? customTheme.palette.primary.main : customTheme.palette.background.default,
                 display: 'flex',
                 flexDirection: 'row',
                 alignItems: 'center',
