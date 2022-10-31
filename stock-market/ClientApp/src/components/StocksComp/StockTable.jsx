@@ -84,6 +84,7 @@ export default function StockTable({ stockObj }) {
             .then((response) => {
                 if (response) {
                     alert('Successfully bought ' + amount + ' shares of ' + ticker);
+                    window.location.reload();
                 }
                 else {
                     alert('You dont have enough money...;/');
