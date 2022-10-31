@@ -22,19 +22,14 @@ export default function PortfolioGraph({ portfolio }) {
         const lVal = item.liquid_value;
         const sVal = item.stock_value;
         const tVal = item.total_value;
-        const theDate = item.timestamp.time;
+        const theDate = item.time;
 
 
 
-        liquidValue.push([lVal, theDate]);
-        stockValue.push([sVal, theDate]);
-        totalValue.push([tVal, theDate]);
+        liquidValue.push([theDate, lVal]);
+        stockValue.push([theDate, sVal]);
+        totalValue.push([theDate, tVal]);
     });
-    console.log(liquidValue);
-
-    console.log(stockValue);
-
-    console.log(totalValue);
 
     //Datapoints
     const series = [
@@ -76,7 +71,7 @@ export default function PortfolioGraph({ portfolio }) {
             width: 1,
         },
         xaxis: {
-            type: 'numerical',
+            type: 'datetime',
             labels: {
                 datetimeUTC: false
             },
@@ -85,11 +80,7 @@ export default function PortfolioGraph({ portfolio }) {
             title: {
                 text: 'Value (USD)'
             },
-            labels: {
-                formatter: function (val) {
-                    return val.toFixed(2) + '$';
-                }
-            }
+            
         },
         grid: {
             show: true,
