@@ -3,6 +3,8 @@ using Newtonsoft.Json;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
+using stock_market.Model;
+using System.Collections.Generic;
 
 namespace stock_market.DAL
 {
@@ -38,7 +40,7 @@ namespace stock_market.DAL
         {
             var user = await _db.Users.FirstAsync();
             var portfolios = await _db.portfolios
-                .Where(p => p.user.id == user.id)
+                .Where(p => p.user.id == user.id && p.timestamp.time >= DateTime.Now.AddDays(-1))
                 .Include(p => p.timestamp)
                 .Select(p => new
                 {
@@ -49,6 +51,7 @@ namespace stock_market.DAL
                 })
                 .ToListAsync();
             portfolios.Sort((p1, p2) => p1.time.CompareTo(p2.time));
+
             string json = JsonConvert.SerializeObject(portfolios);
             return json;
         }

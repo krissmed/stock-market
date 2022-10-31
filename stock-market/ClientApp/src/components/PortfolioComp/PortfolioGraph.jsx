@@ -59,16 +59,19 @@ export default function PortfolioGraph({ portfolio }) {
             zoom: {
                 enabled: false,
             },
-            animation: {
+            animations: {
                 enabled: false
                 },
         },
         markers: {
             size: 0
         },
+        datalabels: {
+            enabled: false
+        },
         stroke: {
-            curve: 'smooth',
-            width: 1,
+            curve: 'straight',
+            width: 2,
         },
         xaxis: {
             type: 'datetime',
