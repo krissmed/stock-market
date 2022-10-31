@@ -15,8 +15,6 @@ namespace stock_market.DAL
         Task<bool> DeleteUser(int id);
         Task<bool> EditUser(User editUser);
         Task<bool> EditUserBalance(User editUser);
-        
-
 
     }
 }
