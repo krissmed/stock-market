@@ -2,6 +2,8 @@
 import TextField from '@mui/material/TextField';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Button from '@mui/material/Button';
+import { useTheme, styled } from '@mui/material/styles';
 
 
 
@@ -46,28 +48,32 @@ export default function edituser() {
                     justifyContent: 'center',
                 
                 }}>
-                <form onSubmit={handleSubmit }>
+                <form onSubmit={handleSubmit} sx={{ display: 'flex'} }>
                     <TextField value={inputs.first_name}
                         name="first_name"
-                        type={"text"}
+                        type='filled'
+                        label='First Name'
                         onChange={handleChange }
-                        sx={{ margin: 3 }}
-                        placeholder="Name"
-                        variant="outlined"
+                        sx={{
+                            margin: 3,
+                            color: customTheme.palette.primary.contrastText
+
+                        }}
+                        variant="filled"
                     />
 
                     <TextField value={inputs.last_name}
                         name="last_name"
-                        type={"text"}
+                        type='filled'
+                        label='Last Name'
                         onChange={handleChange}
                         sx={{ margin: 3 }}
-                        placeholder="Name"
-                        variant="outlined"
+                        variant="filled"
                     />
                     
 
-                    <button type='submit'>submit</button>
                 </form>
+                <Button onclickcolor='success' variant='contained'>submit</Button>
                 </div>
             
 

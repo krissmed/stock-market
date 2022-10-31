@@ -2,7 +2,6 @@
 
 import { TopBar } from '../components/TopBar.jsx';
 import DashboardGraph from '../components/DashboardComp/DashboardGraph';
-import OverViewStocks from '../components/DashboardComp/OverViewStocks';
 import DashboardStocks from '../components/DashboardComp/DasboardStocks'
 import { isMobile } from './Layout'
 import Container from '@mui/material/Container';
