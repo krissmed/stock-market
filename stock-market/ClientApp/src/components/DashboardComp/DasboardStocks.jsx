@@ -7,24 +7,48 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useTheme, styled } from '@mui/material/styles';
-import Typography from '@mui/material/Typography'
+import Typography from '@mui/material/Typography';
+import { useEffect, useState } from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
+import axios from 'axios';
 
-
-    function createData(name, price) {
-        return { name, price};
-    }
-
-    const rows = [
-        createData('APPL', 159),
-        createData('TSLA', 237),
-        createData('AMAZ', 262),
-        createData('ABCD', 305),
-        createData('APPL', 356),
-    ];
 
 export default function DashboardStocks() {
+
+    const [isLoading, setIsLoading] = useState(true);
+
+    const [stocks, setStocks] = useState([]);
+
+    useEffect(() => {
+
+        const fetchData = async () => {
+
+
+            const stocks = await axios.get("stock/getstocks");
+
+            setStocks(stocks.data);
+
+            setIsLoading(false)
+        }
+        fetchData();
+
+
+    }, []);
+
     const customTheme = useTheme();
-        return (
+    return (
+        isLoading == true ?
+            <>
+                <div
+                    style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: 'center'
+                    }}>
+                    <CircularProgress color="success" />
+                </div>
+            </>
+            :
             <TableContainer
                 sx={{
                     backgroundColor: customTheme.palette.primary.main
@@ -33,20 +57,20 @@ export default function DashboardStocks() {
                 <Table sx={{ minWidth: 100 }} aria-label="simple table">
                     <TableHead>
                         <TableRow>
-                            <TableCell sx={{ color: customTheme.palette.primary.contrastText }}><Typography variant='h6'>Name</Typography></TableCell>
-                            <TableCell sx={{ color: customTheme.palette.primary.contrastText }}><Typography variant='h6'>Value</Typography></TableCell>
+                            <TableCell sx={{ color: customTheme.palette.primary.contrastText }}><Typography variant='h6'>Ticker</Typography></TableCell>
+                            <TableCell sx={{ color: customTheme.palette.primary.contrastText }}><Typography variant='h6'>Current Price</Typography></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row) => (
+                        {stocks.map((row) => (
                             <TableRow
-                                key={row.name}
+                                key={row.id}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
                                 <TableCell component="th" scope="row" sx={{ color: customTheme.palette.primary.contrastText }}>
-                                    {row.name}
+                                    {row.ticker}
                                 </TableCell>
-                                <TableCell sx={{ color: customTheme.palette.primary.contrastText }}>{row.price}</TableCell>
+                                <TableCell sx={{ color: customTheme.palette.primary.contrastText, textAlign: 'center' }}>{row.current_price}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

@@ -73,6 +73,10 @@ export default function PortfolioGraph({ portfolio }) {
             curve: 'straight',
             width: 2,
         },
+        title: {
+            text: 'Your portfolio-value over time',
+            align: 'left',
+        },
         xaxis: {
             type: 'datetime',
             labels: {
