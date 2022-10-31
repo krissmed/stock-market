@@ -13,6 +13,7 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import Container from '@mui/material/Container';
 import { useTheme } from '@mui/material/styles';
 
 
@@ -40,7 +41,7 @@ const ExpandableRows = ({ children, curStock, ...otherArgs }) => {
         <>
 
 
-            <TableRow {...otherArgs}>
+            <TableRow {...otherArgs} key={curStock.id}>
 
                 {children}
 
@@ -61,14 +62,17 @@ const ExpandableRows = ({ children, curStock, ...otherArgs }) => {
             {isExpanded && (
                 
                 curStock.map(stock => (
-                    <>
+                    <Container sx={{
+                        ml: 45 + '%',
+                    }} key={stock.id}>
                         <Box sx={{
                             color: customTheme.palette.primary.contrastText,
                             textAlign: 'center',
-                            width: '100',
-                            mt: 2
+                            width: 'auto',
+                            mt: 2,
+                            
                         }}
-                            key={stock.id}
+                         
                         >
                             <Typography variant='h6'
                                 color={customTheme.palette.primary.contrastText}>
@@ -99,7 +103,7 @@ const ExpandableRows = ({ children, curStock, ...otherArgs }) => {
                                 </TableRow>
                             </TableHead>
 
-                            <TableBody>
+                            <TableBody sx={{ my: 1 }}>
                                 <TableRow>
                                     <TableCell>
                                         <Typography variant='body1'
@@ -114,7 +118,7 @@ const ExpandableRows = ({ children, curStock, ...otherArgs }) => {
                                             </Typography>
                                     </TableCell>
                                     <TableCell>
-                                        <Typography variant='body1'
+                                        <Typography variant='body1' textAlign='center'
                                         color={customTheme.palette.primary.contrastText}>
                                             { stock.count}
                                             </Typography>
@@ -122,7 +126,7 @@ const ExpandableRows = ({ children, curStock, ...otherArgs }) => {
                                 </TableRow>
                             </TableBody>
                         </Table>
-                        </>
+                    </Container>
                     ))
             )}
 

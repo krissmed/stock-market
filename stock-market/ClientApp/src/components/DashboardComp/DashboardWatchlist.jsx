@@ -8,23 +8,27 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useTheme, styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography'
+import axios from 'axios';
+import { useState } from 'react';
 
 
-function createData(name, curPrice, tarPrice, amount) {
-    return { name, curPrice, tarPrice, amount };
-}
-
-const rows = [
-    createData('APPL', 159, 160, 10),
-    createData('TSLA', 237, 240, 10),
-    createData('AMAZ', 262, 270, 10),
-    createData('ABCD', 305, 310, 10),
-    createData('APPL', 356, 360, 10),
-];
 
 export default function DashboardWatchlist() {
+    const [watchlist, setWatchlist] = useState([]);
+
+    React.useEffect(() => {
+        const fetchData = async () => {
+            const wList = await axios.get("watchlist/getfullwatchlist");
+
+            setWatchlist(wList.data);
+                
+        }
+        fetchData();
+    }, [])
+
     const customTheme = useTheme();
     return (
+        <>
         <TableContainer
             component={Paper}
             sx={{
@@ -34,27 +38,34 @@ export default function DashboardWatchlist() {
             <Table sx={{ minWidth: 100 }} aria-label="simple table">
                 <TableHead>
                     <TableRow>
-                        <TableCell sx={{ color: customTheme.palette.primary.contrastText }}><Typography variant='h6'>Name</Typography></TableCell>
+                        <TableCell sx={{ color: customTheme.palette.primary.contrastText }}><Typography variant='h6'>Ticker</Typography></TableCell>
                         <TableCell sx={{ color: customTheme.palette.primary.contrastText }}><Typography variant='h6'>Current Price</Typography></TableCell>
                         <TableCell sx={{ color: customTheme.palette.primary.contrastText }}><Typography variant='h6'>Target Price</Typography></TableCell>
-                        <TableCell sx={{ color: customTheme.palette.primary.contrastText }}><Typography variant='h6'>Amount</Typography></TableCell>
                     </TableRow>
                 </TableHead>
-                <TableBody>
-                    {rows.map((row) => (
-                        <TableRow
-                            key={row.name}
-                        >
-                            <TableCell component="th" scope="row" sx={{ color: customTheme.palette.primary.contrastText }}>
-                                {row.name}
-                            </TableCell>
-                            <TableCell sx={{ color: customTheme.palette.primary.contrastText }}>{row.curPrice}</TableCell>
-                            <TableCell sx={{ color: customTheme.palette.primary.contrastText }}>{row.tarPrice}</TableCell>
-                            <TableCell sx={{ color: customTheme.palette.primary.contrastText }}>{row.amount}</TableCell>
-                        </TableRow>
-                    ))}
+                    <TableBody>
+                        {watchlist.stocks.length == 0
+                            ?
+                            <TableRow><Typography variant='subtitle1'>No stock added to watchlist</Typography></TableRow>
+                            :
+                        <>
+                            {watchlist.stock.map(row => (
+                                    <TableRow
+                                        key={row.ticker}
+                                    >
+                                        <TableCell component="th" scope="row" sx={{ color: customTheme.palette.primary.contrastText }}>
+                                            {row.ticker}
+                                        </TableCell>
+                                        <TableCell sx={{ color: customTheme.palette.primary.contrastText }}>{row.current_price}</TableCell>
+                                        <TableCell sx={{ color: customTheme.palette.primary.contrastText }}>{row.target_price}</TableCell>
+                                    </TableRow>
+                                ))
+                            }
+                        </>
+                    }
                 </TableBody>
             </Table>
-        </TableContainer>
+            </TableContainer>
+            </>
     );
 }

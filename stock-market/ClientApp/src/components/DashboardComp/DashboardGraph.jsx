@@ -1,15 +1,29 @@
-﻿import React from 'react';
+﻿import React, { useEffect } from 'react';
 import Chart from "react-apexcharts";
 import Box from '@mui/material/Box';
 
 import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
+import { useState } from 'react';
+import PortfolioGraph from '../PortfolioComp/PortfolioGraph';
 
 
 export default function DashboardGraph() {
+    const [historicalFolio, setHistoricalFolio] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const histFolio = await axios.get("portfolio/gethistoricalportfolios");
+
+            setHistoricalFolio(histFolio.data);
+            
+        }
+
+        fetchData();
+    }, []);
 
     const customTheme = useTheme();
-
+    /*
     const cSeries = [{
         name: 'Liquid',
         data: [23, 24, 25, 15, 25, 28, 38, 46],
@@ -51,7 +65,7 @@ export default function DashboardGraph() {
             theme: 'dark',
         },
 
-    };
+    };*/
    
 
 
@@ -62,22 +76,7 @@ export default function DashboardGraph() {
             padding: 1,
 
         }}>
-            <Typography 
-                color='customTheme.palette.primary.contrastText'
-                variant='h6'
-                sx={{
-                    padding: 1
-                }}            >
-                    Your Balance
-            </Typography>
-
-
-                <Chart
-                    options={cOptions}
-                    series = {cSeries}
-                    type="line"
-                    height='250'
-                />
+            <PortfolioGraph portfolio={historicalFolio} />
             </Box>
         );
 }

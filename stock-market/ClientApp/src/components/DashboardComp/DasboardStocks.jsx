@@ -1,4 +1,5 @@
 ﻿import * as React from 'react';
+import { useState } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -8,21 +9,21 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useTheme, styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography'
+import axios from 'axios';
 
-
-    function createData(name, price) {
-        return { name, price};
-    }
-
-    const rows = [
-        createData('APPL', 159),
-        createData('TSLA', 237),
-        createData('AMAZ', 262),
-        createData('ABCD', 305),
-        createData('APPL', 356),
-    ];
 
 export default function DashboardStocks() {
+    const [stocks, setStocks] = useState([]);
+
+    React.useEffect(() => {
+        axios.get("stock/getstocks")
+            .then(res => {
+                setStocks(res.data)
+            })
+    }, [])
+
+    console.log()
+
     const customTheme = useTheme();
         return (
             <TableContainer
@@ -38,15 +39,15 @@ export default function DashboardStocks() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row) => (
+                        {stocks.map((row) => (
                             <TableRow
-                                key={row.name}
+                                key={row.id}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
                                 <TableCell component="th" scope="row" sx={{ color: customTheme.palette.primary.contrastText }}>
-                                    {row.name}
+                                    {row.ticker}
                                 </TableCell>
-                                <TableCell sx={{ color: customTheme.palette.primary.contrastText }}>{row.price}</TableCell>
+                                <TableCell sx={{ color: customTheme.palette.primary.contrastText }}>{row.current_price}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
