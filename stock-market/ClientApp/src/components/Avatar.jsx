@@ -33,12 +33,8 @@ export default function MyAvatar({ users }) {
                         <></>
                         :
                         <div>
-                        <Typography variant="subtitle1">
+                        <Typography variant='h6'>
                             {user.first_name + ' ' + user.last_name}
-                        </Typography>
-
-                        <Typography variant="subtitle2">
-                            Balance: <b>{user.curr_balance.toFixed(2)}$</b>
                         </Typography>
 
                     </div> }

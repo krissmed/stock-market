@@ -1,5 +1,7 @@
 ﻿import React from 'react';
 import { Link } from "react-router-dom";
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography';
 
 //LOGO;
 import Logo from '../assets/LOGO.svg';
@@ -37,7 +39,9 @@ const Drawer = styled(MuiDrawer)(
 
 
 export default function Nav() {
-
+    const dummyBalance = [
+        { liquid: 100, stocks: 200}
+    ]
 
     //Colorpalette;
     const customTheme = useTheme();
@@ -81,7 +85,23 @@ export default function Nav() {
                     ))}
 
                 </List>
-          
+                <Box
+                    sx={{
+                        marginTop: '100%',
+                        marginLeft: '25px'
+                    } }
+                >
+                    <Typography variant='h4'>
+                    Balance:
+                    </Typography>
+                    {dummyBalance.map(items => (
+                        <>
+                            <Typography variant='h6'>Liquid: {items.liquid}$</Typography>
+                            <Typography variant='h6'>Stocks: {items.stocks}$</Typography>
+                            <Typography variant='h6'>Total: {items.stocks+items.liquid}$    </Typography>
+                        </>
+))}
+                </Box>
         </Drawer>
         </>
     )
