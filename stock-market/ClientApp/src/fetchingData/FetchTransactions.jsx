@@ -65,17 +65,7 @@ export default function FetchTransactions() {
         },
     ];
 
-    const [transactions, setTransactions] = useState([
-        {
-            Id:0,
-            ticker: 'AAPL',
-            price: 254.32,
-            type: 'BUY',
-            quantity: 10,
-            timestampid: '2022-10-15T00:01:00Z',
-            Userid: 0,
-        }
-    ]);
+    const [transactions, setTransactions] = useState([]);
 
     useEffect(() => {
         axios.get("transaction/listall")

@@ -2,7 +2,7 @@
 import NavBar from '../components/Nav.jsx';
 import { TopBar } from '../components/TopBar.jsx';
 import { drawerWidth } from '../components/Nav';
-import TransactionData from '../fetchingData/FetchPortfolio';
+import FetchPortfolio from '../fetchingData/FetchPortfolio';
 
 import Container from '@mui/material/Container';
 
@@ -17,7 +17,7 @@ export default function Dashboard() {
                 ml: drawerWidth + 'px',
                 width: 'auto',
             }}>
-                <TransactionData />
+                <FetchPortfolio />
             </Container>
         </>
     );

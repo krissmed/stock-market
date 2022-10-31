@@ -22,8 +22,6 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 
 
-//Object to store variables showed. Fetched data;
-
 
 //Customized to enable expandable row when icon is clicked
 

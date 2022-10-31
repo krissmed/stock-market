@@ -33,7 +33,7 @@ export default function DashboardGraph() {
             },
             zoom: {
                 enabled: false,
-            },
+            }
         },
         stroke: {
             curve: 'smooth',

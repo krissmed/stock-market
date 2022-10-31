@@ -34,7 +34,7 @@ export default function MyAvatar({ users }) {
                         </Typography>
 
                         <Typography variant="subtitle2">
-                            Balance: <b>{user.curr_balance}$</b>
+                            Balance: <b>{user.curr_balance.toFixed(2)}$</b>
                         </Typography>
 
                     </div>
