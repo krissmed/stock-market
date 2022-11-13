@@ -1,7 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.EntityFrameworkCore;
 using stock_market.Model;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using SQLitePCL;
 
 namespace stock_market.DAL
 {
@@ -43,15 +46,19 @@ namespace stock_market.DAL
 
         public async Task<bool> CreateUser(User innUser)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // Front-End m� benytte seg av Post for � sende inn data, denne tar da og lagrer det mot DB.
+                try
+                {
+                    // Front-End m� benytte seg av Post for � sende inn data, denne tar da og lagrer det mot DB.
 
-                await _db.Users.AddAsync(innUser);
-                await _db.SaveChangesAsync();
-                return true;
+                    await _db.Users.AddAsync(innUser);
+                    await _db.SaveChangesAsync();
+                    return true;
+                }
+                catch { return false; }
             }
-            catch { return false; }
+            return BadRequest("Feil i inputvaildering.")
         }
 
         public async Task<List<User>> GetAll()
