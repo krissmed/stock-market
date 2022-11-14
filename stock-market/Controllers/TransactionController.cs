@@ -28,7 +28,11 @@ namespace stock_market.Controllers
 
         public async Task<bool> BuyStock(string ticker, int amount)
         {
-            return await _db.BuyStock(ticker, amount);
+            if (ModelState.IsValid)
+            {
+                return await _db.BuyStock(ticker, amount);
+            }
+            return true;
         }
 
         public async Task<List<Transaction>> ListAll()

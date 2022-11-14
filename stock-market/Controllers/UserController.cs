@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
+using SQLitePCL;
 using stock_market.DAL;
 using stock_market.Model;
 
@@ -44,7 +45,12 @@ namespace stock_market.Controllers
 
         public async Task<bool> CreateUser (User innUser)
         {
-            return await _db.CreateUser(innUser);
+            if (ModelState.IsValid)
+            {
+                return await _db.CreateUser(innUser);
+            }
+            return true;
+            
         }
 
         public async Task<List<User>> GetAll()
@@ -59,7 +65,11 @@ namespace stock_market.Controllers
 
         public async Task<bool> EditUser(User editUser) //Edits User, get current vaulues with GET and send new ones with POST. This is meant for the user to be able to change his own name.
         {
-            return await _db.EditUser(editUser);
+            if (ModelState.IsValid)
+            {
+                return await _db.EditUser(editUser);
+            }
+            return true;
         }
 
         public async Task<bool> EditUserBalance(User editUser) //Edits balance of user, get current calues with GET and send new ones with POST. This is meant for when user sell/buy stock

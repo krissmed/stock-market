@@ -46,8 +46,7 @@ namespace stock_market.DAL
 
         public async Task<bool> CreateUser(User innUser)
         {
-            if (ModelState.IsValid)
-            {
+            
                 try
                 {
                     // Front-End m� benytte seg av Post for � sende inn data, denne tar da og lagrer det mot DB.
@@ -57,8 +56,8 @@ namespace stock_market.DAL
                     return true;
                 }
                 catch { return false; }
-            }
-            return BadRequest("Feil i inputvaildering.")
+           
+            
         }
 
         public async Task<List<User>> GetAll()
