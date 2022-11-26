@@ -42,15 +42,6 @@ namespace stock_market.Controllers
             _log.LogError("TransactionController: Fault in InputVal ");
             return BadRequest("Fault in InputVal");
 
-
-            //bool ok = 
-            //if (!ok)
-            //{
-            //    _log.LogInformation("kunne ikke selge stock");
-            //    return BadRequest("Kunne ikke selge stock");
-            //}
-            //_log.LogInformation("Hei loggen!");
-            //return Ok("kun");
         }
 
         public async Task<ActionResult> BuyStock(string ticker, int amount)
