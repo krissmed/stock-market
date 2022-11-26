@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using stock_market.Model;
 using stock_market.DAL;
+using Castle.Core.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace stock_market.Controllers
 {
@@ -16,14 +18,18 @@ namespace stock_market.Controllers
     {
         private readonly ITransactionRepository _db;
 
-        public TransactionController(ITransactionRepository db)
+        private readonly ILogger<TransactionController> _log;
+
+        public TransactionController(ITransactionRepository db, ILogger<TransactionController> log)
         {
             _db = db;
+            _log=log;
         }
 
         public async Task<bool> SellStock(string ticker, int amount)
         {
             return await _db.SellStock(ticker, amount);
+            _log.LogInformation("Hello!");
         }
 
         public async Task<bool> BuyStock(string ticker, int amount)

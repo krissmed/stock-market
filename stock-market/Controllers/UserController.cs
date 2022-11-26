@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Castle.Core.Logging;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Extensions.Logging;
 using SQLitePCL;
 using stock_market.DAL;
 using stock_market.Model;
@@ -16,9 +18,12 @@ namespace stock_market.Controllers
     {
         private readonly IUserRepository _db;
 
-        public UserController(IUserRepository db)
+        private ILogger<UserController> _log;
+
+        public UserController(IUserRepository db, ILogger<UserController> log)
         {
             _db = db;
+            _log = log;
         }
 
 
