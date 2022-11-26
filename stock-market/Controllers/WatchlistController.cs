@@ -11,6 +11,8 @@ using Newtonsoft.Json;
 using stock_market.Model;
 using Microsoft.AspNetCore.Authentication;
 using stock_market.DAL;
+using Microsoft.Extensions.Logging;
+
 
 namespace stock_market.Controllers
 {
@@ -18,10 +20,12 @@ namespace stock_market.Controllers
     public class WatchlistController : ControllerBase
     {
         private readonly IWatchlistRepository _db;
+        private readonly ILogger<TransactionController> _log;
 
-        public WatchlistController(IWatchlistRepository db)
+        public WatchlistController(IWatchlistRepository db, ILogger<TransactionController> log)
         {
             _db = db;
+            _log = log;
         }
 
         public async Task<string> GetFullWatchlist()
@@ -29,19 +33,52 @@ namespace stock_market.Controllers
             return await _db.GetFullWatchlist();
         }
 
-        public async Task<bool> AddStock(string ticker, int amount, double target_price)
+        public async Task<ActionResult> AddStock(string ticker, int amount, double target_price)
         {
-            return await _db.AddStock(ticker, amount, target_price);
+
+            if (ModelState.IsValid)
+            {
+                bool ok = await _db.AddStock(ticker, amount, target_price);
+                if (!ok)
+                {
+                    _log.LogError("TransactionController: Could not add to watchlist");
+                    return BadRequest("Could not add to watchlist");
+                }
+                _log.LogInformation("TransactionController: User added to watchlist");
+                return Ok("User added to watchlist");
+            }
+            _log.LogError("TransactionController: Fault in InputVal ");
+            return BadRequest("Fault in InputVal");
         }
 
-        public async Task<bool> DeleteStock(int id)
+        public async Task<ActionResult> DeleteStock(int id)
         {
-            return await _db.DeleteStock(id);
+            bool ok = await _db.DeleteStock(id);
+            if (!ok)
+            {
+                _log.LogError("TransactionController: Could not delete from watchlist");
+                return BadRequest("Could not delete from watchlist");
+            }
+            _log.LogInformation("TransactionController: User deleted from watchlist");
+            return Ok("User deleted from watchlist");
         }
 
-        public async Task<bool> UpdateStock(int id, int amount, double target_price)
+        public async Task<ActionResult> UpdateStock(int id, int amount, double target_price)
         {
-            return await _db.UpdateStock(id, amount, target_price);
+
+            if (ModelState.IsValid)
+            {
+                bool ok = await _db.UpdateStock(id, amount, target_price);
+                if (!ok)
+                {
+                    _log.LogError("TransactionController: Could not update watchlist");
+                    return BadRequest("Could not update watchlist");
+                }
+                _log.LogInformation("TransactionController: User updated to watchlist");
+                return Ok("User updated to watchlist");
+            }
+            _log.LogError("TransactionController: Fault in InputVal ");
+            return BadRequest("Fault in InputVal");
         }
     }
 }
