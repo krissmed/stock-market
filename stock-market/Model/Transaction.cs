@@ -13,6 +13,7 @@ namespace stock_market.Model
         public double price { get; set; }
         public User user { get; set; }
         public string type { get; set; }
+        [RegularExpression(@"^[0-9]{4}$")]
         public int quantity { get; set; }
         public Timestamp timestamp { get; set; }
     }
