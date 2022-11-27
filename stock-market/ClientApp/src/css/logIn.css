@@ -1,0 +1,22 @@
+body {
+    margin: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: #27262B;
+    color: #FEFEFE;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logInContainer{
+    background-color: #252638;
+    height: 65vh;
+    width: 40vw;
+    margin: 12px;
+    padding: 12px;
+    border-radius: 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}

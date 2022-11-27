@@ -10,6 +10,7 @@ import Stocks from './pages/Stocks';
 import Transactions from './pages/Transactions';
 import Watchlist from './pages/Watchlist';
 import Edituser from './pages/Edituser';
+import LogIn from './pages/LogIn';
 
 import { Layout } from './pages/Layout';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -40,6 +41,17 @@ const customTheme = createTheme({
     },
 });
 
+const bool = false;
+
+if (!bool){
+    ReactDOM.render(
+        <ThemeProvider theme={customTheme}>
+            <CssBaseline />
+                <LogIn />
+        </ThemeProvider>
+        , rootElement);
+}
+else(
 ReactDOM.render(
     <ThemeProvider theme={customTheme}>
         <CssBaseline />
@@ -54,12 +66,14 @@ ReactDOM.render(
                 <Route path="watchlist" element={<Watchlist />} />
                 <Route path="transactions" element={<Transactions />} />
                 <Route path="edituser" element={<Edituser />} />
+                <Route path="login" element={<LogIn />} />
             </Route>
         </Routes>
 
         </BrowserRouter>
     </ThemeProvider>,
-  rootElement);
+  rootElement)
+);
 
 registerServiceWorker();
 
