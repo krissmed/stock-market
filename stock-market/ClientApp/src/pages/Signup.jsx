@@ -44,8 +44,8 @@ function LogIn() {
         console.log(e.target.name);
         if (e.target.name == 'username'){
             if(checkUsername(e.target.value)){
-                    setUsrname(e.target.value)
-                }
+                setUsrname(e.target.value)
+            }
         }
         if (e.target.name == 'password'){
             setPswrd(e.target.value);
@@ -77,7 +77,7 @@ function LogIn() {
             }}>
 
                 <Typography variant='h5' sx={{color: customTheme.palette.info.main}}>
-                    Welcome to KEVO Stocks!
+                    Sign up to KEVO stocks now!
                 </Typography>
             </Box>
             <Box sx={{
@@ -105,8 +105,40 @@ function LogIn() {
                                    ),
                                }}
                                sx={{
-                                    borderColor: customTheme.palette.primary.contrastText,
-                                    color: customTheme.palette.primary.contrastText,
+                                   borderColor: customTheme.palette.primary.contrastText,
+                                   color: customTheme.palette.primary.contrastText,
+                               }}
+                               onBlur={handleChange}
+                    />
+                </Box>
+                <Box>
+                    <TextField required
+                               id='firstname outlined-required'
+                               label='Firstname'
+                               autoComplete='off'
+                               fullWidth
+                               color='info'
+                               helperText={errMsg}
+                               name='firstname'
+                               sx={{
+                                   borderColor: customTheme.palette.primary.contrastText,
+                                   color: customTheme.palette.primary.contrastText,
+                               }}
+                               onBlur={handleChange}
+                    />
+                </Box>
+                <Box>
+                    <TextField required
+                               id='lastname outlined-required'
+                               label='Lastname'
+                               autoComplete='off'
+                               fullWidth
+                               color='info'
+                               helperText={errMsg}
+                               name='lastname'
+                               sx={{
+                                   borderColor: customTheme.palette.primary.contrastText,
+                                   color: customTheme.palette.primary.contrastText,
                                }}
                                onBlur={handleChange}
                     />
@@ -138,21 +170,14 @@ function LogIn() {
                         width: '60%',
                         height: 40
                     }}
-                    onClick={logIn}
+                            onClick={logIn}
                     >
                         <LoginRoundedIcon sx={{
                             marginRight: 1,
                         }}/>
-                            Log in
+                        Sign up
                     </Button>
                 </Box>
-            </Box>
-<Divider />
-            <Box sx={{
-                textAlign: 'center',
-                padding: 3,
-            }}>
-                <Typography variant='body2'>Not a registered user? Register <a href='/signup'>here</a></Typography>
             </Box>
 
         </Box>

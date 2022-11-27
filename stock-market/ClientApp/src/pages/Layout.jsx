@@ -28,7 +28,7 @@ export function Layout() {
 
 return (
         <>
-            {isMobile() ? <></> : <Nav />}
+            {isMobile() ? <></> : <Nav /> }
 
             <Outlet />
         </>

@@ -6,6 +6,9 @@ import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import PersonAddAltRoundedIcon from '@mui/icons-material/PersonAddAltRounded';
+import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import { isMobile } from '../pages/Layout'
 
 
@@ -91,6 +94,18 @@ export default function MyAvatar({ users }) {
                             <Avatar /> {aUser.first_name + ' ' + aUser.last_name}
                         </MenuItem>
                     ))}
+                    <MenuItem
+                        onClick={() => logOut()}>
+                        <EditRoundedIcon/> Edit user
+                    </MenuItem>
+                    <MenuItem
+                        onClick={() => logOut()}>
+                        <PersonAddAltRoundedIcon/> Create a new user
+                    </MenuItem>
+                    <MenuItem
+                        onClick={() => logOut()}>
+                        <LogoutRoundedIcon/> Log Out
+                    </MenuItem>
                 </Menu>
             </>
         );
