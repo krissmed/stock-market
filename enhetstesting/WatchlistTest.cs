@@ -129,6 +129,26 @@ namespace enhetstesting
             Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
             Assert.Equal("Could not update watchlist", resultat.Value);
         }
+        [Fact]
+        public async Task AddStockWrongInputVal()
+        {
+            mockRep.Setup(k => k.AddStock("44",1,50)).ReturnsAsync(true);
+
+            var watchController = new WatchlistController(mockRep.Object, mockLog.Object);
+
+            watchController.ModelState.AddModelError("Fornavn", "Feil i inputvalidering på server");
+
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            watchController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            // Act
+            var resultat = await watchController.AddStock("44", 1, 50) as BadRequestObjectResult;
+
+            // Assert 
+            Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
+            Assert.Equal("Fault in InputVal", resultat.Value);
+        }
 
     }
 }
