@@ -81,6 +81,114 @@ namespace enhetstesting
             Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
             Assert.Equal("Could not create user", resultat.Value);
         }
+
+
+        [Fact]
+        public async Task DeleteUserLoggetinnOK()
+        {
+
+            var mock = new Mock<IUserRepository>();
+            mock.Setup(k => k.DeleteUser(1)).ReturnsAsync(true);
+            var userController = new UserController(mock.Object, mockLog.Object);
+
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            userController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            var resualt = await userController.DeleteUser(1) as OkObjectResult;
+
+            Assert.Equal((int)HttpStatusCode.OK, resualt.StatusCode);
+            Assert.Equal("User deleted user", resualt.Value);
+        }
+        [Fact]
+        public async Task DeleteUserLoggetinnIkkeOK()
+        {
+            mockRep.Setup(k => k.DeleteUser(1)).ReturnsAsync(false);
+
+            var userController = new UserController(mockRep.Object, mockLog.Object);
+
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            userController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            // Act
+            var resultat = await userController.DeleteUser(1) as BadRequestObjectResult;
+
+            // Assert 
+            Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
+            Assert.Equal("Could not delete user", resultat.Value);
+        }
+
+        [Fact]
+        public async Task EditUserLoggetinnOK()
+        {
+            var mock = new Mock<IUserRepository>();
+            mock.Setup(k => k.EditUser(It.IsAny<User>())).ReturnsAsync(true);
+            var userController = new UserController(mock.Object, mockLog.Object);
+
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            userController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            var resualt = await userController.EditUser(It.IsAny<User>()) as OkObjectResult;
+
+            Assert.Equal((int)HttpStatusCode.OK, resualt.StatusCode);
+            Assert.Equal("User edit user", resualt.Value);
+        }
+
+        [Fact]
+        public async Task EditUserLoggetinnIkkeOK()
+        {
+            mockRep.Setup(k => k.EditUser(It.IsAny<User>())).ReturnsAsync(false);
+
+            var userController = new UserController(mockRep.Object, mockLog.Object);
+
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            userController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            // Act
+            var resultat = await userController.EditUser(It.IsAny<User>()) as BadRequestObjectResult;
+
+            // Assert 
+            Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
+            Assert.Equal("Could not edit user", resultat.Value);
+        }
+
+        [Fact]
+        public async Task EditUserBalanceLoggetinnOK()
+        {
+            var mock = new Mock<IUserRepository>();
+            mock.Setup(k => k.EditUserBalance(It.IsAny<User>())).ReturnsAsync(true);
+            var userController = new UserController(mock.Object, mockLog.Object);
+
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            userController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            var resualt = await userController.EditUserBalance(It.IsAny<User>()) as OkObjectResult;
+
+            Assert.Equal((int)HttpStatusCode.OK, resualt.StatusCode);
+            Assert.Equal("User edited userbal", resualt.Value);
+        }
+        [Fact]
+        public async Task EditUserBalanceLoggetinnIkkeOK()
+        {
+            mockRep.Setup(k => k.EditUserBalance(It.IsAny<User>())).ReturnsAsync(false);
+
+            var userController = new UserController(mockRep.Object, mockLog.Object);
+
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            userController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            // Act
+            var resultat = await userController.EditUserBalance(It.IsAny<User>()) as BadRequestObjectResult;
+
+            // Assert 
+            Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
+            Assert.Equal("Could not edit userbal", resultat.Value);
+        }
     }
 }
 
