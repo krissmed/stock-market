@@ -9,6 +9,7 @@ import { AllUsers } from '../fetchingData/FetchUsers.js';
 
 import { isMobile } from '../pages/Layout'
 import RespNav from './RespNav.jsx';
+import MyAvatar from './Avatar.jsx';
 
 export const topBarHeight = 100;
 
@@ -40,7 +41,7 @@ export const TopBar = ({ title }) => {
                     {title}
                 </Typography>
 
-                <AllUsers />
+            <MyAvatar />
          </AppBar>
         );
 }

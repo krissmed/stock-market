@@ -102,11 +102,11 @@ export default function Nav() {
                     Balance:
                     </Typography>
                     {balance.map(items => (
-                        <>
+                        <div key={items.curr_balance}>
                             <Typography variant='h6'>Liquid: {items.curr_balance_liquid.toFixed(2)}$</Typography>
                             <Typography variant='h6'>Stocks: {items.curr_balance_stock.toFixed(2)}$</Typography>
                             <Typography variant='h6'>Total: {items.curr_balance.toFixed(2)}$    </Typography>
-                        </>
+                        </div>
 ))}
                 </Box>
         </Drawer>

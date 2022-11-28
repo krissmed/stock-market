@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
@@ -6,10 +6,17 @@ import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import PersonAddAltRoundedIcon from '@mui/icons-material/PersonAddAltRounded';
+import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import { isMobile } from '../pages/Layout'
+import { Navigate } from 'react-router-dom';
 
 
-export default function MyAvatar({ users }) {
+export default function MyAvatar() {
+
+    const [username, setUsername] = useState(localStorage.getItem('user'));
+
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -18,11 +25,12 @@ export default function MyAvatar({ users }) {
     const handleClose = () => {
         setAnchorEl(null);
     };
-    const [user, setUser] = React.useState(users[0]);
 
-    const handleUserChange = (user) => {
-        setUser(user);
+    const logOut = () => {
+        localStorage.setItem('isLoggedIn', false);
+        window.location.href = "/login";
     }
+
         return (
             <>
                 <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
@@ -31,7 +39,7 @@ export default function MyAvatar({ users }) {
                         :
                         <div>
                         <Typography variant='h6'>
-                            {user.first_name + ' ' + user.last_name}
+                            {username}
                         </Typography>
 
                     </div> }
@@ -45,7 +53,7 @@ export default function MyAvatar({ users }) {
                             aria-haspopup="true"
                             aria-expanded={open ? 'true' : undefined}
                         >
-                            <Avatar sx={{ width: 40, height: 40 }}>{user.first_name.charAt(0)}</Avatar>
+                            <Avatar sx={{ width: 40, height: 40 }}>{username.charAt(0)}</Avatar>
                         </IconButton>
                     </Tooltip>
                 </Box>
@@ -84,13 +92,18 @@ export default function MyAvatar({ users }) {
                     transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                     anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                 >
-                    {users.map( (aUser) => ( 
-                        <MenuItem
-                            key={aUser.id}
-                            onClick={() => handleUserChange(aUser)}>
-                            <Avatar /> {aUser.first_name + ' ' + aUser.last_name}
-                        </MenuItem>
-                    ))}
+                    <MenuItem
+                        onClick={() => <Navigate to="edituser" />}>
+                        <EditRoundedIcon/>  Edit user
+                    </MenuItem>
+                    <MenuItem
+                        onClick={() => <Navigate to="/signup" />}>
+                        <PersonAddAltRoundedIcon/>  Register new user
+                    </MenuItem>
+                    <MenuItem
+                        onClick={() => logOut()}>
+                        <LogoutRoundedIcon/>  Log Out
+                    </MenuItem>
                 </Menu>
             </>
         );

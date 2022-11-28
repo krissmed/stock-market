@@ -91,12 +91,12 @@ export default function RespNav() {
                     Balance:
                 </Typography>
                 {dummyBalance.map(items => (
-                    <>
+                    <div key={items.liquid}>
                                         
                         <Typography variant='h6' sx={{ color: customTheme.palette.primary.contrastText}}>Liquid: {items.liquid}$</Typography>
                         <Typography variant='h6' sx={{ color: customTheme.palette.primary.contrastText}}>Stocks: {items.stocks}$</Typography>
                         <Typography variant='h6' sx={{ color: customTheme.palette.primary.contrastText}}>Total: {items.stocks + items.liquid}$    </Typography>
-                    </>
+                    </div>
                 ))}
             </Box>
         </Box>
