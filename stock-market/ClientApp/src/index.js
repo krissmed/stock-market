@@ -2,6 +2,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import registerServiceWorker from './registerServiceWorker';
+import { BrowserRouter, Routes } from 'react-router-dom';
 
 import App from './App';
 
@@ -34,8 +35,10 @@ const customTheme = createTheme({
 
     ReactDOM.render(
         <ThemeProvider theme={customTheme}>
-            <CssBaseline/>
-                <App />
+            <CssBaseline />
+            <BrowserRouter>
+                    <App />
+            </BrowserRouter>
         </ThemeProvider>,
         rootElement)
 registerServiceWorker();

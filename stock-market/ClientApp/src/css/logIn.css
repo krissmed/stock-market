@@ -1,4 +1,4 @@
-body {
+.body {
     margin: 0;
     height: 100vh;
     width: 100vw;
@@ -10,7 +10,8 @@ body {
 }
 
 .logInContainer{
-    background-color: #A1D0C1;
+    background-color: #FEFEFE;
+    color: #252525;
     height: 65vh;
     width: 40vw;
     margin: 12px;

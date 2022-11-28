@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Button from '@mui/material/Button';
 import { useTheme, styled } from '@mui/material/styles';
-
+import { Navigate } from 'react-router-dom';
 
 
 
@@ -37,8 +37,10 @@ export default function edituser() {
             console.log(error);
         }
     }
+
     return (
-        
+        (localStorage.getItem('isLoggedIn') === 'true')
+            ?
         <>
             <TopBar title="test" />
             
@@ -75,11 +77,12 @@ export default function edituser() {
                 </form>
                 <Button onclickcolor='success' variant='contained'>submit</Button>
                 </div>
-            
-
-
-            
             </>
+            :
+
+                <Navigate to="/login" />
+            
+            
         )
     
 }

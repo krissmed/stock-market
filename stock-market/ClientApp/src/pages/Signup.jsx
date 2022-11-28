@@ -33,7 +33,6 @@ function LogIn() {
             })
             localStorage.setItem('isLoggedIn', true);
             localStorage.setItem('user', user.username);
-            console.log(user);
         }
         else {
             alert("invalid");
@@ -67,6 +66,7 @@ function LogIn() {
         }
     }
     return (
+        <Box className='body'>
         <Box className='logInContainer'>
 
             <Box sx={{
@@ -169,8 +169,8 @@ function LogIn() {
                     <Button variant='contained' className='logInBtn' color='info' sx={{
                         width: '60%',
                         height: 40
-                    }}
-                            onClick={logIn}
+                        }}
+                            onClick={ window.location.href='/login' }
                     >
                         <LoginRoundedIcon sx={{
                             marginRight: 1,
@@ -180,6 +180,7 @@ function LogIn() {
                 </Box>
             </Box>
 
+            </Box>
         </Box>
     );
 }

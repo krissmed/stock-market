@@ -1,4 +1,6 @@
-﻿import React from 'react';
+﻿import React, { useEffect } from 'react';
+import { Navigate } from 'react-router-dom';
+
 
 import { TopBar } from '../components/TopBar.jsx';
 import DashboardGraph from '../components/DashboardComp/DashboardGraph';
@@ -15,7 +17,13 @@ import Box from '@mui/material/Box';
 export default function Dashboard() {
     const drawerWidth = isMobile() ? 0 : 220;
     const customTheme = useTheme();
+
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
+
+
     return (
+        (isLoggedIn === 'true')
+        ?
         <>
             <TopBar title='My Dashboard' />
 
@@ -108,7 +116,11 @@ export default function Dashboard() {
                 </Grid>
                 </Container>
             </Box>
-         </>
+            </>
+
+            :
+
+            <Navigate to="/login" />
         );
 }
 
