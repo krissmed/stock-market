@@ -207,7 +207,7 @@ namespace enhetstesting
 
             var userController = new UserController(mockRep.Object, mockLog.Object);
 
-            userController.ModelState.AddModelError("Fornavn", "Feil i inputvalidering på server");
+            userController.ModelState.AddModelError("InputValidation", "Fault in InputVal");
 
             mockSession[_loggetInn] = _loggetInn;
             mockHttpContext.Setup(s => s.Session).Returns(mockSession);
@@ -215,6 +215,66 @@ namespace enhetstesting
 
             // Act
             var resultat = await userController.CreateUser(user) as BadRequestObjectResult;
+
+            // Assert 
+            Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
+            Assert.Equal("Fault in InputVal", resultat.Value);
+        }
+        [Fact]
+        public async Task EditUserWrongInputVal()
+        {
+            var user = new User
+            {
+                id = 2,
+                first_name = "Ole",
+                last_name = "Norm4nn",
+                curr_balance = 10,
+                curr_balance_liquid = 5,
+                curr_balance_stock = 5
+            };
+
+            mockRep.Setup(k => k.EditUser(user)).ReturnsAsync(true);
+
+            var userController = new UserController(mockRep.Object, mockLog.Object);
+
+            userController.ModelState.AddModelError("InputValidation", "Fault in InputVal");
+
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            userController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            // Act
+            var resultat = await userController.EditUser(user) as BadRequestObjectResult;
+
+            // Assert 
+            Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
+            Assert.Equal("Fault in InputVal", resultat.Value);
+        }
+        [Fact]
+        public async Task EditUserBalWrongInputVal()
+        {
+            var user = new User
+            {
+                id = 2,
+                first_name = "Ole",
+                last_name = "Normann",
+                curr_balance = 0,
+                curr_balance_liquid = 5,
+                curr_balance_stock = 5
+            };
+
+            mockRep.Setup(k => k.EditUserBalance(user)).ReturnsAsync(true);
+
+            var userController = new UserController(mockRep.Object, mockLog.Object);
+
+            userController.ModelState.AddModelError("InputValidation", "Fault in InputVal");
+
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            userController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            // Act
+            var resultat = await userController.EditUserBalance(user) as BadRequestObjectResult;
 
             // Assert 
             Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);

@@ -62,12 +62,14 @@ namespace enhetstesting
         }
 
         [Fact]
-        public async Task LagreLoggetInnFeilModel()
+        public async Task BuyStockWrongInputVal()
         {
 
             mockRep.Setup(k => k.BuyStock("app7e", 1)).ReturnsAsync(true);
 
             var transactionController = new TransactionController(mockRep.Object, mockLog.Object);
+
+            transactionController.ModelState.AddModelError("InputValidation", "Fault in InputVal");
 
             mockSession[_loggetInn] = _loggetInn;
             mockHttpContext.Setup(s => s.Session).Returns(mockSession);
@@ -78,7 +80,7 @@ namespace enhetstesting
 
             // Assert 
             Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
-            Assert.Equal("Feil i inputvalidering på server", resultat.Value);
+            Assert.Equal("Fault in InputVal", resultat.Value);
         }
         [Fact]
         public async Task SellStockLoggetinnOK()
@@ -115,12 +117,14 @@ namespace enhetstesting
             Assert.Equal("Could not sell stock", resultat.Value);
         }
         [Fact]
-        public async Task SellStockLoggetInnFeilModel()
+        public async Task SellStockWrongInputval()
         {
 
             mockRep.Setup(k => k.SellStock("app7e", 1)).ReturnsAsync(true);
 
             var transactionController = new TransactionController(mockRep.Object, mockLog.Object);
+
+            transactionController.ModelState.AddModelError("InputValidation", "Fault in InputVal");
 
             mockSession[_loggetInn] = _loggetInn;
             mockHttpContext.Setup(s => s.Session).Returns(mockSession);

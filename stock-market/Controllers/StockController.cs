@@ -52,15 +52,21 @@ namespace stock_market.Controllers
 
         public async Task<ActionResult> DeleteStock(string ticker)
         {
-            bool ok = await _db.DeleteStock(ticker);
-            if (!ok)
+            if (ModelState.IsValid)
             {
-                _log.LogError("StockController: Could not delete stock");
-                return BadRequest("Could not delete stock");
+                bool ok = await _db.DeleteStock(ticker);
+                if (!ok)
+                {
+                    _log.LogError("StockController: Could not delete stock");
+                    return BadRequest("Could not delete stock");
+                }
+                _log.LogInformation("StockController: User deleted stock");
+                return Ok("User deleted stock");
             }
-            _log.LogInformation("StockController: User deleted stock");
-            return Ok("User deleted stock");
-        }
+            _log.LogError("StockController::Fault in InputVal ");
+            return BadRequest("Fault in InputVal");
+         }
+        
 
     }
 }

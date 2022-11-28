@@ -134,16 +134,16 @@ namespace enhetstesting
         {
             mockRep.Setup(k => k.AddStock("44",1,50)).ReturnsAsync(true);
 
-            var watchController = new WatchlistController(mockRep.Object, mockLog.Object);
+            var watchlistController = new WatchlistController(mockRep.Object, mockLog.Object);
 
-            watchController.ModelState.AddModelError("Fornavn", "Feil i inputvalidering på server");
+            watchlistController.ModelState.AddModelError("InputValidation", "Fault in InputVal");
 
             mockSession[_loggetInn] = _loggetInn;
             mockHttpContext.Setup(s => s.Session).Returns(mockSession);
-            watchController.ControllerContext.HttpContext = mockHttpContext.Object;
+            watchlistController.ControllerContext.HttpContext = mockHttpContext.Object;
 
             // Act
-            var resultat = await watchController.AddStock("44", 1, 50) as BadRequestObjectResult;
+            var resultat = await watchlistController.AddStock("44", 1, 50) as BadRequestObjectResult;
 
             // Assert 
             Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);

@@ -96,6 +96,48 @@ namespace enhetstesting
             Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
             Assert.Equal("Could not delete stock", resultat.Value);
         }
+        [Fact]
+        public async Task AddStockWrongInputVal()
+        {
+            
+            mockRep.Setup(k => k.AddStock("55")).ReturnsAsync(true);
+
+            var stockController = new StockController(mockRep.Object, mockLog.Object);
+
+            stockController.ModelState.AddModelError("InputValidation", "Fault in InputVal");
+
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            stockController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            // Act
+            var resultat = await stockController.AddStock("55") as BadRequestObjectResult;
+
+            // Assert 
+            Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
+            Assert.Equal("Fault in InputVal", resultat.Value);
+        }
+        [Fact]
+        public async Task DeleteStockWrongInputVal()
+        {
+
+            mockRep.Setup(k => k.DeleteStock("55")).ReturnsAsync(true);
+
+            var stockController = new StockController(mockRep.Object, mockLog.Object);
+
+            stockController.ModelState.AddModelError("InputValidation", "Fault in InputVal");
+
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            stockController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            // Act
+            var resultat = await stockController.DeleteStock("55") as BadRequestObjectResult;
+
+            // Assert 
+            Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
+            Assert.Equal("Fault in InputVal", resultat.Value);
+        }
     }
 }
 
