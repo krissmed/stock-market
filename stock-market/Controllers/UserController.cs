@@ -112,7 +112,7 @@ namespace stock_market.Controllers
                 bool returnOK = await _db.LogIn(user);
                 if (!returnOK)
                 {
-                    return Ok(false);
+                    return Unauthorized("Wrong username or password");
                 }
                 return Ok(true);
             }
