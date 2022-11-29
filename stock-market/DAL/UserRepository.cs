@@ -72,7 +72,7 @@ namespace stock_market.DAL
         public static byte[] MakeSalt()
         {
             var csp = new RNGCryptoServiceProvider();
-            var salt = new byte[32];
+            var salt = new byte[24];
             csp.GetBytes(salt);
             return salt;
         }
@@ -85,11 +85,16 @@ namespace stock_market.DAL
                 User foundUser = await _db.Users.FirstOrDefaultAsync(u => u.username == user.username);
 
                 byte[] hash = MakeHash(user.password, foundUser.salt);
+
+                Console.WriteLine("Password: " + user.password);
+
                 bool ok = hash.SequenceEqual(foundUser.password);
                 if (ok)
                 {
+                    Console.WriteLine("like");
                     return true;
                 }
+                Console.WriteLine("Ikke like");
                 return false;
             }
             catch (Exception e)

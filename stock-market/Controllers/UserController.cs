@@ -105,14 +105,14 @@ namespace stock_market.Controllers
 
 
 
-        public async Task<ActionResult> LogIn(LoginUser user)
+        public async Task<ActionResult> LogIn([FromBody] LoginUser user)
         {
             if (ModelState.IsValid)
             {
                 bool returnOK = await _db.LogIn(user);
                 if (!returnOK)
                 {
-                    return Unauthorized("Wrong username or password");
+                    return Unauthorized("Feil brukernavn eller passord");
                 }
                 return Ok(true);
             }
@@ -135,7 +135,7 @@ namespace stock_market.Controllers
             return BadRequest("Fault in InputVal");
         }
 
-        public async Task<ActionResult> Register(RegisterUser user)
+        public async Task<ActionResult> Register([FromBody] RegisterUser user)
         {
                 if (ModelState.IsValid)
                 {
