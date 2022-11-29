@@ -17,7 +17,7 @@ namespace enhetstesting
     {
 
         private const string _loggetInn = "loggetInn";
-        private const string _ikkeLoggetInn = "";
+        private const string _ikkeLoggetInn = null;
 
         private readonly Mock<ITransactionRepository> mockRep = new Mock<ITransactionRepository>();
         private readonly Mock<ILogger<TransactionController>> mockLog = new Mock<ILogger<TransactionController>>();
@@ -39,6 +39,22 @@ namespace enhetstesting
             var resualt = await transactionController.BuyStock("GOOGL", 1) as OkObjectResult;
 
             Assert.Equal((int)HttpStatusCode.OK, resualt.StatusCode);
+            Assert.Equal("User buy stock", resualt.Value);
+        }
+        [Fact]
+        public async Task BuyStockNotLoggedOK()
+        {
+            var mock = new Mock<ITransactionRepository>();
+            mock.Setup(k => k.BuyStock("GOOGL", 1)).ReturnsAsync(true);
+            var transactionController = new TransactionController(mock.Object, mockLog.Object);
+
+            mockSession[_loggetInn] = _ikkeLoggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            transactionController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            var resualt = await transactionController.BuyStock("GOOGL", 1) as UnauthorizedObjectResult;
+
+            Assert.Equal((int)HttpStatusCode.Unauthorized, resualt.StatusCode);
             Assert.Equal("User buy stock", resualt.Value);
         }
 

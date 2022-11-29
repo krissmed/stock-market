@@ -53,6 +53,26 @@ namespace enhetstesting
             Assert.Equal((int)HttpStatusCode.OK, resualt.StatusCode);
             Assert.Equal("User created user", resualt.Value);
         }
+        [Fact]
+        public async Task CreateUsernotLoggetinnOK()
+        {
+
+            mockRep.Setup(k => k.DeleteUser(1)).ReturnsAsync(true);
+
+            var userController = new UserController(mockRep.Object, mockLog.Object);
+
+            mockSession[_loggetInn] = _ikkeLoggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            userController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            // Act
+            var resultat = await userController.DeleteUser() as UnauthorizedObjectResult;
+
+            // Assert 
+            Assert.Equal((int)HttpStatusCode.Unauthorized, resultat.StatusCode);
+            Assert.Equal("User is not logged in", resultat.Value);
+
+        }
 
         [Fact]
         public async Task CreateUserLoggetinnIkkeOK()
@@ -91,11 +111,11 @@ namespace enhetstesting
             mock.Setup(k => k.DeleteUser(1)).ReturnsAsync(true);
             var userController = new UserController(mock.Object, mockLog.Object);
 
-            mockSession[_loggetInn] = _loggetInn;
+            mockSession[_loggetInn] = 1;
             mockHttpContext.Setup(s => s.Session).Returns(mockSession);
             userController.ControllerContext.HttpContext = mockHttpContext.Object;
 
-            var resualt = await userController.DeleteUser(1) as OkObjectResult;
+            var resualt = await userController.DeleteUser() as OkObjectResult;
 
             Assert.Equal((int)HttpStatusCode.OK, resualt.StatusCode);
             Assert.Equal("User deleted user", resualt.Value);
@@ -112,7 +132,7 @@ namespace enhetstesting
             userController.ControllerContext.HttpContext = mockHttpContext.Object;
 
             // Act
-            var resultat = await userController.DeleteUser(1) as BadRequestObjectResult;
+            var resultat = await userController.DeleteUser() as BadRequestObjectResult;
 
             // Assert 
             Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
