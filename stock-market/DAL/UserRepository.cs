@@ -1,6 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.EntityFrameworkCore;
 using stock_market.Model;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace stock_market.DAL
@@ -53,6 +57,82 @@ namespace stock_market.DAL
             }
             catch { return false; }
         }
+
+        public static byte[] MakeHash(string password, byte[] salt)
+        {
+            return KeyDerivation.Pbkdf2(
+                password: password,
+                salt: salt,
+                prf: KeyDerivationPrf.HMACSHA512,
+                iterationCount: 1000,
+                numBytesRequested: 32
+                );
+        }
+
+        public static byte[] MakeSalt()
+        {
+            var csp = new RNGCryptoServiceProvider();
+            var salt = new byte[32];
+            csp.GetBytes(salt);
+            return salt;
+        }
+
+
+        public async Task<bool> LogIn(LoginUser user)
+        {
+            try
+            {
+                User foundUser = await _db.Users.FirstOrDefaultAsync(u => u.username == user.username);
+
+                byte[] hash = MakeHash(user.password, foundUser.salt);
+                bool ok = hash.SequenceEqual(foundUser.password);
+                if (ok)
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }    
+        }
+        
+        public async Task<bool> Register(RegisterUser user)
+        {
+            try
+            {
+                User foundUser = await _db.Users.FirstOrDefaultAsync(u => u.username == user.username);
+                if (foundUser != null)
+                {
+                    return false;
+                }
+                byte[] salt = MakeSalt();
+                byte[] hash = MakeHash(user.password, salt);
+                User newUser = new User
+                {
+                    username = user.username,
+                    first_name = user.first_name,
+                    last_name = user.last_name,
+                    password = hash,
+                    salt = salt,
+                    curr_balance = 100_000,
+                    curr_balance_liquid = 100_000,
+                    curr_balance_stock = 0,
+                };
+                await _db.Users.AddAsync(newUser);
+                await _db.SaveChangesAsync();
+                return true;
+
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+        
+
+
 
         public async Task<List<User>> GetAll()
         {

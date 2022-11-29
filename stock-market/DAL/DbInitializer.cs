@@ -75,15 +75,20 @@ public class DbInitializer : IDbInitializer
         {
             using (var _db = serviceScope.ServiceProvider.GetService<mainDB>())
             {
-                //Create User
-                User john_doe = new User();
-                john_doe.curr_balance = 100_000;
-                john_doe.curr_balance_liquid = 100_000;
-                john_doe.curr_balance_stock = 0;
-                john_doe.first_name = "John";
-                john_doe.last_name = "Doe";
-                await _db.Users.AddAsync(john_doe);
-
+                //Create guest user
+                User guest = new User();
+                guest.username = "Guest";
+                string password = "password";
+                byte[] salt = UserRepository.MakeSalt();
+                byte[] hash = UserRepository.MakeHash(password, salt);
+                guest.password = hash;
+                guest.salt = salt;
+                guest.curr_balance = 0;
+                guest.curr_balance_stock = 0;
+                guest.curr_balance_liquid = 0;
+                guest.first_name = "Guest";
+                guest.last_name = "";
+                await _db.Users.AddAsync(guest);
                 await _db.SaveChangesAsync();
             }
         }

@@ -65,8 +65,36 @@ namespace stock_market.Controllers
         public async Task<bool> EditUserBalance(User editUser) //Edits balance of user, get current calues with GET and send new ones with POST. This is meant for when user sell/buy stock
         {
             return await _db.EditUserBalance(editUser);
-
         }
+
+        public async Task<ActionResult> LogIn(LoginUser user)
+        {
+            if (ModelState.IsValid)
+            {
+                bool returnOK = await _db.LogIn(user);
+                if (!returnOK)
+                {
+                    return Ok(false);
+                }
+                return Ok(true);
+            }
+            return BadRequest("Feil i inputvalidering på server");
+        }
+
+        public async Task<ActionResult> Register(RegisterUser user)
+        {
+                if (ModelState.IsValid)
+                {
+                    bool returnOK = await _db.Register(user);
+                    if (!returnOK)
+                    {
+                        return Ok(false);
+                    }
+                    return Ok(true);
+                }
+                return BadRequest("Feil i inputvalidering på server");
+            }
+        
     }
 
 }
