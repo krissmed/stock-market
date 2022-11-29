@@ -17,19 +17,14 @@ import InputAdornment from '@mui/material/InputAdornment';
 function Signup() {
 
     const registerUser = (user) => {
-        console.log(user);
         axios.post('user/register', user)
             .then(res => {
-
                 if (res.status === 200) {
                     window.location.href = "/login";
                 }
-                if (res.status === 409) {
-                    setErrMsg("Username already exists");
-                }
 
             }).catch(err => {
-                setErrMsg("Username already exists");
+                setErrMsg(err.response.data);
             })
     }
 
