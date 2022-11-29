@@ -17,10 +17,9 @@ namespace stock_market.DAL
             _db = db;
         }
 
-        public async Task<string> GetCurrentPortfolio()
+        public async Task<string> GetCurrentPortfolio(int userid)
         {
-
-            var user = await _db.Users.FirstAsync();
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.id == userid);
 
             var portfolio = await _db.portfolios
                 .Include(p => p.stock_counter)
@@ -36,9 +35,9 @@ namespace stock_market.DAL
             return json;
         }
 
-        public async Task<string> GetHistoricalPortfolios()
+        public async Task<string> GetHistoricalPortfolios(int userid)
         {
-            var user = await _db.Users.FirstAsync();
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.id == userid);
             var portfolios = await _db.portfolios
                 .Where(p => p.user.id == user.id && p.timestamp.time >= DateTime.Now.AddDays(-1))
                 .Include(p => p.timestamp)

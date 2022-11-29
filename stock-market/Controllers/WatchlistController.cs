@@ -12,7 +12,7 @@ using stock_market.Model;
 using Microsoft.AspNetCore.Authentication;
 using stock_market.DAL;
 using Microsoft.Extensions.Logging;
-
+using Microsoft.AspNetCore.Http;
 
 namespace stock_market.Controllers
 {
@@ -21,6 +21,7 @@ namespace stock_market.Controllers
     {
         private readonly IWatchlistRepository _db;
         private readonly ILogger<WatchlistController> _log;
+        private const string _loggetInn = "loggetInn";
 
         public WatchlistController(IWatchlistRepository db, ILogger<WatchlistController> log)
         {
@@ -28,17 +29,28 @@ namespace stock_market.Controllers
             _log = log;
         }
 
-        public async Task<string> GetFullWatchlist()
+        public async Task<ActionResult> GetFullWatchlist()
         {
-            return await _db.GetFullWatchlist();
+            if (HttpContext.Session.GetInt32(_loggetInn) == null || HttpContext.Session.GetInt32(_loggetInn) == -1)
+            {
+                _log.LogError("WatchlistController: User is not logged in, tried to get full watchlist");
+                return Unauthorized("User is not logged in");
+            }
+            return Ok(await _db.GetFullWatchlist(HttpContext.Session.GetInt32(_loggetInn).Value));
         }
 
         public async Task<ActionResult> AddStock(string ticker, int amount, double target_price)
         {
+            if (HttpContext.Session.GetInt32(_loggetInn) == null || HttpContext.Session.GetInt32(_loggetInn) == -1)
+            {
+                _log.LogError("WatchlistController: User is not logged in, tried to get full watchlist");
+                return Unauthorized("User is not logged in");
+            }
+            int userid = HttpContext.Session.GetInt32(_loggetInn).Value;
 
             if (ModelState.IsValid)
             {
-                bool ok = await _db.AddStock(ticker, amount, target_price);
+                bool ok = await _db.AddStock(ticker, amount, target_price, userid);
                 if (!ok)
                 {
                     _log.LogError("TransactionController: Could not add to watchlist");
@@ -53,7 +65,14 @@ namespace stock_market.Controllers
 
         public async Task<ActionResult> DeleteStock(int id)
         {
-            bool ok = await _db.DeleteStock(id);
+            if (HttpContext.Session.GetInt32(_loggetInn) == null || HttpContext.Session.GetInt32(_loggetInn) == -1)
+            {
+                _log.LogError("WatchlistController: User is not logged in, tried to delete a stock");
+                return Unauthorized("User is not logged in");
+            }
+            int userid = HttpContext.Session.GetInt32(_loggetInn).Value;
+            
+            bool ok = await _db.DeleteStock(id, userid);
             if (!ok)
             {
                 _log.LogError("TransactionController: Could not delete from watchlist");
@@ -65,6 +84,13 @@ namespace stock_market.Controllers
 
         public async Task<ActionResult> UpdateStock(int id, int amount, double target_price)
         {
+            if (HttpContext.Session.GetInt32(_loggetInn) == null || HttpContext.Session.GetInt32(_loggetInn) == -1)
+            {
+                _log.LogError("WatchlistController: User is not logged in, tried to update a stock");
+                return Unauthorized("User is not logged in");
+            }
+            int userid = HttpContext.Session.GetInt32(_loggetInn).Value;
+
 
             if (ModelState.IsValid)
             {

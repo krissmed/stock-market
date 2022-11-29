@@ -4,8 +4,8 @@ namespace stock_market.DAL
 {
     public interface IPortfolioRepository
     {
-        Task<string> GetCurrentPortfolio();
-        Task<string> GetHistoricalPortfolios();
+        Task<string> GetCurrentPortfolio(int userid);
+        Task<string> GetHistoricalPortfolios(int userid);
 
     }
 }

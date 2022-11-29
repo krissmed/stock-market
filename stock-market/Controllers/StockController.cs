@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 using stock_market.Model;
 using stock_market.DAL;
 using Microsoft.Extensions.Logging;
-
+using Microsoft.AspNetCore.Http;
 
 namespace stock_market.Controllers
 {
@@ -20,6 +20,7 @@ namespace stock_market.Controllers
     {
         private readonly IStockRepository _db;
         private readonly ILogger<StockController> _log;
+        private const string _loggetInn = "loggetInn";
 
 
         public StockController(IStockRepository db, ILogger<StockController> log)
@@ -30,6 +31,12 @@ namespace stock_market.Controllers
 
         public async Task<ActionResult> AddStock(string ticker)
         {
+            if (HttpContext.Session.GetInt32(_loggetInn) == null || HttpContext.Session.GetInt32(_loggetInn) == -1)
+            {
+                _log.LogError("StockController: User is not logged in, tried to get add stock");
+                return Unauthorized("User is not logged in");
+            }
+
             if (ModelState.IsValid)
             {
                 bool ok = await _db.AddStock(ticker);
@@ -52,6 +59,12 @@ namespace stock_market.Controllers
 
         public async Task<ActionResult> DeleteStock(string ticker)
         {
+            if (HttpContext.Session.GetInt32(_loggetInn) == null || HttpContext.Session.GetInt32(_loggetInn) == -1)
+            {
+                _log.LogError("StockController: User is not logged in, tried to get delete stock");
+                return Unauthorized("User is not logged in");
+            }
+
             if (ModelState.IsValid)
             {
                 bool ok = await _db.DeleteStock(ticker);

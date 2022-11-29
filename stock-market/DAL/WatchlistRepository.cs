@@ -16,9 +16,9 @@ namespace stock_market.DAL
             _db = db;
         }
 
-        public async Task<string> GetFullWatchlist()
+        public async Task<string> GetFullWatchlist(int userid)
         {
-            User user = await _db.Users.FirstAsync();
+            User user = await _db.Users.FirstOrDefaultAsync(u => u.id == userid);
 
             if (!await _db.watchlist.AnyAsync(w => w.user == user))
             {
@@ -37,7 +37,7 @@ namespace stock_market.DAL
             return json;
         }
 
-        public async Task<bool> AddStock(string ticker, int amount, double target_price)
+        public async Task<bool> AddStock(string ticker, int amount, double target_price, int userid)
         {
             try
             {
@@ -47,7 +47,7 @@ namespace stock_market.DAL
                 }
 
                 BaseStock stock = await _db.baseStocks.FirstAsync(s => s.ticker == ticker);
-                User user = await _db.Users.FirstAsync();
+                User user = await _db.Users.FirstOrDefaultAsync(u => u.id == userid);
 
                 //check if the user already has a watchlist
                 /*if (!_db.watchlist.Any(w => w.user == user))
@@ -83,21 +83,19 @@ namespace stock_market.DAL
 
         }
 
-        public async Task<bool> DeleteStock(int id)
+        public async Task<bool> DeleteStock(int id, int userid)
         {
+            try
             {
-                try
-                {
-                    WatchlistStock wls = await _db.wls.FirstAsync(w => w.id == id);
-                    _db.wls.Remove(wls);
-                    await _db.SaveChangesAsync();
-                    return true;
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    return false;
-                }
+                WatchlistStock wls = await _db.wls.FirstAsync(w => w.id == id);
+                _db.wls.Remove(wls);
+                await _db.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return false;
             }
         }
 

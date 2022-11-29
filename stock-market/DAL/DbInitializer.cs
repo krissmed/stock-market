@@ -83,9 +83,9 @@ public class DbInitializer : IDbInitializer
                 byte[] hash = UserRepository.MakeHash(password, salt);
                 guest.password = hash;
                 guest.salt = salt;
-                guest.curr_balance = 0;
+                guest.curr_balance = 50_000;
                 guest.curr_balance_stock = 0;
-                guest.curr_balance_liquid = 0;
+                guest.curr_balance_liquid = 50_000;
                 guest.first_name = "Guest";
                 guest.last_name = "";
                 await _db.Users.AddAsync(guest);
@@ -513,53 +513,62 @@ public class DbInitializer : IDbInitializer
                             //check if the portfolio exists in the list of portfolio stocks
                             if (!all_portfolios.Any(h => h.timestamp == ts && h.user == user))
                             {
-
+                                
                                 Timestamp time = all_timestamps.Find(t => t.time == ts.time.AddMinutes(-1));
                                 Portfolio prev_port = all_portfolios.Find(p => p.timestamp == time && p.user == user);
-
-                                if (prev_port != null)
+                                
+                                double prevval = 0;
+                                List<BaseStockCounter> prestock = new List<BaseStockCounter>();
+                                
+                                if (prev_port == null)
                                 {
-
-                                    Portfolio historical_portfolio = new Portfolio
-                                    {
-                                        user = user,
-                                        liquid_value = prev_port.liquid_value,
-                                        stock_counter = prev_port.stock_counter,
-                                        stock_value = 0
-                                    };
-
-                                    List<BaseStockCounter> all_counters = new List<BaseStockCounter>();
-                                    if (historical_portfolio.stock_counter != null && historical_portfolio.stock_counter.Count != 0)
-                                    {
-                                        foreach (var hs in historical_portfolio.stock_counter)
-                                        {
-
-                                            BaseStockCounter temp = new BaseStockCounter
-                                            {
-                                                count = hs.count,
-                                            };
-
-                                            HistoricalStock historical_stock = await _db.historicalStocks
-                                                .Include(h => h.baseStock)
-                                                .Include(h => h.timestamp)
-                                                .Where(h => h.baseStock == hs.historical.baseStock && h.timestamp == ts)
-                                                .FirstOrDefaultAsync();
-
-                                            temp.historical = historical_stock;
-
-                                            historical_portfolio.stock_value += hs.historical.price * hs.count;
-                                            all_counters.Add(temp);
-                                        }
-                                    }
-
-
-                                    historical_portfolio.total_value = historical_portfolio.stock_value
-                                        + historical_portfolio.liquid_value;
-                                    historical_portfolio.timestamp = ts;
-                                    historical_portfolio.stock_counter = all_counters;
-                                    all_filled_portfolios.Add(historical_portfolio);
-                                    all_portfolios.Add(historical_portfolio);
+                                    prevval = user.curr_balance_liquid;
                                 }
+                                else
+                                {
+                                    prevval = prev_port.liquid_value;
+                                    prestock = prev_port.stock_counter;
+                                }
+
+                                Portfolio historical_portfolio = new Portfolio
+                                {
+                                    user = user,
+                                    liquid_value = prevval,
+                                    stock_counter = prestock,
+                                    stock_value = 0
+                                };
+
+                                List<BaseStockCounter> all_counters = new List<BaseStockCounter>();
+                                if (historical_portfolio.stock_counter != null && historical_portfolio.stock_counter.Count != 0)
+                                {
+                                    foreach (var hs in historical_portfolio.stock_counter)
+                                    {
+
+                                        BaseStockCounter temp = new BaseStockCounter
+                                        {
+                                            count = hs.count,
+                                        };
+
+                                        HistoricalStock historical_stock = await _db.historicalStocks
+                                            .Include(h => h.baseStock)
+                                            .Include(h => h.timestamp)
+                                            .Where(h => h.baseStock == hs.historical.baseStock && h.timestamp == ts)
+                                            .FirstOrDefaultAsync();
+
+                                        temp.historical = historical_stock;
+
+                                        historical_portfolio.stock_value += hs.historical.price * hs.count;
+                                        all_counters.Add(temp);
+                                    }
+                                }
+
+
+                                historical_portfolio.total_value = historical_portfolio.stock_value
+                                    + historical_portfolio.liquid_value;
+                                historical_portfolio.timestamp = ts;
+                                historical_portfolio.stock_counter = all_counters;
+                                all_filled_portfolios.Add(historical_portfolio);
+                                all_portfolios.Add(historical_portfolio);
                             }
                         }
                     }
@@ -597,7 +606,7 @@ public class DbInitializer : IDbInitializer
                             {
 
                                 //buy the stock using the buystock method of the transactioncontroller
-                                bool buy = await new TransactionRepository(_db).BuyStock(stock.stock.ticker, stock.amount);
+                                bool buy = await new TransactionRepository(_db).BuyStock(stock.stock.ticker, stock.amount, watchlist.user.id);
 
                                 if (buy)
                                 {

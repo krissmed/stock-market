@@ -16,7 +16,7 @@ namespace stock_market.DAL
             _db = db;
         }
 
-        public async Task<bool> SellStock(string ticker, int amount)
+        public async Task<bool> SellStock(string ticker, int amount, int userid)
         {
             {
                 try
@@ -89,7 +89,7 @@ namespace stock_market.DAL
             }
         }
 
-        public async Task<bool> BuyStock(string ticker, int amount)
+        public async Task<bool> BuyStock(string ticker, int amount, int userid)
         {
             try
             {
@@ -99,7 +99,7 @@ namespace stock_market.DAL
                 }
 
                 var stock = await _db.baseStocks.FirstAsync(s => s.ticker == ticker);
-                var user = await _db.Users.FirstAsync();
+                var user = await _db.Users.FirstAsync(u => u.id == userid);
                 var timestamp = await _db.timestamps.OrderByDescending(t => t.time)
                     .FirstAsync();
 
@@ -185,12 +185,14 @@ namespace stock_market.DAL
             }
         }
 
-        public async Task<List<Transaction>> ListAll()
+        public async Task<List<Transaction>> ListAll(int userid)
         {
-            //include user and timestamp
+            var user = await _db.Users.FirstAsync(u => u.id == userid);
+            
             List<Transaction> transactions = await _db.transactions
                 .Include(t => t.user)
                 .Include(t => t.timestamp)
+                .Where(t => t.user == user)
                 .ToListAsync();
             return transactions;
         }
