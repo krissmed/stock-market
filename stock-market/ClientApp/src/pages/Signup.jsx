@@ -101,9 +101,9 @@ function LogIn() {
 
         const checkPassword = (password) => {
 
-            if (!/^((?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,})$/.test(password)) {
+            if (!/^((?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16})$/.test(password)) {
                 setErr(true)
-                setErrPass("Password invalid. Has to be over 6 chars and include digits");
+                setErrPass("Minimum 8chars: 1 uppercase, 1 lowercase, 1 digit and 1 special char");
                 return false;
             }
             else {

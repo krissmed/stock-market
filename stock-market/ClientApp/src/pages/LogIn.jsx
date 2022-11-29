@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import '../css/logIn.css';
 import Signup from './Signup.jsx';
 
@@ -11,6 +12,18 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import PasswordRoundedIcon from '@mui/icons-material/PasswordRounded';
 import InputAdornment from '@mui/material/InputAdornment';
 
+const loggingInUser = (user) => {
+    console.log(user);
+
+    axios.post('user/login', user)
+        .then(res => {
+            console.log(res);
+
+        }).catch(err => {
+            return false;
+        })
+
+}
 
 function LogIn() {
     const customTheme = useTheme();
@@ -22,13 +35,24 @@ function LogIn() {
 
     const [err, setErr] = useState(false);
     const [errMsg, setErrMsg] = useState("");
+    const [errUser, setErrUser] = useState("");
+    const [errPass, setErrPass] = useState("");
 
     const logIn = () => {
-        if(!err) {
-            localStorage.setItem('isLoggedIn', true);
-            localStorage.setItem('user', user.username);
+        if (!err) {
 
-            window.location.href = "/";
+            if (loggingInUser(user)) {
+                alert("valid, logged in");
+            }
+            //localStorage.setItem('isLoggedIn', true);
+            //localStorage.setItem('user', user.username);
+
+            //window.location.href = "/";
+
+            else {
+                setErrMsg("Invalid username or password. Try again");
+            }
+
         }
         else {
             setErrMsg("Invalid username or password. Try again");
@@ -37,7 +61,8 @@ function LogIn() {
 
     const handleChange = (e) => {
         setErrMsg("");
-        if (e.target.name == 'username'){
+        if (e.target.name == 'username') {
+            setErrUser("");
             if (checkUsername(e.target.value)) {
                 setUser({
                     ...user,
@@ -46,26 +71,45 @@ function LogIn() {
                 }
         }
         if (e.target.name == 'password') {
-            setUser({
-                ...user,
-                password: e.target.value
+            setErrPass("");
+
+            if (checkPassword(e.target.value)) {
+                setUser({
+                    ...user,
+                    password: e.target.value
                 })
+            }
         }
     }
 
 
     const checkUsername = (username) => {
 
-        if(!/^([a-zA-ZæøåÆØÅ._0-9  ]{4,20})$/.test(username)){
+        if (!/^([a-zA-ZæøåÆØÅ. \-]{2,20})$/.test(username)){
             setErr(true)
-            setErrMsg("Username invalid");
+            setErrUser("Username invalid");
             return false;
         }
         else {
             setErr(false)
-            setErrMsg("");
+            setErrUser("");
             return true;
         }
+    }
+
+    const checkPassword = (password) => {
+
+        if (!/^((?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16})$/.test(password)) {
+            setErr(true);
+            setErrPass("Minimum 8chars: 1 uppercase, 1 lowercase, 1 digit and 1 special char");
+            return false;
+        }
+        else {
+            setErr(false)
+            setErrPass("");
+            return true;
+        }
+
     }
     return (
         <Box className='body'>
@@ -97,7 +141,7 @@ function LogIn() {
                                    autoComplete='off'
                                    fullWidth
                                    color='info'
-                                   helperText={errMsg}
+                                   helperText={errUser}
                                    name='username'
                                    InputProps={{
                                        startAdornment: (
@@ -120,7 +164,8 @@ function LogIn() {
                                    type='password'
                                    label='Password'
                                    autoComplete='off'
-                                   fullWidth
+                                    fullWidth
+                                    helperText={errPass}
                                    color='info'
                                    name='password'
                                    InputProps={{
@@ -137,7 +182,9 @@ function LogIn() {
                         textAlign: 'center',
                         padding: 3,
                     }}>
-                        <Typography variant='body2'>   {errMsg}    </Typography>
+                        <Typography variant='subtitle2' sx={{
+                            color: customTheme.palette.error.main
+                        }}>   {errMsg}    </Typography>
                     </Box>
                     <Box sx={{
                         textAlign: 'center',
