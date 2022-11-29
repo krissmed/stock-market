@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import '../css/logIn.css';
-import Signup from './Signup.jsx';
+import LogIn from './LogIn';
 
 import { Box, Typography, Button, TextField } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
@@ -12,28 +12,27 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import PasswordRoundedIcon from '@mui/icons-material/PasswordRounded';
 import InputAdornment from '@mui/material/InputAdornment';
 
-const registerUser = (user) => {
-    console.log(user);
-    axios.post('user/register', user)
-        .then(res => {
-            console.log(res);
-
-            if (res.status === 200) {
-                alert("Logged in");
-                return true;
-            }
-            else if (res.status === 409) {
-                setErrMsg("Username already exists")
-            }
-            return false;
-
-        }).catch(err => {
-            return false;
-        })
-}
 
 
-function LogIn() {
+function Signup() {
+
+    const registerUser = (user) => {
+        console.log(user);
+        axios.post('user/register', user)
+            .then(res => {
+
+                if (res.status === 200) {
+                    window.location.href = "/login";
+                }
+                if (res.status === 409) {
+                    setErrMsg("Username already exists");
+                }
+
+            }).catch(err => {
+                setErrMsg("Username already exists");
+            })
+    }
+
     const customTheme = useTheme();
 
     const [user, setUser] = useState({
@@ -49,12 +48,10 @@ function LogIn() {
     const [errName, setErrName] = useState("");
     const [errPass, setErrPass] = useState("");
 
-    const logIn = () => {
+    const register = () => {
         if (!err) {
 
-            if (registerUser(user)) {
-                window.location.href = "/login";
-            }
+            registerUser(user);
         }
         else {
             setErrMsg("Invalid input. Try again");
@@ -259,7 +256,7 @@ function LogIn() {
                             width: '60%',
                             height: 40
                         }}
-                            onClick={logIn}
+                            onClick={register}
                         >
                             <LoginRoundedIcon sx={{
                                 marginRight: 1,
@@ -274,4 +271,4 @@ function LogIn() {
     );
 }
 
-export default LogIn;
+export default Signup;

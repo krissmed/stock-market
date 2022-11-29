@@ -12,25 +12,28 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import PasswordRoundedIcon from '@mui/icons-material/PasswordRounded';
 import InputAdornment from '@mui/material/InputAdornment';
 
-const loggingInUser = (user) => {
-    console.log(user);
 
-    axios.post('user/login', user)
-        .then(res => {
-            console.log(res);
-            if (res.status === 200) {
-                console.log("logged in");
-                return true;
-            }
-            return false;
-
-        }).catch(err => {
-            return false;
-        })
-
-}
 
 function LogIn() {
+
+//AXIOS request
+    const loggingInUser = (user) => {
+
+        axios.post('user/login', user)
+            .then(res => {
+
+                if (res.status === 200) {
+
+                    localStorage.setItem('isLoggedIn', true);
+                    localStorage.setItem('user', user.username);
+                    window.location.href = "/";
+                }
+            }).catch(err => {
+                setErrMsg("Invalid username or password");
+            })
+
+    }
+
     const customTheme = useTheme();
 
     const [user, setUser] = useState({
@@ -45,19 +48,7 @@ function LogIn() {
 
     const logIn = () => {
         if (!err) {
-
-            if (loggingInUser(user)) {
-                alert("valid, logged in");
-            }
-            //localStorage.setItem('isLoggedIn', true);
-            //localStorage.setItem('user', user.username);
-
-            //window.location.href = "/";
-
-            else {
-                setErrMsg("Invalid username or password. Try again");
-            }
-
+            loggingInUser(user);
         }
         else {
             setErrMsg("Invalid username or password. Try again");
@@ -116,6 +107,7 @@ function LogIn() {
         }
 
     }
+
     return (
         <Box className='body'>
             <Box className='logInContainer'>
