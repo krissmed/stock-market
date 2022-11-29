@@ -14,7 +14,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 const registerUser = (user) => {
     console.log(user);
-    axios.post('user/login', user)
+    axios.post('user/register', user)
         .then(res => {
             console.log(res);
 
@@ -23,7 +23,7 @@ const registerUser = (user) => {
                 return true;
             }
             else if (res.status === 409) {
-                setErrMsg("User already exists")
+                setErrMsg("Username already exists")
             }
             return false;
 
@@ -53,7 +53,7 @@ function LogIn() {
         if (!err) {
 
             if (registerUser(user)) {
-                console.log("Valid input")
+                window.location.href = "/login";
             }
         }
         else {
@@ -118,7 +118,7 @@ function LogIn() {
 
             if (!/^((?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16})$/.test(password)) {
                 setErr(true)
-                setErrPass("Minimum 8chars: 1 uppercase, 1 lowercase, 1 digit and 1 special char");
+                setErrPass("Max 16chars, minimum 8chars: 1 uppercase, 1 lowercase, 1 digit and 1 special char");
                 return false;
             }
             else {
@@ -131,7 +131,7 @@ function LogIn() {
     const checkName = (name) => {
         if (!/^([a-zA-ZæøåÆØÅ \-]{2,50})$/.test(name)) {
             setErr(true)
-            setErrName("One of your names are invalid");
+            setErrName("Names has to consist of 2 or more letters");
             return false;
         }
         else {
