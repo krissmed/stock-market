@@ -133,6 +133,7 @@ namespace stock_market.Controllers
             }
             _log.LogError("UserController: Fault in InputVal ");
             return BadRequest("Fault in InputVal");
+        }
 
         public async Task<ActionResult> Register(RegisterUser user)
         {
@@ -147,7 +148,6 @@ namespace stock_market.Controllers
                 }
                 return BadRequest("Feil i inputvalidering på server");
             }
-        
+        }
     }
 
-}
