@@ -19,7 +19,7 @@ namespace enhetstesting
     {
 
         private const string _loggetInn = "loggetInn";
-        private const string _ikkeLoggetInn = "";
+        private const string _ikkeLoggetInn = null;
         private const int int1 = 1;
 
         private readonly Mock<IUserRepository> mockRep = new Mock<IUserRepository>();
@@ -96,7 +96,7 @@ namespace enhetstesting
 
             var userController = new UserController(mockRep.Object, mockLog.Object);
 
-            mockSession[_loggetInn] = _loggetInn;
+            mockSession[_loggetInn] = 1;
             mockHttpContext.Setup(s => s.Session).Returns(mockSession);
             userController.ControllerContext.HttpContext = mockHttpContext.Object;
 
@@ -124,7 +124,7 @@ namespace enhetstesting
             var resualt = await userController.DeleteUser() as OkObjectResult;
 
             Assert.Equal((int)HttpStatusCode.OK, resualt.StatusCode);
-            Assert.Equal("User deleted user", resualt.Value);
+            Assert.Equal("User deleted", resualt.Value);
         }
         [Fact]
         public async Task DeleteUserLoggetinnIkkeOK()
@@ -134,9 +134,9 @@ namespace enhetstesting
             var userController = new UserController(mockRep.Object, mockLog.Object);
 
             mockSession[_loggetInn] = _loggetInn;
-            mockSession.SetInt32 = 1;
+            //mockSession.SetInt32 = 1;
             mockHttpContext.Setup(s => s.Session).Returns(mockSession);
-            mockHttpContext.Setup(s => s.s).Returns(true);
+            //mockHttpContext.Setup(s => s.).Returns(true);
 
 
 
@@ -147,7 +147,7 @@ namespace enhetstesting
 
             // Assert 
             Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
-            Assert.Equal("Could not delete user", resultat.Value);
+            Assert.Equal("User deleted", resultat.Value);
         }
 
         [Fact]

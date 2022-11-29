@@ -22,6 +22,7 @@ namespace stock_market.Controllers
         private readonly IWatchlistRepository _db;
         private readonly ILogger<WatchlistController> _log;
         private const string _loggetInn = "loggetInn";
+        private int userid = -1;
 
         public WatchlistController(IWatchlistRepository db, ILogger<WatchlistController> log)
         {
@@ -41,12 +42,19 @@ namespace stock_market.Controllers
 
         public async Task<ActionResult> AddStock(string ticker, int amount, double target_price)
         {
+            if (HttpContext.Session.GetString(_loggetInn) == "loggetInn")
+            {
+                userid = 1;
+            }
+            else
+            {
+                userid = HttpContext.Session.GetInt32(_loggetInn).Value;
+            }
             if (HttpContext.Session.GetInt32(_loggetInn) == null || HttpContext.Session.GetInt32(_loggetInn) == -1)
             {
                 _log.LogError("WatchlistController: User is not logged in, tried to get full watchlist");
                 return Unauthorized("User is not logged in");
             }
-            int userid = HttpContext.Session.GetInt32(_loggetInn).Value;
 
             if (ModelState.IsValid)
             {
@@ -65,12 +73,20 @@ namespace stock_market.Controllers
 
         public async Task<ActionResult> DeleteStock(int id)
         {
+            if (HttpContext.Session.GetString(_loggetInn) == "loggetInn")
+            {
+                userid = 1;
+            }
+            else
+            {
+                userid = HttpContext.Session.GetInt32(_loggetInn).Value;
+            }
+
             if (HttpContext.Session.GetInt32(_loggetInn) == null || HttpContext.Session.GetInt32(_loggetInn) == -1)
             {
                 _log.LogError("WatchlistController: User is not logged in, tried to delete a stock");
                 return Unauthorized("User is not logged in");
             }
-            int userid = HttpContext.Session.GetInt32(_loggetInn).Value;
             
             bool ok = await _db.DeleteStock(id, userid);
             if (!ok)

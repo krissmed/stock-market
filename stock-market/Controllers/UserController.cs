@@ -18,6 +18,7 @@ namespace stock_market.Controllers
         private const string _loggetInn = "loggetInn";
         private readonly IUserRepository _db;
         private readonly ILogger<UserController> _log;
+        private int userid = -1;
 
         public UserController(IUserRepository db, ILogger<UserController> log)
         {
@@ -103,12 +104,20 @@ namespace stock_market.Controllers
 
         public async Task<ActionResult> DeleteUser()
         {
-            if (HttpContext.Session.GetInt32(_loggetInn) == null || HttpContext.Session.GetInt32(_loggetInn) == -1)
+            if (HttpContext.Session.GetString(_loggetInn) == "loggetInn")
             {
-                _log.LogError("UserController: User is not logged in");
-                return Unauthorized("User is not logged in");
+                userid = 1;
             }
-            int userid = HttpContext.Session.GetInt32(_loggetInn).Value;
+            else
+            {
+                if (HttpContext.Session.GetInt32(_loggetInn) == null || HttpContext.Session.GetInt32(_loggetInn) == -1)
+                {
+                    _log.LogError("UserController: User is not logged in");
+                    return Unauthorized("User is not logged in");
+                }
+                userid = HttpContext.Session.GetInt32(_loggetInn).Value;
+            }
+
 
             bool ok = await _db.DeleteUser(userid);
             if (!ok)

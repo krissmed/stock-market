@@ -17,7 +17,7 @@ namespace enhetstesting
     {
 
         private const string _loggetInn = "loggetInn";
-        private const string _ikkeLoggetInn = "";
+        private const string _ikkeLoggetInn = null;
 
         private readonly Mock<IStockRepository> mockRep = new Mock<IStockRepository>();
         private readonly Mock<ILogger<StockController>> mockLog = new Mock<ILogger<StockController>>();

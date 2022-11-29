@@ -19,7 +19,7 @@ namespace enhetstesting
         //BLIR INNFØRT NÅR LOGIN ER IMPLEMENTERT
 
         private const string _loggetInn = "loggetInn";
-        private const string _ikkeLoggetInn = "";
+        private const string _ikkeLoggetInn = null;
 
         private readonly Mock<IPortfolioRepository> mockRep = new Mock<IPortfolioRepository>();
         private readonly Mock<ILogger<PortfolioController>> mockLog = new Mock<ILogger<PortfolioController>>();

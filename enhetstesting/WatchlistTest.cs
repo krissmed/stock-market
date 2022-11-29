@@ -17,7 +17,7 @@ namespace enhetstesting
     {
 
         private const string _loggetInn = "loggetInn";
-        private const string _ikkeLoggetInn = "";
+        private const string _ikkeLoggetInn = null;
 
         private readonly Mock<IWatchlistRepository> mockRep = new Mock<IWatchlistRepository>();
         private readonly Mock<ILogger<WatchlistController>> mockLog = new Mock<ILogger<WatchlistController>>();
@@ -29,14 +29,14 @@ namespace enhetstesting
         public async Task AddStockLoggetinnOK()
         {
             var mock = new Mock<IWatchlistRepository>();
-            mock.Setup(k => k.AddStock("GOOGL", 1, 50,1)).ReturnsAsync(true);
+            mock.Setup(k => k.AddStock("AAPL", 1, 50, 1)).ReturnsAsync(true);
             var watchlistController = new WatchlistController(mock.Object, mockLog.Object);
 
             mockSession[_loggetInn] = _loggetInn;
             mockHttpContext.Setup(s => s.Session).Returns(mockSession);
             watchlistController.ControllerContext.HttpContext = mockHttpContext.Object;
 
-            var resualt = await watchlistController.AddStock("GOOGL", 1, 50) as OkObjectResult;
+            var resualt = await watchlistController.AddStock("AAPL", 1, 50) as OkObjectResult;
 
             Assert.Equal((int)HttpStatusCode.OK, resualt.StatusCode);
             Assert.Equal("User added to watchlist", resualt.Value);
