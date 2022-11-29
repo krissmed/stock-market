@@ -142,7 +142,7 @@ namespace stock_market.Controllers
                     bool returnOK = await _db.Register(user);
                     if (!returnOK)
                     {
-                        return Ok(false);
+                        return Conflict("User already exists");
                     }
                     return Ok(true);
                 }
