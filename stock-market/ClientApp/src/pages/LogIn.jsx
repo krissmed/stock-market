@@ -107,7 +107,6 @@ function LogIn() {
         }
 
     }
-
     return (
         <Box className='body'>
             <Box className='logInContainer'>

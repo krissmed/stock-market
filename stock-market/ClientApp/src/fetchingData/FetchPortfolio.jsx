@@ -22,6 +22,11 @@ export default function FetchPortfolio() {
             const curFolio = await axios.get("portfolio/getcurrentportfolio");
             const histFolio = await axios.get("portfolio/gethistoricalportfolios");
 
+            if (curFolio.status === 401 || histFolio.status === 401) {
+                localStorage.setItem('isLoggedIn', false);
+                window.location.href = "/login";
+            }
+
             setPortfolios(curFolio.data);
             setHistoricalFolio(histFolio.data);
 

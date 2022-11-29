@@ -11,6 +11,12 @@ export default function WatchlistData() {
     useEffect(() => {
         async function fetchData() {
             const response = await axios.get('watchlist/getfullwatchlist');
+
+            if (response.status === 401) {
+                localStorage.setItem('isLoggedIn', false);
+                window.location.href = "/login";
+            }
+
             setWatchlist(response.data);
             setIsLoading(false);
         }

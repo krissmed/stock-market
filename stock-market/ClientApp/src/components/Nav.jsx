@@ -46,7 +46,13 @@ export default function Nav() {
     useEffect(() => {
         axios.get("user/getall")
             .then(res => {
+                console.log(res);
                 setBalance(res.data);
+            }).catch(err => {
+                if (err.status === 401) {
+                    window.location.href = "/login";
+                    localStorage.setItem('isLoggedIn', false);
+                }
             })
     }, [])
 

@@ -24,6 +24,12 @@ function Signup() {
                 }
 
             }).catch(err => {
+               
+                    if (err.status === 401) {
+                        window.location.href = "/login";
+                        localStorage.setItem('isLoggedIn', false);
+                    }
+
                 setErrMsg(err.response.data);
             })
     }

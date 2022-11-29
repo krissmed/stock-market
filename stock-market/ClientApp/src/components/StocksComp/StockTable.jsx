@@ -86,10 +86,17 @@ export default function StockTable({ stockObj }) {
                     alert('Successfully bought ' + amount + ' shares of ' + ticker);
                     window.location.reload();
                 }
+                
+                setIsLoading(false);
+            }).catch(err => {
+                if (err.status === 401) {
+                    window.location.href = "/login";
+                    localStorage.setItem('isLoggedIn', false);
+                }
+                //If not enough money
                 else {
                     alert('You dont have enough money...;/');
                 }
-                setIsLoading(false);
             })
     }
 

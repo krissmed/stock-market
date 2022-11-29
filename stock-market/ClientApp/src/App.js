@@ -9,7 +9,6 @@ import Portfolio from './pages/Portfolio';
 import Stocks from './pages/Stocks';
 import Transactions from './pages/Transactions';
 import Watchlist from './pages/Watchlist';
-import Edituser from './pages/Edituser';
 import LogIn from './pages/LogIn';
 import SignUp from './pages/Signup';
 
@@ -24,7 +23,6 @@ function App() {
                             <Route path="portfolio" element={<Portfolio />} />
                             <Route path="watchlist" element={<Watchlist />} />
                             <Route path="transactions" element={<Transactions />} />
-                            <Route path="edituser" element={<Edituser />} />
                     </Route>
 
                 <Route path="/login" element={<LogIn />} />

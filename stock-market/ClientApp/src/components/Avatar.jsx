@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
@@ -27,8 +28,18 @@ export default function MyAvatar() {
     };
 
     const logOut = () => {
-        localStorage.setItem('isLoggedIn', false);
-        window.location.href = "/login";
+
+        axios.get('/user/logout')
+            .then(res => {
+                localStorage.setItem('isLoggedIn', false);
+                window.location.href = "/login";
+            }).catch(err => {
+
+                if (err.status === 401) {
+                    localStorage.setItem('isLoggedIn', false);
+                    window.location.href = "/login";
+                }
+            })
     }
 
         return (
