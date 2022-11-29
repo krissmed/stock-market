@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import '../css/logIn.css';
 import Signup from './Signup.jsx';
 
@@ -12,8 +13,23 @@ import PasswordRoundedIcon from '@mui/icons-material/PasswordRounded';
 import InputAdornment from '@mui/material/InputAdornment';
 
 const registerUser = (user) => {
-    alert(user.username);
-    return true;
+    console.log(user);
+    axios.post('user/login', user)
+        .then(res => {
+            console.log(res);
+
+            if (res.status === 200) {
+                alert("Logged in");
+                return true;
+            }
+            else if (res.status === 409) {
+                setErrMsg("User already exists")
+            }
+            return false;
+
+        }).catch(err => {
+            return false;
+        })
 }
 
 
@@ -35,7 +51,6 @@ function LogIn() {
 
     const logIn = () => {
         if (!err) {
-            console.log(user);
 
             if (registerUser(user)) {
                 console.log("Valid input")
