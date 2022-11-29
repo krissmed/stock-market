@@ -19,6 +19,7 @@ namespace stock_market.Controllers
         private readonly IPortfolioRepository _db;
         private readonly ILogger<PortfolioController> _log;
         private const string _loggetInn = "loggetInn";
+        private int userid = -1;
 
         public PortfolioController(IPortfolioRepository db, ILogger<PortfolioController> log)
         {
@@ -28,31 +29,40 @@ namespace stock_market.Controllers
         
         public async Task<ActionResult> GetCurrentPortfolio()
         {
-            if (HttpContext.Session.GetInt32(_loggetInn) == null || HttpContext.Session.GetInt32(_loggetInn) == -1)
+            if (HttpContext.Session.GetString(_loggetInn) == "loggetInn")
             {
-                _log.LogError("PortfolioController: User is not logged in, tried to get current portfolio");
-                return Unauthorized("User is not logged in");
+                userid = 1;
             }
-            int userid = HttpContext.Session.GetInt32(_loggetInn).Value;
-
+                else
+                {
+                if (HttpContext.Session.GetInt32(_loggetInn) == null || HttpContext.Session.GetInt32(_loggetInn) == -1)
+                {
+                    _log.LogError("PortfolioController: User is not logged in, tried to get current portfolio");
+                    return Unauthorized("User is not logged in");
+                }
+                    int userid = HttpContext.Session.GetInt32(_loggetInn).Value;
+                }
             _log.LogInformation("PortfolioController: Got portfolio");
             return Ok(await _db.GetCurrentPortfolio(userid));
         }
 
         public async Task<ActionResult> GetHistoricalPortfolios()
         {
-            if (HttpContext.Session.GetInt32(_loggetInn) == null || HttpContext.Session.GetInt32(_loggetInn) == -1)
+            if (HttpContext.Session.GetString(_loggetInn) == "loggetInn")
             {
-                _log.LogError("PortfolioController: User is not logged in, tried to get historical portfolios");
-                return Unauthorized("User is not logged in");
+                userid = 1;
             }
-            int userid = HttpContext.Session.GetInt32(_loggetInn).Value;
-            
+            else
+            {
+                if (HttpContext.Session.GetInt32(_loggetInn) == null || HttpContext.Session.GetInt32(_loggetInn) == -1)
+                {
+                    _log.LogError("PortfolioController: User is not logged in, tried to get historical portfolios");
+                    return Unauthorized("User is not logged in");
+                }
+                int userid = HttpContext.Session.GetInt32(_loggetInn).Value;
+            }
             _log.LogInformation("PortfolioController: Got Historicalportfolio");
             return Ok(await _db.GetHistoricalPortfolios(userid));
         }
-
     }
-    
-
 }

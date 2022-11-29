@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
+
 namespace stock_market.Model
 {
+    [ExcludeFromCodeCoverage]
     public class Timestamp
     {
         public int id { get; set; }

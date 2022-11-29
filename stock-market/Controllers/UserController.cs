@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -26,7 +27,7 @@ namespace stock_market.Controllers
             _log = log;
         }
 
-
+        [ExcludeFromCodeCoverage]
         public async Task<ActionResult> GetFullName()
         {
             //check if user is logged in by checking HttpContext.Session and checking if its -1 or null
@@ -42,7 +43,7 @@ namespace stock_market.Controllers
             string fullname = await _db.GetFullName(userid);
             return Ok(fullname);
         }
-
+        [ExcludeFromCodeCoverage]
         public async Task<ActionResult> GetFName()
         {
             if (HttpContext.Session.GetInt32(_loggetInn) == null || HttpContext.Session.GetInt32(_loggetInn) == -1)
@@ -56,7 +57,7 @@ namespace stock_market.Controllers
             string fname = await _db.GetFName(userid);
             return Ok(fname);
         }
-
+        [ExcludeFromCodeCoverage]
         public async Task<ActionResult> GetLName()
         {
             if (HttpContext.Session.GetInt32(_loggetInn) == null || HttpContext.Session.GetInt32(_loggetInn) == -1)
@@ -71,7 +72,7 @@ namespace stock_market.Controllers
 
             return Ok(lname);
         }
-
+        [ExcludeFromCodeCoverage]
         public async Task<ActionResult> GetUserID()
         {
             if (HttpContext.Session.GetInt32(_loggetInn) == null || HttpContext.Session.GetInt32(_loggetInn) == -1)
@@ -146,7 +147,7 @@ namespace stock_market.Controllers
             _log.LogError("UserController: Fault in InputVal ");
             return BadRequest("Fault in InputVal");
         }
-
+        [ExcludeFromCodeCoverage]
         public async Task<ActionResult> GetAll()
         {
             {
@@ -167,7 +168,7 @@ namespace stock_market.Controllers
                 return Ok(users);
             }
         }
-        
+        [ExcludeFromCodeCoverage]
         public async Task<ActionResult> LogIn([FromBody] LoginUser user)
         {
             if (ModelState.IsValid)
@@ -203,7 +204,7 @@ namespace stock_market.Controllers
             _log.LogError("UserController: Fault in InputVal ");
             return BadRequest("Fault in InputVal");
         }
-
+        [ExcludeFromCodeCoverage]
         public async Task<ActionResult> Register([FromBody] RegisterUser user)
         {
             if (ModelState.IsValid)
@@ -217,7 +218,7 @@ namespace stock_market.Controllers
             }
             return BadRequest("Feil i inputvalidering på server");
         }
-
+        [ExcludeFromCodeCoverage]
         public void LogOut()
         {
             HttpContext.Session.SetInt32(_loggetInn, -1);

@@ -12,6 +12,7 @@ using stock_market.Model;
 using stock_market.DAL;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
+using System.Diagnostics.CodeAnalysis;
 
 namespace stock_market.Controllers
 {
@@ -52,6 +53,7 @@ namespace stock_market.Controllers
             return BadRequest("Fault in InputVal");
         }
 
+        [ExcludeFromCodeCoverage]
         public async Task<List<BaseStock>> GetStocks()
         {
             return await _db.GetStocks();

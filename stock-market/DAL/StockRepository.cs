@@ -8,9 +8,11 @@ using System.Net.Http.Headers;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace stock_market.DAL
 {
+    [ExcludeFromCodeCoverage]
     public class StockRepository : IStockRepository
     {
         private readonly mainDB _db;

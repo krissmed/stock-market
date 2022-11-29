@@ -10,10 +10,12 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using stock_market.Model;
 using stock_market.DAL;
+using System.Diagnostics.CodeAnalysis;
 
 namespace stock_market.Controllers
 {
     [Route("[controller]/[action]")]
+    [ExcludeFromCodeCoverage]
     public class HistoricalStockController : ControllerBase
     {
         private readonly IHistoricalStockRepository _db;

@@ -26,42 +26,39 @@ namespace enhetstesting
 
         private readonly Mock<HttpContext> mockHttpContext = new Mock<HttpContext>();
         private readonly MockHttpSession mockSession = new MockHttpSession();
+        
+        [Fact]
+        public async Task GetPortfolioNotLoggedOK()
+        {
+            var mock = new Mock<IPortfolioRepository>();
+            mock.Setup(k => k.GetCurrentPortfolio(1)).ReturnsAsync("");
+            var portfolioController = new PortfolioController(mock.Object, mockLog.Object);
 
-        //  [Fact]
-        //  public async Task AddStockLoggetinnOK()
-        //  {
-        //    var mock = new Mock<PortfolioRepository>();
-        //    mock.Setup(k => k.GetCurrentPortfolio());
-        //    var portfolioController = new PortfolioController(mock.Object, mockLog.Object);
+            mockSession[_loggetInn] = _ikkeLoggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            portfolioController.ControllerContext.HttpContext = mockHttpContext.Object;
 
-        //     mockSession[_loggetInn] = _loggetInn;
-        //     mockHttpContext.Setup(s => s.Session).Returns(mockSession);
-        //     portfolioController.ControllerContext.HttpContext = mockHttpContext.Object;
+            var resualt = await portfolioController.GetCurrentPortfolio() as UnauthorizedObjectResult;
 
-        //     var resualt = await portfolioController.AddStock("GOOGL") as OkObjectResult;
+            Assert.Equal((int)HttpStatusCode.Unauthorized, resualt.StatusCode);
+            Assert.Equal("User is not logged in", resualt.Value);
+        }
+        [Fact]
+        public async Task GetHistoricalPortfolioNotLoggedOK()
+        {
+            var mock = new Mock<IPortfolioRepository>();
+            mock.Setup(k => k.GetHistoricalPortfolios(1)).ReturnsAsync("");
+            var portfolioController = new PortfolioController(mock.Object, mockLog.Object);
 
-        //     Assert.Equal((int)HttpStatusCode.OK, resualt.StatusCode);
-         //     Assert.Equal("User added stock", resualt.Value);
-          //  }
+            mockSession[_loggetInn] = _ikkeLoggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            portfolioController.ControllerContext.HttpContext = mockHttpContext.Object;
 
-        //    [Fact]
-        //    public async Task AddstockLoggetinnIkkeOK()
-        // {
-        //        mockRep.Setup(k => k.AddStock("appl")).ReturnsAsync(false);
-        //
-        //        var stockController = new StockController(mockRep.Object, mockLog.Object);
+            var resualt = await portfolioController.GetHistoricalPortfolios() as UnauthorizedObjectResult;
 
-        //        mockSession[_loggetInn] = _loggetInn;
-        //        mockHttpContext.Setup(s => s.Session).Returns(mockSession);
-        //       stockController.ControllerContext.HttpContext = mockHttpContext.Object;
-
-        // Act
-        //      var resultat = await stockController.AddStock("appl") as BadRequestObjectResult;
-
-        // Assert 
-        //      Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
-        //       Assert.Equal("Could not add stock", resultat.Value);
-        //   }
+            Assert.Equal((int)HttpStatusCode.Unauthorized, resualt.StatusCode);
+            Assert.Equal("User is not logged in", resualt.Value);
+        }
     }
 }
 

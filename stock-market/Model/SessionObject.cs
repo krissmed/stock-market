@@ -1,5 +1,8 @@
-﻿namespace stock_market.Model
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace stock_market.Model
 {
+    [ExcludeFromCodeCoverage]
     public class SessionObject
     {
         public int userId { get; set; }

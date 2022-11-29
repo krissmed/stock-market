@@ -1,8 +1,10 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace stock_market.Model
 {
+    [ExcludeFromCodeCoverage]
     public class LoginUser
     {
         [RegularExpression(@"^[a-zA-ZæøåÆØÅ. \-]{2,20}$")]

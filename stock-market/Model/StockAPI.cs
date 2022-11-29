@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace stock_market.Model
 {
     // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
+    [ExcludeFromCodeCoverage]
     public class Datum
     {
         public double open { get; set; }
@@ -17,6 +19,7 @@ namespace stock_market.Model
         public string exchange { get; set; }
     }
 
+    [ExcludeFromCodeCoverage]
     public class Pagination
     {
         public int limit { get; set; }
@@ -25,6 +28,7 @@ namespace stock_market.Model
         public int total { get; set; }
     }
 
+    [ExcludeFromCodeCoverage]
     public class Root
     {
         public Pagination pagination { get; set; }

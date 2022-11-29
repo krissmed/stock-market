@@ -4,9 +4,11 @@ using stock_market.Model;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace stock_market.DAL
 {
+    [ExcludeFromCodeCoverage]
     public class WatchlistRepository : IWatchlistRepository
     {
         private readonly mainDB _db;

@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace stock_market.DAL
 {
+    [ExcludeFromCodeCoverage]
     public class TransactionRepository : ITransactionRepository
     {
         private readonly mainDB _db;

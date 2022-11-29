@@ -7,6 +7,7 @@ using stock_market.Model;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
@@ -15,6 +16,7 @@ using System.Security.Cryptography.Xml;
 using System.Security.Policy;
 using System.Threading.Tasks;
 
+[ExcludeFromCodeCoverage]
 public class DbInitializer : IDbInitializer
 {
     private readonly IServiceScopeFactory _scopeFactory;
@@ -39,6 +41,7 @@ public class DbInitializer : IDbInitializer
         }
     }
     
+
     public async Task InitializeTimestamps()
     {
         using (var serviceScope = _scopeFactory.CreateScope())

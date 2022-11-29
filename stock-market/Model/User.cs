@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace stock_market.Model
 {
+    [ExcludeFromCodeCoverage]
     public class User
     {
         public int id { get; set; }

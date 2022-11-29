@@ -2,11 +2,13 @@
 using Newtonsoft.Json;
 using stock_market.Model;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace stock_market.DAL
 {
+    [ExcludeFromCodeCoverage]
     public class HistoricalStockRepository : IHistoricalStockRepository
     {
         private readonly mainDB _db;

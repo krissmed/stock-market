@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using stock_market.Model;
 
 namespace stock_market.DAL
 {
+    [ExcludeFromCodeCoverage]
     public class mainDB : DbContext
     {
+        
         public mainDB(DbContextOptions<mainDB> options) : base(options)
         {
             Database.EnsureCreated();

@@ -3,12 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using stock_market.Model;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace stock_market.DAL
 {
+    [ExcludeFromCodeCoverage]
     public class UserRepository : IUserRepository
     {
         private readonly mainDB _db;

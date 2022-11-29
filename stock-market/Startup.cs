@@ -10,10 +10,12 @@ using Microsoft.Extensions.Logging;
 using stock_market.DAL;
 using stock_market.Model;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
 namespace stock_market
 {
+    [ExcludeFromCodeCoverage]
     public class Startup
     {
         public Startup(IConfiguration configuration)

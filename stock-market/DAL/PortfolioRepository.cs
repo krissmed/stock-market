@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 using System;
 using stock_market.Model;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace stock_market.DAL
 {
+    [ExcludeFromCodeCoverage]
     public class PortfolioRepository : IPortfolioRepository
     {
         private readonly mainDB _db;

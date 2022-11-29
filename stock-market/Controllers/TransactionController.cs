@@ -11,6 +11,7 @@ using stock_market.DAL;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Microsoft.AspNetCore.Http;
+using System.Diagnostics.CodeAnalysis;
 
 namespace stock_market.Controllers
 {
@@ -93,7 +94,7 @@ namespace stock_market.Controllers
             _log.LogError("TransactionController: Fault in InputVal ");
             return BadRequest("Fault in InputVal");
         }
-
+        [ExcludeFromCodeCoverage]
         public async Task<ActionResult> ListAll()
         {
             if (HttpContext.Session.GetInt32(_loggetInn) == null || HttpContext.Session.GetInt32(_loggetInn) == -1)

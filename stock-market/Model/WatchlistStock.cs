@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace stock_market.Model
 {
+    [ExcludeFromCodeCoverage]
     public class WatchlistStock
     {
         public int id { get; set; }
