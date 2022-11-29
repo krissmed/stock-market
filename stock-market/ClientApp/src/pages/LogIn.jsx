@@ -18,6 +18,11 @@ const loggingInUser = (user) => {
     axios.post('user/login', user)
         .then(res => {
             console.log(res);
+            if (res.status === 200) {
+                console.log("logged in");
+                return true;
+            }
+            return false;
 
         }).catch(err => {
             return false;
@@ -101,7 +106,7 @@ function LogIn() {
 
         if (!/^((?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16})$/.test(password)) {
             setErr(true);
-            setErrPass("Minimum 8chars: 1 uppercase, 1 lowercase, 1 digit and 1 special char");
+            setErrPass("Max 16chars, minimum 8chars: 1 uppercase, 1 lowercase, 1 digit and 1 special char");
             return false;
         }
         else {
