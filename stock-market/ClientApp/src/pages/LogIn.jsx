@@ -18,17 +18,17 @@ function LogIn() {
 
 //AXIOS request
     const loggingInUser = (user) => {
-
         axios.post('user/login', user)
             .then(res => {
-
                 if (res.status === 200) {
 
                     localStorage.setItem('isLoggedIn', true);
-                    localStorage.setItem('user', user.username);
+                    localStorage.setItem('user', res.data);
                     window.location.href = "/";
+
                 }
             }).catch(err => {
+               
                 setErrMsg("Invalid username or password");
             })
 

@@ -26,8 +26,11 @@ function Signup() {
             }).catch(err => {
                
                     if (err.status === 401) {
-                        window.location.href = "/login";
-                        localStorage.setItem('isLoggedIn', false);
+                        axios.get('/user/logout')
+                            .then(res => {
+                                localStorage.setItem('isLoggedIn', false);
+                                window.location.href = "/login";
+                            })
                     }
 
                 setErrMsg(err.response.data);

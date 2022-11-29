@@ -104,14 +104,6 @@ export default function MyAvatar() {
                     anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                 >
                     <MenuItem
-                        onClick={() => <Navigate to="edituser" />}>
-                        <EditRoundedIcon/>  Edit user
-                    </MenuItem>
-                    <MenuItem
-                        onClick={() => <Navigate to="/signup" />}>
-                        <PersonAddAltRoundedIcon/>  Register new user
-                    </MenuItem>
-                    <MenuItem
                         onClick={() => logOut()}>
                         <LogoutRoundedIcon/>  Log Out
                     </MenuItem>
