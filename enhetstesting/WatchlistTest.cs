@@ -29,7 +29,7 @@ namespace enhetstesting
         public async Task AddStockLoggetinnOK()
         {
             var mock = new Mock<IWatchlistRepository>();
-            mock.Setup(k => k.AddStock("GOOGL", 1, 50)).ReturnsAsync(true);
+            mock.Setup(k => k.AddStock("GOOGL", 1, 50,1)).ReturnsAsync(true);
             var watchlistController = new WatchlistController(mock.Object, mockLog.Object);
 
             mockSession[_loggetInn] = _loggetInn;
@@ -45,7 +45,7 @@ namespace enhetstesting
         [Fact]
         public async Task AddstockLoggetinnIkkeOK()
         {
-            mockRep.Setup(k => k.AddStock("appl", 1, 50)).ReturnsAsync(false);
+            mockRep.Setup(k => k.AddStock("appl", 1, 50,1)).ReturnsAsync(false);
 
             var watchlistController = new WatchlistController(mockRep.Object, mockLog.Object);
 
@@ -64,7 +64,7 @@ namespace enhetstesting
         public async Task DeleteStockLoggetinnOK()
         {
             var mock = new Mock<IWatchlistRepository>();
-            mock.Setup(k => k.DeleteStock(2)).ReturnsAsync(true);
+            mock.Setup(k => k.DeleteStock(2,1)).ReturnsAsync(true);
             var watchlistController = new WatchlistController(mock.Object, mockLog.Object);
 
             mockSession[_loggetInn] = _loggetInn;
@@ -79,7 +79,7 @@ namespace enhetstesting
         [Fact]
         public async Task DeletestockLoggetinnIkkeOK()
         {
-            mockRep.Setup(k => k.DeleteStock(2)).ReturnsAsync(false);
+            mockRep.Setup(k => k.DeleteStock(2,1)).ReturnsAsync(false);
 
             var watchlistController = new WatchlistController(mockRep.Object, mockLog.Object);
 
@@ -132,7 +132,7 @@ namespace enhetstesting
         [Fact]
         public async Task AddStockWrongInputVal()
         {
-            mockRep.Setup(k => k.AddStock("44",1,50)).ReturnsAsync(true);
+            mockRep.Setup(k => k.AddStock("44",1,50,1)).ReturnsAsync(true);
 
             var watchlistController = new WatchlistController(mockRep.Object, mockLog.Object);
 

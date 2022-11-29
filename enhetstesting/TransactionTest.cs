@@ -29,7 +29,7 @@ namespace enhetstesting
         public async Task BuyStockLoggetinnOK()
         {
             var mock = new Mock<ITransactionRepository>();
-            mock.Setup(k => k.BuyStock("GOOGL", 1)).ReturnsAsync(true);
+            mock.Setup(k => k.BuyStock("GOOGL", 1, 1)).ReturnsAsync(true);
             var transactionController = new TransactionController(mock.Object, mockLog.Object);
 
             mockSession[_loggetInn] = _loggetInn;
@@ -45,7 +45,7 @@ namespace enhetstesting
         public async Task BuyStockNotLoggedOK()
         {
             var mock = new Mock<ITransactionRepository>();
-            mock.Setup(k => k.BuyStock("GOOGL", 1)).ReturnsAsync(true);
+            mock.Setup(k => k.BuyStock("GOOGL", 1, 1)).ReturnsAsync(true);
             var transactionController = new TransactionController(mock.Object, mockLog.Object);
 
             mockSession[_loggetInn] = _ikkeLoggetInn;
@@ -55,13 +55,13 @@ namespace enhetstesting
             var resualt = await transactionController.BuyStock("GOOGL", 1) as UnauthorizedObjectResult;
 
             Assert.Equal((int)HttpStatusCode.Unauthorized, resualt.StatusCode);
-            Assert.Equal("User buy stock", resualt.Value);
+            Assert.Equal("User is not logged in", resualt.Value);
         }
 
         [Fact]
         public async Task BuystockLoggetinnIkkeOK()
         {
-            mockRep.Setup(k => k.BuyStock("appl", 1)).ReturnsAsync(false);
+            mockRep.Setup(k => k.BuyStock("appl", 1, 1)).ReturnsAsync(false);
 
             var transactionController = new TransactionController(mockRep.Object, mockLog.Object);
 
@@ -81,7 +81,7 @@ namespace enhetstesting
         public async Task BuyStockWrongInputVal()
         {
 
-            mockRep.Setup(k => k.BuyStock("app7e", 1)).ReturnsAsync(true);
+            mockRep.Setup(k => k.BuyStock("app7e", 1, 1)).ReturnsAsync(true);
 
             var transactionController = new TransactionController(mockRep.Object, mockLog.Object);
 
@@ -102,7 +102,7 @@ namespace enhetstesting
         public async Task SellStockLoggetinnOK()
         {
             var mock = new Mock<ITransactionRepository>();
-            mock.Setup(k => k.SellStock("appl", 1)).ReturnsAsync(true);
+            mock.Setup(k => k.SellStock("appl", 1, 1)).ReturnsAsync(true);
             var transactionController = new TransactionController(mock.Object, mockLog.Object);
 
             mockSession[_loggetInn] = _loggetInn;
@@ -117,7 +117,7 @@ namespace enhetstesting
         [Fact]
         public async Task SellstockLoggetinnIkkeOK()
         {
-            mockRep.Setup(k => k.SellStock("appl", 1)).ReturnsAsync(false);
+            mockRep.Setup(k => k.SellStock("appl", 1, 1)).ReturnsAsync(false);
 
             var transactionController = new TransactionController(mockRep.Object, mockLog.Object);
 
@@ -136,7 +136,7 @@ namespace enhetstesting
         public async Task SellStockWrongInputval()
         {
 
-            mockRep.Setup(k => k.SellStock("app7e", 1)).ReturnsAsync(true);
+            mockRep.Setup(k => k.SellStock("app7e", 1, 1)).ReturnsAsync(true);
 
             var transactionController = new TransactionController(mockRep.Object, mockLog.Object);
 
@@ -153,52 +153,7 @@ namespace enhetstesting
             Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
 
         }
-        [Fact]
-        public async Task HentAlleLoggetInnOK()
-            //Fullføres når loginn er innført
-        {
-            // Arrange
-            var transaction1 = new Transaction
-            {
-                id = 1,
-                ticker = "apple",
-                price = 50,
-                quantity = 1,
-            };
-            var transaction2 = new Transaction
-            {
-                id = 2,
-                ticker = "apple",
-                price = 50,
-                quantity = 1,
-            };
-            var transaction3 = new Transaction
-            {
-                id = 3,
-                ticker = "apple",
-                price = 50,
-                quantity = 1,
-            };
-
-            var transactionListe = new List<Transaction>();
-            transactionListe.Add(transaction1);
-            transactionListe.Add(transaction2);
-            transactionListe.Add(transaction3);
-
-            mockRep.Setup(k => k.ListAll()).ReturnsAsync(transactionListe);
-
-            var transactionController = new TransactionController(mockRep.Object, mockLog.Object);
-
-            mockSession[_loggetInn] = _loggetInn;
-            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
-            transactionController.ControllerContext.HttpContext = mockHttpContext.Object;
-
-            // Act
-            //var resultat = await transactionController.ListAll() as OkObjectResult;
-
-            // Assert 
-           // Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
-            //Assert.Equal<List<Transaction>>((List<Transaction>)resultat.Value, transactionListe);
-        }
+        
+        
     }
 }

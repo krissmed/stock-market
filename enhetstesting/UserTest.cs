@@ -11,6 +11,7 @@ using System.Net;
 using System.Text;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using Microsoft.VisualBasic;
 
 namespace enhetstesting
 {
@@ -19,12 +20,17 @@ namespace enhetstesting
 
         private const string _loggetInn = "loggetInn";
         private const string _ikkeLoggetInn = "";
+        private const int int1 = 1;
 
         private readonly Mock<IUserRepository> mockRep = new Mock<IUserRepository>();
         private readonly Mock<ILogger<UserController>> mockLog = new Mock<ILogger<UserController>>();
 
         private readonly Mock<HttpContext> mockHttpContext = new Mock<HttpContext>();
         private readonly MockHttpSession mockSession = new MockHttpSession();
+
+        
+
+       
 
         [Fact]
         public async Task CreateUserLoggetinnOK()
@@ -111,7 +117,7 @@ namespace enhetstesting
             mock.Setup(k => k.DeleteUser(1)).ReturnsAsync(true);
             var userController = new UserController(mock.Object, mockLog.Object);
 
-            mockSession[_loggetInn] = 1;
+            mockSession[_loggetInn] = _loggetInn;
             mockHttpContext.Setup(s => s.Session).Returns(mockSession);
             userController.ControllerContext.HttpContext = mockHttpContext.Object;
 
@@ -123,19 +129,24 @@ namespace enhetstesting
         [Fact]
         public async Task DeleteUserLoggetinnIkkeOK()
         {
-            mockRep.Setup(k => k.DeleteUser(1)).ReturnsAsync(false);
+            mockRep.Setup(k => k.DeleteUser(1)).ReturnsAsync(true);
 
             var userController = new UserController(mockRep.Object, mockLog.Object);
 
             mockSession[_loggetInn] = _loggetInn;
+            mockSession.SetInt32 = 1;
             mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            mockHttpContext.Setup(s => s.s).Returns(true);
+
+
+
             userController.ControllerContext.HttpContext = mockHttpContext.Object;
 
             // Act
-            var resultat = await userController.DeleteUser() as BadRequestObjectResult;
+            var resultat = await userController.DeleteUser() as OkObjectResult;
 
             // Assert 
-            Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
+            Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
             Assert.Equal("Could not delete user", resultat.Value);
         }
 
