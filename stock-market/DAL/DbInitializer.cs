@@ -75,20 +75,67 @@ public class DbInitializer : IDbInitializer
         {
             using (var _db = serviceScope.ServiceProvider.GetService<mainDB>())
             {
-                //Create guest user
-                User guest = new User();
-                guest.username = "Guest";
-                string password = "Password1!Pass";
+                //Create test users
+
+                User erling = new User();
+                erling.username = "ErlingStaff";
+                string password = "Erling1!Pass";
                 byte[] salt = UserRepository.MakeSalt();
                 byte[] hash = UserRepository.MakeHash(password, salt);
-                guest.password = hash;
-                guest.salt = salt;
-                guest.curr_balance = 50_000;
-                guest.curr_balance_stock = 0;
-                guest.curr_balance_liquid = 50_000;
-                guest.first_name = "Guest";
-                guest.last_name = "";
-                await _db.Users.AddAsync(guest);
+                erling.password = hash;
+                erling.salt = salt;
+                erling.curr_balance = 500_000;
+                erling.curr_balance_stock = 0;
+                erling.curr_balance_liquid = 500_000;
+                erling.first_name = "Erling";
+                erling.last_name = "Staff";
+                await _db.Users.AddAsync(erling);
+                await _db.SaveChangesAsync();
+
+
+                User ole = new User();
+                ole.username = "OleKnoph";
+                string passwordOle = "Ole1!Pass";
+                byte[] saltOle = UserRepository.MakeSalt();
+                byte[] hashOle = UserRepository.MakeHash(passwordOle, saltOle);
+                ole.password = hashOle;
+                ole.salt = saltOle;
+                ole.curr_balance = 250_000;
+                ole.curr_balance_stock = 0;
+                ole.curr_balance_liquid = 250_000;
+                ole.first_name = "Ole";
+                ole.last_name = "Knoph";
+                await _db.Users.AddAsync(ole);
+                await _db.SaveChangesAsync();
+                
+                User vetle = new User();
+                vetle.username = "VetleEndrerud";
+                string passwordVetle = "Vetle1!Pass";
+                byte[] saltVetle = UserRepository.MakeSalt();
+                byte[] hashVetle = UserRepository.MakeHash(passwordVetle, saltVetle);
+                vetle.password = hashVetle;
+                vetle.salt = saltVetle;
+                vetle.curr_balance = 50_000;
+                vetle.curr_balance_stock = 0;
+                vetle.curr_balance_liquid = 50_000;
+                vetle.first_name = "Vetle";
+                vetle.last_name = "Endrerud";
+                await _db.Users.AddAsync(vetle);
+                await _db.SaveChangesAsync();
+                
+                User kristian = new User();
+                kristian.username = "KristianSmedsrød";
+                string passwordKristian = "Kristian1!Pass";
+                byte[] saltKristian = UserRepository.MakeSalt();
+                byte[] hashKristian = UserRepository.MakeHash(passwordKristian, saltKristian);
+                kristian.password = hashKristian;
+                kristian.salt = saltKristian;
+                kristian.curr_balance = 1_000_000;
+                kristian.curr_balance_stock = 0;
+                kristian.curr_balance_liquid = 1_000_000;
+                kristian.first_name = "Kristian";
+                kristian.last_name = "Smedsrød";
+                await _db.Users.AddAsync(kristian);
                 await _db.SaveChangesAsync();
             }
         }

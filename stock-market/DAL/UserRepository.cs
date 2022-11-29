@@ -72,7 +72,7 @@ namespace stock_market.DAL
         public static byte[] MakeSalt()
         {
             var csp = new RNGCryptoServiceProvider();
-            var salt = new byte[24];
+            var salt = new byte[32];
             csp.GetBytes(salt);
             return salt;
         }
