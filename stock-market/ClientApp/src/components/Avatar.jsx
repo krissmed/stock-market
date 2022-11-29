@@ -7,6 +7,9 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
 import { isMobile } from '../pages/Layout'
+import BasicModal from './Popups/PopupAlert'
+import LogoutIcon from '@mui/icons-material/Logout';
+import Divider from '@mui/material/Divider';
 
 
 export default function MyAvatar({ users }) {
@@ -91,6 +94,8 @@ export default function MyAvatar({ users }) {
                             <Avatar /> {aUser.first_name + ' ' + aUser.last_name}
                         </MenuItem>
                     ))}
+                    <Divider />
+                    <BasicModal/>
                 </Menu>
             </>
         );
