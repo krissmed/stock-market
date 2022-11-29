@@ -7,7 +7,7 @@ namespace stock_market.Model
     {
         [RegularExpression(@"^[a-zA-ZæøåÆØÅ. \-]{2,20}$")]
         public String username { get; set; }
-        [RegularExpression(@"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$")]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$")]
         public String password { get; set; }
     }
 }
