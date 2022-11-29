@@ -20,9 +20,9 @@ namespace stock_market.Controllers
     public class WatchlistController : ControllerBase
     {
         private readonly IWatchlistRepository _db;
-        private readonly ILogger<TransactionController> _log;
+        private readonly ILogger<WatchlistController> _log;
 
-        public WatchlistController(IWatchlistRepository db, ILogger<TransactionController> log)
+        public WatchlistController(IWatchlistRepository db, ILogger<WatchlistController> log)
         {
             _db = db;
             _log = log;
