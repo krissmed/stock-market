@@ -60,6 +60,27 @@ namespace enhetstesting
             Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
             Assert.Equal("Could not add to watchlist", resultat.Value);
         }
+
+        [Fact]
+        public async Task AddstockLoggedInIkkeOK()
+        {
+            mockRep.Setup(k => k.AddStock("appl", 1, 50, 1)).ReturnsAsync(false);
+
+            var watchlistController = new WatchlistController(mockRep.Object, mockLog.Object);
+
+            mockSession[_loggetInn] = _loggetInn+_loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            watchlistController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            // Act
+            var resultat = await watchlistController.AddStock("appl", 1, 50) as BadRequestObjectResult;
+
+            // Assert 
+            Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
+            Assert.Equal("Could not add to watchlist", resultat.Value);
+        }
+
+
         [Fact]
         public async Task DeleteStockLoggetinnOK()
         {
@@ -96,6 +117,86 @@ namespace enhetstesting
         }
 
         [Fact]
+        public async Task DeletestockLoggedInIkkeOK()
+        {
+            mockRep.Setup(k => k.DeleteStock(2, 1)).ReturnsAsync(false);
+
+            var watchlistController = new WatchlistController(mockRep.Object, mockLog.Object);
+
+            mockSession[_loggetInn] = _loggetInn+_loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            watchlistController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            // Act
+            var resultat = await watchlistController.DeleteStock(2) as BadRequestObjectResult;
+
+            // Assert 
+            Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
+            Assert.Equal("Could not delete from watchlist", resultat.Value);
+        }
+
+
+        [Fact]
+        public async Task UpdateStockIkkeOK()
+        {
+            mockRep.Setup(k => k.UpdateStock(1, 1, 10)).ReturnsAsync(false);
+
+            var watchlistController = new WatchlistController(mockRep.Object, mockLog.Object);
+
+            mockSession[_loggetInn] = null;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            watchlistController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            // Act
+            var resultat = await watchlistController.UpdateStock(1, 10, 100) as UnauthorizedObjectResult;
+
+            // Assert 
+            Assert.Equal((int)HttpStatusCode.Unauthorized, resultat.StatusCode);
+            Assert.Equal("User is not logged in", resultat.Value);
+        }
+
+        [Fact]
+        public async Task DeleteStockIkkeOK()
+        {
+            mockRep.Setup(k => k.DeleteStock(1, 1)).ReturnsAsync(false);
+
+            var watchlistController = new WatchlistController(mockRep.Object, mockLog.Object);
+
+            mockSession[_loggetInn] = null;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            watchlistController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            // Act
+            var resultat = await watchlistController.DeleteStock(1) as UnauthorizedObjectResult;
+
+            // Assert 
+            Assert.Equal((int)HttpStatusCode.Unauthorized, resultat.StatusCode);
+            Assert.Equal("User is not logged in", resultat.Value);
+        }
+
+        [Fact]
+        public async Task AddStockIkkeOK()
+        {
+            mockRep.Setup(k => k.AddStock("googl", 1, 1, 1)).ReturnsAsync(false);
+
+            var watchlistController = new WatchlistController(mockRep.Object, mockLog.Object);
+
+            mockSession[_loggetInn] = null;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            watchlistController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            // Act
+            var resultat = await watchlistController.AddStock("googl", 1, 1) as UnauthorizedObjectResult;
+
+            // Assert 
+            Assert.Equal((int)HttpStatusCode.Unauthorized, resultat.StatusCode);
+            Assert.Equal("User is not logged in", resultat.Value);
+        }
+
+
+
+
+        [Fact]
         public async Task UpdateStockLoggetinnOK()
         {
             var mock = new Mock<IWatchlistRepository>();
@@ -111,6 +212,26 @@ namespace enhetstesting
             Assert.Equal((int)HttpStatusCode.OK, resualt.StatusCode);
             Assert.Equal("User updated to watchlist", resualt.Value);
         }
+
+        [Fact]
+        public async Task UpdateStockLoggetinnValFeil()
+        {
+            var mock = new Mock<IWatchlistRepository>();
+            mock.Setup(k => k.UpdateStock(1, 4, 50)).ReturnsAsync(true);
+            var watchlistController = new WatchlistController(mock.Object, mockLog.Object);
+
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            watchlistController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            var resualt = await watchlistController.UpdateStock(-1000, -400000000, -400000000) as BadRequestObjectResult;
+
+            Assert.Equal((int)HttpStatusCode.BadRequest, resualt.StatusCode);
+            Assert.Equal("Fault in InputVal", resualt.Value);
+        }
+
+
+
         [Fact]
         public async Task UpdatestockLoggetinnIkkeOK()
         {

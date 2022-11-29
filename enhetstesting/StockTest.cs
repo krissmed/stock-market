@@ -43,6 +43,24 @@ namespace enhetstesting
         }
 
         [Fact]
+        public async Task AddStockIkkeOK()
+        {
+            var mock = new Mock<IStockRepository>();
+            mock.Setup(k => k.AddStock("GOOGL")).ReturnsAsync(true);
+            var stockController = new StockController(mock.Object, mockLog.Object);
+
+            mockSession[_loggetInn] = null;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            stockController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            var resualt = await stockController.AddStock("GOOGL") as UnauthorizedObjectResult;
+
+            Assert.Equal((int)HttpStatusCode.Unauthorized, resualt.StatusCode);
+            Assert.Equal("User is not logged in", resualt.Value);
+        }
+
+
+        [Fact]
         public async Task AddstockLoggetinnIkkeOK()
         {
             mockRep.Setup(k => k.AddStock("appl")).ReturnsAsync(false);
@@ -77,6 +95,24 @@ namespace enhetstesting
             Assert.Equal((int)HttpStatusCode.OK, resualt.StatusCode);
             Assert.Equal("User deleted stock", resualt.Value);
         }
+
+        [Fact]
+        public async Task DeleteStockIkkeOK()
+        {
+            var mock = new Mock<IStockRepository>();
+            mock.Setup(k => k.DeleteStock("GOOGL")).ReturnsAsync(true);
+            var stockController = new StockController(mock.Object, mockLog.Object);
+
+            mockSession[_loggetInn] = null;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            stockController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            var resualt = await stockController.DeleteStock("GOOGL") as UnauthorizedObjectResult;
+
+            Assert.Equal((int)HttpStatusCode.Unauthorized, resualt.StatusCode);
+            Assert.Equal("User is not logged in", resualt.Value);
+        }
+
 
         [Fact]
         public async Task DeletestockLoggetinnIkkeOK()

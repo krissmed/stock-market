@@ -156,6 +156,10 @@ namespace stock_market.DAL
         {
             try
             {
+                if (id<0)
+                {
+                    return false;
+                }
                 User user = await _db.Users.FindAsync(id);
                 _db.Users.Remove(user);
                 await _db.SaveChangesAsync();

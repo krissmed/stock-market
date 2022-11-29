@@ -38,14 +38,14 @@ namespace stock_market.Controllers
             }
             else
             {
+                if (HttpContext.Session.GetInt32(_loggetInn) == null || HttpContext.Session.GetInt32(_loggetInn) == -1)
+                {
+                    _log.LogError("TransactionController: User is not logged in, tried to sell a stock");
+                    return Unauthorized("User is not logged in");
+                }
                 userid = HttpContext.Session.GetInt32(_loggetInn).Value;
             }
 
-            if (HttpContext.Session.GetInt32(_loggetInn) == null || HttpContext.Session.GetInt32(_loggetInn) == -1)
-            {
-                _log.LogError("TransactionController: User is not logged in, tried to sell a stock");
-                return Unauthorized("User is not logged in");
-            }
 
             if (ModelState.IsValid)
             {

@@ -78,6 +78,46 @@ namespace enhetstesting
         }
 
         [Fact]
+        public async Task BuystockLoggedInIkkeOK()
+        {
+            mockRep.Setup(k => k.BuyStock("appl", 1, 1)).ReturnsAsync(false);
+
+            var transactionController = new TransactionController(mockRep.Object, mockLog.Object);
+
+            mockSession[_loggetInn] = _loggetInn+_loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            transactionController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            // Act
+            var resultat = await transactionController.BuyStock("appl", 1) as BadRequestObjectResult;
+
+            // Assert 
+            Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
+            Assert.Equal("Could not buy stock", resultat.Value);
+        }
+
+
+        [Fact]
+        public async Task SellStockIkkeOK()
+        {
+            mockRep.Setup(k => k.SellStock("appl", 1, 1)).ReturnsAsync(false);
+
+            var transactionController = new TransactionController(mockRep.Object, mockLog.Object);
+
+            mockSession[_loggetInn] = null;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            transactionController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            // Act
+            var resultat = await transactionController.SellStock("appl", 1) as UnauthorizedObjectResult;
+
+            // Assert 
+            Assert.Equal((int)HttpStatusCode.Unauthorized, resultat.StatusCode);
+            Assert.Equal("User is not logged in", resultat.Value);
+        }
+
+
+        [Fact]
         public async Task BuyStockWrongInputVal()
         {
 
@@ -114,6 +154,25 @@ namespace enhetstesting
             Assert.Equal((int)HttpStatusCode.OK, resualt.StatusCode);
             Assert.Equal("User sold stock", resualt.Value);
         }
+
+        [Fact]
+        public async Task SellStockLoggetInIkkeOK()
+        {
+            var mock = new Mock<ITransactionRepository>();
+            mock.Setup(k => k.SellStock("aapl", 1, 1)).ReturnsAsync(true);
+            var transactionController = new TransactionController(mock.Object, mockLog.Object);
+
+            mockSession[_loggetInn] = _loggetInn+_loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            transactionController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            var resualt = await transactionController.SellStock("aapl", 1) as BadRequestObjectResult;
+
+            Assert.Equal((int)HttpStatusCode.BadRequest, resualt.StatusCode);
+            Assert.Equal("Could not sell stock", resualt.Value);
+        }
+
+
         [Fact]
         public async Task SellstockLoggetinnIkkeOK()
         {

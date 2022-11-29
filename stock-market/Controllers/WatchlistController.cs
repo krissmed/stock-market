@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authentication;
 using stock_market.DAL;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
+using System.Diagnostics.CodeAnalysis;
 
 namespace stock_market.Controllers
 {
@@ -30,6 +31,7 @@ namespace stock_market.Controllers
             _log = log;
         }
 
+        [ExcludeFromCodeCoverage]
         public async Task<ActionResult> GetFullWatchlist()
         {
             if (HttpContext.Session.GetInt32(_loggetInn) == null || HttpContext.Session.GetInt32(_loggetInn) == -1)
@@ -48,12 +50,12 @@ namespace stock_market.Controllers
             }
             else
             {
+                if (HttpContext.Session.GetInt32(_loggetInn) == null || HttpContext.Session.GetInt32(_loggetInn) == -1)
+                {
+                    _log.LogError("WatchlistController: User is not logged in, tried to get full watchlist");
+                    return Unauthorized("User is not logged in");
+                }
                 userid = HttpContext.Session.GetInt32(_loggetInn).Value;
-            }
-            if (HttpContext.Session.GetInt32(_loggetInn) == null || HttpContext.Session.GetInt32(_loggetInn) == -1)
-            {
-                _log.LogError("WatchlistController: User is not logged in, tried to get full watchlist");
-                return Unauthorized("User is not logged in");
             }
 
             if (ModelState.IsValid)
@@ -79,14 +81,14 @@ namespace stock_market.Controllers
             }
             else
             {
+                if (HttpContext.Session.GetInt32(_loggetInn) == null || HttpContext.Session.GetInt32(_loggetInn) == -1)
+                {
+                    _log.LogError("WatchlistController: User is not logged in, tried to delete a stock");
+                    return Unauthorized("User is not logged in");
+                }
                 userid = HttpContext.Session.GetInt32(_loggetInn).Value;
             }
 
-            if (HttpContext.Session.GetInt32(_loggetInn) == null || HttpContext.Session.GetInt32(_loggetInn) == -1)
-            {
-                _log.LogError("WatchlistController: User is not logged in, tried to delete a stock");
-                return Unauthorized("User is not logged in");
-            }
             
             bool ok = await _db.DeleteStock(id, userid);
             if (!ok)
@@ -108,7 +110,7 @@ namespace stock_market.Controllers
             int userid = HttpContext.Session.GetInt32(_loggetInn).Value;
 
 
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && id>0)
             {
                 bool ok = await _db.UpdateStock(id, amount, target_price);
                 if (!ok)

@@ -16,8 +16,6 @@ namespace enhetstesting
     public class PortfolioTest
     {
 
-        //BLIR INNFØRT NÅR LOGIN ER IMPLEMENTERT
-
         private const string _loggetInn = "loggetInn";
         private const string _ikkeLoggetInn = null;
 
@@ -59,6 +57,74 @@ namespace enhetstesting
             Assert.Equal((int)HttpStatusCode.Unauthorized, resualt.StatusCode);
             Assert.Equal("User is not logged in", resualt.Value);
         }
+
+        [Fact]
+        public async Task GetHistoricalPortfolioLoggedOK()
+        {
+            var mock = new Mock<IPortfolioRepository>();
+            mock.Setup(k => k.GetHistoricalPortfolios(1)).ReturnsAsync("");
+            var portfolioController = new PortfolioController(mock.Object, mockLog.Object);
+
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            portfolioController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            var resualt = await portfolioController.GetHistoricalPortfolios() as OkObjectResult;
+
+            Assert.Equal((int)HttpStatusCode.OK, resualt.StatusCode);
+        }
+
+        [Fact]
+        public async Task GetHistoricalPortfolioOK()
+        {
+            var mock = new Mock<IPortfolioRepository>();
+            mock.Setup(k => k.GetHistoricalPortfolios(1)).ReturnsAsync("");
+            var portfolioController = new PortfolioController(mock.Object, mockLog.Object);
+
+            mockSession[_loggetInn] = _loggetInn+_loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            portfolioController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            var resualt = await portfolioController.GetHistoricalPortfolios() as OkObjectResult;
+
+            Assert.Equal((int)HttpStatusCode.OK, resualt.StatusCode);
+        }
+
+        [Fact]
+        public async Task GetCurrentPortfolioLoggedOK()
+        {
+            var mock = new Mock<IPortfolioRepository>();
+            mock.Setup(k => k.GetCurrentPortfolio(1)).ReturnsAsync("");
+            var portfolioController = new PortfolioController(mock.Object, mockLog.Object);
+
+            mockSession[_loggetInn] = _loggetInn + _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            portfolioController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            var resualt = await portfolioController.GetCurrentPortfolio() as OkObjectResult;
+
+            Assert.Equal((int)HttpStatusCode.OK, resualt.StatusCode);
+        }
+
+
+        [Fact]
+        public async Task GetCurrentPortfolioOK()
+        {
+            var mock = new Mock<IPortfolioRepository>();
+            mock.Setup(k => k.GetCurrentPortfolio(1)).ReturnsAsync("");
+            var portfolioController = new PortfolioController(mock.Object, mockLog.Object);
+
+            mockSession[_loggetInn] = _loggetInn;
+            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
+            portfolioController.ControllerContext.HttpContext = mockHttpContext.Object;
+
+            var resualt = await portfolioController.GetCurrentPortfolio() as OkObjectResult;
+
+            Assert.Equal((int)HttpStatusCode.OK, resualt.StatusCode);
+        }
+
+
+
     }
 }
 

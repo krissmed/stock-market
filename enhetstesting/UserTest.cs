@@ -126,28 +126,23 @@ namespace enhetstesting
             Assert.Equal((int)HttpStatusCode.OK, resualt.StatusCode);
             Assert.Equal("User deleted", resualt.Value);
         }
+
         [Fact]
-        public async Task DeleteUserLoggetinnIkkeOK()
+        public async Task DeleteUserOK()
         {
-            mockRep.Setup(k => k.DeleteUser(1)).ReturnsAsync(true);
 
-            var userController = new UserController(mockRep.Object, mockLog.Object);
+            var mock = new Mock<IUserRepository>();
+            mock.Setup(k => k.DeleteUser(1)).ReturnsAsync(true);
+            var userController = new UserController(mock.Object, mockLog.Object);
 
-            mockSession[_loggetInn] = _loggetInn;
-            //mockSession.SetInt32 = 1;
+            mockSession[_loggetInn] = _loggetInn+_loggetInn;
             mockHttpContext.Setup(s => s.Session).Returns(mockSession);
-            //mockHttpContext.Setup(s => s.).Returns(true);
-
-
-
             userController.ControllerContext.HttpContext = mockHttpContext.Object;
 
-            // Act
-            var resultat = await userController.DeleteUser() as OkObjectResult;
+            var resualt = await userController.DeleteUser() as BadRequestObjectResult;
 
-            // Assert 
-            Assert.Equal((int)HttpStatusCode.OK, resultat.StatusCode);
-            Assert.Equal("User deleted", resultat.Value);
+            Assert.Equal((int)HttpStatusCode.BadRequest, resualt.StatusCode);
+            Assert.Equal("Could not delete user", resualt.Value);
         }
 
         [Fact]
