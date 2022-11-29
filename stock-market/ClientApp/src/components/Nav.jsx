@@ -49,7 +49,8 @@ export default function Nav() {
                 console.log(res);
                 setBalance(res.data);
             }).catch(err => {
-                if (err.status === 401) {
+                console.log(err);
+                if (err.response.status === 401) {
                     window.location.href = "/login";
                     localStorage.setItem('isLoggedIn', false);
                 }
