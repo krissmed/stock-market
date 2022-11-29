@@ -9,8 +9,8 @@ namespace stock_market.Model
         public string username { get; set; }
         [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$")]
         public string password { get; set; }
-        public string first_name { get; set; }
-        public string last_name { get; set; }
+        public string firstname { get; set; }
+        public string lastname { get; set; }
 
     }
 }

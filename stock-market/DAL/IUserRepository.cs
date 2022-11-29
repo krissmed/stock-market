@@ -11,12 +11,12 @@ namespace stock_market.DAL
         Task<string> GetLName(int userid);
         Task<int> GetUserID();
         Task<bool> CreateUser(User innUser);
-        Task<List<User>> GetAll();
+        Task<List<User>> GetAll(int userid);
         Task<bool> DeleteUser(int id);
         Task<bool> EditUser(User editUser);
         Task<bool> EditUserBalance(User editUser);
         Task<bool> LogIn(LoginUser user);
         Task<bool> Register(RegisterUser user);
-
+        Task<int> GetUserIDForUsername(string username);
     }
 }

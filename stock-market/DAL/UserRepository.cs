@@ -117,8 +117,8 @@ namespace stock_market.DAL
                 User newUser = new User
                 {
                     username = user.username,
-                    first_name = user.first_name,
-                    last_name = user.last_name,
+                    first_name = user.firstname,
+                    last_name = user.lastname,
                     password = hash,
                     salt = salt,
                     curr_balance = 100_000,
@@ -136,13 +136,18 @@ namespace stock_market.DAL
             }
         }
         
-
-
-
-        public async Task<List<User>> GetAll()
+        public async Task<int> GetUserIDForUsername(string username)
         {
-            List<User> allUsers = await _db.Users.ToListAsync();
-            return allUsers;
+            User user = await _db.Users.FirstOrDefaultAsync(u => u.username == username);
+            return user.id;
+        }
+        
+
+
+
+        public async Task<List<User>> GetAll(int userid)
+        {
+            return await _db.Users.Where(u => u.id == userid).ToListAsync();
         }
 
         public async Task<bool> DeleteUser(int id)

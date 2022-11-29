@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using stock_market.DAL;
 using stock_market.Model;
+using System;
 using System.Threading;
 
 namespace stock_market
@@ -35,7 +36,15 @@ namespace stock_market
             services.AddScoped<ITransactionRepository, TransactionRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IWatchlistRepository, WatchlistRepository>();
-            
+            services.AddSession(options =>
+            {
+                options.Cookie.Name = ".AdventureWorks.Session";
+                options.IdleTimeout = TimeSpan.FromSeconds(1800); // 30 minutter
+                options.Cookie.IsEssential = true;
+            });
+            services.AddDistributedMemoryCache();
+
+
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -63,6 +72,7 @@ namespace stock_market
             app.UseSpaStaticFiles();
 
             app.UseRouting();
+            app.UseSession();
 
             var scopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
             using (var scope = scopeFactory.CreateScope())
