@@ -71,6 +71,11 @@ export default function WatchlistTable({ data }) {
                 else {
                     alert("Something wrong. Either stock doesnt exists or you should ask Erling");
                 }
+            }).catch(err => {
+                if (err.status === 401) {
+                    window.location.href = "/login";
+                    localStorage.setItem('isLoggedIn', false);
+                }
             })
 
     }
@@ -88,6 +93,11 @@ export default function WatchlistTable({ data }) {
                 }
                 else {
                     alert("Something wrong. Ask Erling");
+                }
+            }).catch(err => {
+                if (err.status === 401) {
+                    window.location.href = "/login";
+                    localStorage.setItem('isLoggedIn', false);
                 }
             })
 

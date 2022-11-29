@@ -37,7 +37,7 @@ export default function StockData() {
                 setStocks(res.data);
                 
             }).catch(err => {
-                if (err.status === 401) {
+                if (err.response.status === 401) {
                     localStorage.setItem('isLoggedIn', false);
                     window.location.href = "/login";
                 }

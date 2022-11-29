@@ -111,6 +111,11 @@ export default function StockTable({ stockObj }) {
                 else {
                     alert("Something wrong. Ask Erling");
                 }
+            }).catch(err => {
+                if (err.status === 401) {
+                    window.location.href = "/login";
+                    localStorage.setItem('isLoggedIn', false);
+                }
             })
     }
 
@@ -126,6 +131,11 @@ export default function StockTable({ stockObj }) {
                 }
                 else {
                     alert("Something wrong. Ask Erling");
+                }
+            }).catch(err => {
+                if (err.status === 401) {
+                    window.location.href = "/login";
+                    localStorage.setItem('isLoggedIn', false);
                 }
             })
     }

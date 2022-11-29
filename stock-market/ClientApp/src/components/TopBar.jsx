@@ -5,7 +5,6 @@ import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 
 import { drawerWidth } from './Nav.jsx';
-import { AllUsers } from '../fetchingData/FetchUsers.js';
 
 import { isMobile } from '../pages/Layout'
 import RespNav from './RespNav.jsx';

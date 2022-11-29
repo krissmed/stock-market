@@ -25,7 +25,7 @@ function Signup() {
 
             }).catch(err => {
                
-                    if (err.status === 401) {
+                    if (err.response.status === 401) {
                         axios.get('/user/logout')
                             .then(res => {
                                 localStorage.setItem('isLoggedIn', false);
