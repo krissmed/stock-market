@@ -78,7 +78,7 @@ public class DbInitializer : IDbInitializer
                 //Create guest user
                 User guest = new User();
                 guest.username = "Guest";
-                string password = "password";
+                string password = "Password1!Pass";
                 byte[] salt = UserRepository.MakeSalt();
                 byte[] hash = UserRepository.MakeHash(password, salt);
                 guest.password = hash;
