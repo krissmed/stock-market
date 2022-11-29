@@ -26,6 +26,11 @@ export default function FetchTransactions() {
 
                 setTransactions(res.data);                
                 setIsLoading(false);
+            }).catch(err => {
+                if (err.status === 401) {
+                    localStorage.setItem('isLoggedIn', false);
+                    window.location.href = "/login";
+                }
             })
     }, [])
 

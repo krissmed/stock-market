@@ -15,6 +15,11 @@ export default function DashboardGraph() {
 
             const histFolio = await axios.get("portfolio/gethistoricalportfolios");
 
+            if (histFolio.status === 401) {
+                    window.location.href = "/login";
+                    localStorage.setItem('isLoggedIn', false);
+            }
+
             setHistoricalFolio(histFolio.data);
 
             setIsLoading(false)

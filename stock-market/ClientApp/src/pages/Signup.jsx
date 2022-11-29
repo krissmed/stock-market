@@ -24,6 +24,15 @@ function Signup() {
                 }
 
             }).catch(err => {
+               
+                    if (err.status === 401) {
+                        axios.get('/user/logout')
+                            .then(res => {
+                                localStorage.setItem('isLoggedIn', false);
+                                window.location.href = "/login";
+                            })
+                    }
+
                 setErrMsg(err.response.data);
             })
     }

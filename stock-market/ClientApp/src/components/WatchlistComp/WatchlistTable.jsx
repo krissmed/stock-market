@@ -48,6 +48,11 @@ export default function WatchlistTable({ data }) {
                 else {
                     alert("Something wrong. Ask Erling");
                 }
+            }).catch(err => {
+                if (err.status === 401) {
+                    window.location.href = "/login";
+                    localStorage.setItem('isLoggedIn', false);
+                }
             })
     }
 

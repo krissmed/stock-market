@@ -34,6 +34,11 @@ function sellStock(ticker, amount) {
         .then(res => {
             alert("Sold " + amount + " of " + ticker);
             window.location.reload();
+        }).catch(err => {
+            if (err.status === 401) {
+                window.location.href = "/login";
+                localStorage.setItem('isLoggedIn', false);
+            }
         })
 }
 

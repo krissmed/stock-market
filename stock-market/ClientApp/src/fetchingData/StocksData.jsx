@@ -36,6 +36,11 @@ export default function StockData() {
             .then((res) => {
                 setStocks(res.data);
                 
+            }).catch(err => {
+                if (err.status === 401) {
+                    localStorage.setItem('isLoggedIn', false);
+                    window.location.href = "/login";
+                }
             })
 
         setFetching('false');

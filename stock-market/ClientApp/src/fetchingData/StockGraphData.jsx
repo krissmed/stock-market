@@ -45,6 +45,12 @@ export default function StockGraphData({ ticker }) {
     useEffect(() => {
         async function fetchData() {
             const response = await axios.get('historicalstock/gethistoricalprice?ticker=' + ticker);
+
+            if (response.status === 401) {
+                localStorage.setItem('isLoggedIn', false);
+                window.location.href = "/login";
+            }
+
             setHistoricalData(response.data);
             setIsLoading(false);
         }

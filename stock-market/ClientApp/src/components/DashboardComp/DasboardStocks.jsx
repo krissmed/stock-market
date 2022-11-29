@@ -26,6 +26,11 @@ export default function DashboardStocks() {
 
             const stocks = await axios.get("stock/getstocks");
 
+            if (stocks.status === 401) {
+                window.location.href = "/login";
+                localStorage.setItem('isLoggedIn', false);
+            }
+
             setStocks(stocks.data);
 
             setIsLoading(false)
