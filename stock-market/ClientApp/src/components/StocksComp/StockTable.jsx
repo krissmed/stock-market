@@ -236,6 +236,7 @@ export default function StockTable({ stockObj }) {
     }
     const confirmAdd = () => {
         if (checkTicker(chosenTicker)) {
+            setAddOpen(false);
             addStock();
         }
         else {
@@ -451,7 +452,7 @@ export default function StockTable({ stockObj }) {
                             width: '55%',
                             bgColor: customTheme.palette.success.main,
                         }}
-                            onClick={addStock}
+                            onClick={confirmAdd}
                         >Add the stock</Button>
                     </Box>
 

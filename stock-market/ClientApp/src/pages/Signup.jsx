@@ -53,7 +53,12 @@ function Signup() {
     const [errPass, setErrPass] = useState("");
 
     const register = () => {
-        if (!err) {
+        if (!err
+            && checkUsername(user.username)
+            && checkName(user.firstname)
+            && checkName(user.lastname)
+            && checkPassword(user.password)
+            )   {
 
             registerUser(user);
         }
