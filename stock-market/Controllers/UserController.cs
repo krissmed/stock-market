@@ -118,8 +118,6 @@ namespace stock_market.Controllers
                 }
                 userid = HttpContext.Session.GetInt32(_loggetInn).Value;
             }
-
-
             bool ok = await _db.DeleteUser(userid);
             if (!ok)
             {

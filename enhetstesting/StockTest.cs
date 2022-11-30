@@ -59,7 +59,6 @@ namespace enhetstesting
             Assert.Equal("User is not logged in", resualt.Value);
         }
 
-
         [Fact]
         public async Task AddstockLoggetinnIkkeOK()
         {
@@ -113,7 +112,6 @@ namespace enhetstesting
             Assert.Equal("User is not logged in", resualt.Value);
         }
 
-
         [Fact]
         public async Task DeletestockLoggetinnIkkeOK()
         {
@@ -132,6 +130,7 @@ namespace enhetstesting
             Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
             Assert.Equal("Could not delete stock", resultat.Value);
         }
+
         [Fact]
         public async Task AddStockWrongInputVal()
         {
@@ -153,6 +152,7 @@ namespace enhetstesting
             Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
             Assert.Equal("Fault in InputVal", resultat.Value);
         }
+
         [Fact]
         public async Task DeleteStockWrongInputVal()
         {
