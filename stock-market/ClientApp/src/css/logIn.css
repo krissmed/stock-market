@@ -1,3 +1,7 @@
+html {
+    font-family: 'Public Sans', sans-serif;
+}
+
 .body {
     margin: 0;
     height: 100vh;
@@ -13,7 +17,7 @@
     background-color: #FEFEFE;
     color: #252525;
     min-height: 65vh;
-    width: 40vw;
+    max-width: 38vw;
     margin: 12px;
     padding: 12px;
     border-radius: 5%;
@@ -23,9 +27,9 @@
     box-shadow: 0 13px 25px -16px rgba(150,163,108,0.65);
 }
 
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: 750px) {
     .logInContainer {
-        width: 80vw;
+        max-width: 80vw;
     }
     .logInBtn {
         width: 80%;

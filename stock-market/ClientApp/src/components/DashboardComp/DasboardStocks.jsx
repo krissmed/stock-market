@@ -25,7 +25,6 @@ export default function DashboardStocks() {
 
 
             const stocks = await axios.get("stock/getstocks");
-            console.log(stocks);
 
             if (stocks.status === 401) {
                 window.location.href = "/login";

@@ -29,8 +29,13 @@ const customTheme = createTheme({
         success: {
             main: '#4fa579'
         },
-        type: 'dark'
+        type: 'dark',
     },
+    typography: {
+        fontFamily: [
+            'Public Sans',
+        ].join(','),
+    }
 });
 
     ReactDOM.render(
