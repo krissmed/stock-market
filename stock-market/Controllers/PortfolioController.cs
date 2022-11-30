@@ -40,7 +40,7 @@ namespace stock_market.Controllers
                     _log.LogError("PortfolioController: User is not logged in, tried to get current portfolio");
                     return Unauthorized("User is not logged in");
                 }
-                    int userid = HttpContext.Session.GetInt32(_loggetInn).Value;
+                    userid = HttpContext.Session.GetInt32(_loggetInn).Value;
                 }
             _log.LogInformation("PortfolioController: Got portfolio");
             return Ok(await _db.GetCurrentPortfolio(userid));
@@ -59,7 +59,7 @@ namespace stock_market.Controllers
                     _log.LogError("PortfolioController: User is not logged in, tried to get historical portfolios");
                     return Unauthorized("User is not logged in");
                 }
-                int userid = HttpContext.Session.GetInt32(_loggetInn).Value;
+                userid = HttpContext.Session.GetInt32(_loggetInn).Value;
             }
             _log.LogInformation("PortfolioController: Got Historicalportfolio");
             return Ok(await _db.GetHistoricalPortfolios(userid));

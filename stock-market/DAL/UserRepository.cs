@@ -88,7 +88,6 @@ namespace stock_market.DAL
 
                 byte[] hash = MakeHash(user.password, foundUser.salt);
 
-                Console.WriteLine("Password: " + user.password);
 
                 bool ok = hash.SequenceEqual(foundUser.password);
                 if (ok)
@@ -129,6 +128,29 @@ namespace stock_market.DAL
                 };
                 await _db.Users.AddAsync(newUser);
                 await _db.SaveChangesAsync();
+                //get the last 100 timestamps
+
+                List<Timestamp> new_timestamps = await _db.timestamps.OrderByDescending(t => t.time).Take(100).ToListAsync();
+                List<Portfolio> pfs = new List<Portfolio>();
+                User newAccount = await _db.Users.FirstOrDefaultAsync(u => u.username == user.username);
+
+                for (int i = 0; i < new_timestamps.Count; i++)
+                {
+                    Portfolio newPf = new Portfolio
+                    {
+                        user = newAccount,
+                        timestamp = new_timestamps[i],
+                        total_value = newAccount.curr_balance,
+                        stock_value = newAccount.curr_balance_stock,
+                        liquid_value = newAccount.curr_balance_liquid,
+                        stock_counter = new List<BaseStockCounter>()
+                    };
+                    pfs.Add(newPf);
+                }
+
+                await _db.portfolios.AddRangeAsync(pfs);
+                await _db.SaveChangesAsync();
+                
                 return true;
 
             }

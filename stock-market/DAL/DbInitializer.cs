@@ -22,6 +22,7 @@ public class DbInitializer : IDbInitializer
     private readonly IServiceScopeFactory _scopeFactory;
 
     private List<string> tickers = new List<string>();
+    private Timestamp previousTimestamp = null;
 
 
 
@@ -419,6 +420,8 @@ public class DbInitializer : IDbInitializer
                 List<BaseStock> all_base_stocks = await _db.baseStocks.ToListAsync();
                 all_timestamps.Sort((x, y) => x.unix.CompareTo(y.unix));
 
+                Timestamp previousTimestamp = all_timestamps.First();
+
                 foreach (var ts in all_timestamps)
                 {
                     foreach (var base_stock in all_base_stocks)
@@ -426,20 +429,29 @@ public class DbInitializer : IDbInitializer
                         //check if the historical stock exists in the list of historical stocks
                         if (!all_historical_stocks.Any(h => h.timestamp == ts && h.baseStock == base_stock))
                         {
-                            HistoricalStock prev_hs = all_historical_stocks.Find(h => h.baseStock == base_stock && h.timestamp.unix == ts.unix - 60);
+                            //Console.WriteLine("Missing historical stock for " + base_stock.ticker + " at " + ts.time);
+                            //find the previous price for the stock
 
-                            if (prev_hs != null)
+                            HistoricalStock previousStock = all_historical_stocks.Find(h => h.baseStock == base_stock && h.timestamp == previousTimestamp);
+
+
+                            //HistoricalStock prev_hs = all_historical_stocks.Find(h => h.baseStock == base_stock && h.timestamp.unix == ts.unix - 60);
+
+                            if (previousStock != null)
                             {
+                                //Console.WriteLine("Found previous historical stock for " + base_stock.ticker + " at " + ts.time);
                                 HistoricalStock historical_stock = new HistoricalStock();
                                 historical_stock.baseStock = base_stock;
                                 historical_stock.timestamp = ts;
-                                historical_stock.price = prev_hs.price;
+                                historical_stock.price = previousStock.price;
                                 all_ffilled_historical_stocks.Add(historical_stock);
                                 all_historical_stocks.Add(historical_stock);
                             }
                         }
                     }
+                    previousTimestamp = ts;
                 }
+                Console.WriteLine("Filled hist");
                 await _db.historicalStocks.AddRangeAsync(all_ffilled_historical_stocks);
                 await _db.SaveChangesAsync();
             }

@@ -26,16 +26,16 @@ namespace stock_market.DAL
                 var ret = "Please enter a ticker";
                 return ret;
             }
-            //rewrite the code under to use async await
 
             BaseStock stock = await _db.baseStocks.FirstAsync(s => s.ticker == ticker);
-
 
             //get all entries where in historicalstocks where h.baseStock == stock
             List<HistoricalStock> historicalstock = await _db.historicalStocks
                 .Where(h => h.baseStock == stock)
                 .Include(h => h.timestamp)
                 .ToListAsync();
+
+            historicalstock.RemoveAll(h => h.timestamp == null);
 
             //sort the list by timestamp
             historicalstock.Sort((x, y) => x.timestamp.time.CompareTo(y.timestamp.time));

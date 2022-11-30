@@ -39,10 +39,12 @@ namespace stock_market.DAL
 
         public async Task<string> GetHistoricalPortfolios(int userid)
         {
+            Console.WriteLine(userid);
             var user = await _db.Users.FirstOrDefaultAsync(u => u.id == userid);
             var portfolios = await _db.portfolios
-                .Where(p => p.user.id == user.id && p.timestamp.time >= DateTime.Now.AddDays(-1))
+                .Include(p => p.user)
                 .Include(p => p.timestamp)
+                .Where(p => p.user == user)
                 .Select(p => new
                 {
                     p.timestamp.time,
@@ -52,7 +54,9 @@ namespace stock_market.DAL
                 })
                 .ToListAsync();
             portfolios.Sort((p1, p2) => p1.time.CompareTo(p2.time));
-
+            
+            Console.WriteLine(portfolios.Count);
+            
             string json = JsonConvert.SerializeObject(portfolios);
             return json;
         }
