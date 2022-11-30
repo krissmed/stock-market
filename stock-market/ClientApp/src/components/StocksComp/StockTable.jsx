@@ -13,6 +13,9 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
+import Modal from '@mui/material/Modal';
+import TextField from '@mui/material/TextField';
+
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import AddShoppingCartOutlinedIcon from '@mui/icons-material/AddShoppingCartOutlined';
@@ -76,33 +79,35 @@ export default function StockTable({ stockObj }) {
 
     //Functions to execute the buttons
 
-    function buyStock(ticker) {
-        const amount = prompt("Please enter desired amount to buy", 1);
-
+    function buyStock() {
         setIsLoading(true);
-        axios.get('transaction/buystock?ticker=' + ticker + '&amount=' + amount)
+        axios.get('transaction/buystock?ticker=' + chosenTicker + '&amount=' + chosenAmount)
             .then((response) => {
                 if (response) {
-                    alert('Successfully bought ' + amount + ' shares of ' + ticker);
                     window.location.reload();
                 }
                 
                 setIsLoading(false);
             }).catch(err => {
-                if (err.status === 401) {
+                if (err.response.status === 401) {
                     window.location.href = "/login";
                     localStorage.setItem('isLoggedIn', false);
                 }
                 //If not enough money
+
                 else {
                     alert('You dont have enough money...;/');
                 }
+                setIsLoading(false);
             })
+
+        
     }
 
-    function deleteStock(ticker) {
+    function deleteStock() {
+        setDeleteOpen(false);
         setIsLoading(true);
-        axios.get('stock/deletestock?ticker=' + ticker)
+        axios.get('stock/deletestock?ticker=' + chosenTicker)
             .then((response) => {
                 if (response) {
                     window.location.reload();
@@ -112,15 +117,16 @@ export default function StockTable({ stockObj }) {
                     alert("Something wrong. Ask Erling");
                 }
             }).catch(err => {
-                if (err.status === 401) {
+                if (err.response.status === 401) {
                     window.location.href = "/login";
                     localStorage.setItem('isLoggedIn', false);
                 }
+                setIsLoading(false);
             })
+        
     }
 
     function addStock() {
-        const chosenTicker = prompt("Enter the ticker of the stock you want to add. Has to be a legit ticker from https://iextrading.com/trading/eligible-symbols/", 'GOOGL').toUpperCase();
 
         setIsLoading(true);
         axios.get('stock/addstock?ticker=' + chosenTicker)
@@ -129,18 +135,113 @@ export default function StockTable({ stockObj }) {
                     window.location.reload();
                     setIsLoading(false);
                 }
-                else {
-                    alert("Something wrong. Ask Erling");
-                }
             }).catch(err => {
                 if (err.status === 401) {
                     window.location.href = "/login";
                     localStorage.setItem('isLoggedIn', false);
                 }
+                else {
+                    setAddOpen(true);
+                    setErrTicker("The ticker didnt exists. Check link")
+                }
+                setIsLoading(false);
             })
     }
 
     const customTheme = useTheme();
+    const modalStyle = {
+        position: 'absolute',
+            top: '50%',
+                left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                        maxWidth: 400,
+                            minHeight: 200,
+                                bgcolor: '#FEFEFE',
+                                    color: '#252525',
+                                        border: '2px solid #252525',
+                                            borderRadius: '5%',
+                                                boxShadow: 24,
+                                                    p: 4,
+                                                        display: 'flex',
+                                                            flexDirection: 'column',
+                                                                justifyContent: 'center',
+                                                                    gap: 2,
+
+                    }
+    
+    ///For modal buy;
+    const [open, setOpen] = useState(false);
+    const [chosenTicker, setChosenTicker] = useState("");
+    const [chosenAmount, setChosenAmount] = useState();
+    const [errMsgInputNumber, setErrMsgInputNumber] = useState("");
+
+    //For modal delete
+    const [deleteOpen, setDeleteOpen] = useState(false);
+
+    //For modal add
+    const [addOpen, setAddOpen] = useState(false);
+    const [errTicker, setErrTicker] = useState("");
+
+    const handleClose = () => {
+        setOpen(false);
+    }
+
+    const inputChange = (e) => {
+        setErrMsgInputNumber("");
+        const value = e.target.value;
+        if (check0to1000(value)) {
+            setChosenAmount(e.target.value);
+        }
+        else {
+            setErrMsgInputNumber("Has to be larger than 0 and less than 1000");
+        }
+    }
+
+    const check0to1000 = (value) => {
+        if (value > 0 && value < 1000) {
+            return true
+        }
+        else {
+            return false
+        }
+    }
+
+    const confirmBuy = () => {
+        setOpen(false);
+        if (check0to1000(chosenAmount)) {
+            buyStock();
+        }
+        else {
+            setErrMsgInputNumber("Invalid input. Try again");
+        }
+    }
+
+    const inputTickerChange = (e) => {
+        const ticker = e.target.value.toUpperCase();
+        console.log(ticker);
+        if (checkTicker(ticker)) {
+            setChosenTicker(ticker);
+        }
+        else {
+            setErrTicker("Only between 1 and 10 letters allowed");
+        }
+    }
+    const checkTicker = (ticker) => {
+        if (/^([A-Z]{1,10})$/.test(ticker)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    const confirmAdd = () => {
+        if (checkTicker(chosenTicker)) {
+            addStock();
+        }
+        else {
+            setErrTicker("Invalid input. Try again");
+        }
+    }
 
     return (
         
@@ -157,13 +258,13 @@ export default function StockTable({ stockObj }) {
             </div>
 
                 :
-
+            <>
     <Box sx={{
         width: 'auto',
         overflowX: 'auto',
     }}>
-        <Button variant='contained' color='success'
-            onClick={() => addStock()}
+                    <Button variant='contained' color='success'
+                        onClick={() => setAddOpen(true)}
             sx={{
                 float: 'right',
                 mt: 1,
@@ -223,7 +324,8 @@ export default function StockTable({ stockObj }) {
                                     <Button variant='outlined'
                                         color='success'
                                         endIcon={<AddShoppingCartOutlinedIcon />}
-                                        onClick={() => buyStock(stock.ticker)}>
+                                        onClick={() => { setOpen(true)
+                                                        setChosenTicker(stock.ticker)}}>
                                         Buy
                                     </Button>
                                 </TableCell>
@@ -232,7 +334,10 @@ export default function StockTable({ stockObj }) {
                                     <Button variant='outlined'
                                         color='error'
                                         endIcon={<DeleteOutlineOutlinedIcon />}
-                                        onClick={() => deleteStock(stock.ticker)}>
+                                        onClick={() => {
+                                            setDeleteOpen(true)
+                                            setChosenTicker(stock.ticker)
+                                        }}>
                                         Delete
                                     </Button>
                                 </TableCell>
@@ -243,5 +348,115 @@ export default function StockTable({ stockObj }) {
         </Table>
     </Box>
 
+
+                <Modal
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={modalStyle}
+                    >
+
+
+                        <Typography id="modal-modal-title" variant="h6" component="h2">
+                            Choose amount of shares
+                        </Typography>
+                        <Box sx={{display: 'flex', alignItems: 'center'}}>
+                        <TextField
+                            id="outlined-number"
+                            label="Number"
+                            type="number"
+                                onChange={inputChange}
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                                helperText={errMsgInputNumber}
+                            sx={{
+                                width: 100,
+                                mr: 1,
+                            }}
+                            />
+                            <Typography>share(s) of {chosenTicker}</Typography>
+                        </Box>
+                        <Button variant="contained" sx={{
+                            width: '60%',
+                        }}
+                            onClick={confirmBuy}
+                        >Buy {chosenTicker}</Button>
+                    </Box>
+
+                </Modal>
+
+                <Modal
+                    open={deleteOpen}
+                    onClose={() => setDeleteOpen(false)}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={modalStyle}
+                    >
+
+
+                        <Typography id="modal-modal-title" variant="h6" component="h2">
+                            Do you want to delete {chosenTicker}?
+                        </Typography>
+                        <Box sx={{ display: 'flex', alignItems: 'center', justifycontent: 'space-between' }}>
+                            <Button variant="contained" sx={{
+                                width: '20%',
+                                mr: 'auto',
+                            }}
+                                color='error'
+                                onClick={() => setDeleteOpen(false)}
+                            >No</Button>
+                            <Button variant="contained" color='success' sx={{
+                                width: '20%',
+                                bgColor: customTheme.palette.success.main,
+                            }}
+                                onClick={deleteStock}
+                            >Yes</Button>
+                        </Box>
+                        
+                    </Box>
+
+                </Modal>
+
+                <Modal
+                    open={addOpen}
+                    onClose={() => setAddOpen(false)}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={modalStyle}
+                    >
+
+
+                        <Typography id="modal-modal-title" variant="h6" component="h2">
+                            Add a stock
+                        </Typography>
+                        <Typography id="modal-modal-title" variant="subtitle1" component="h2">
+                            Has to be a valid ticker from <a href='https://iextrading.com/trading/eligible-symbols/'>ticker overview</a>. I.e: GOOGL, MSFT
+                        </Typography>
+                        <TextField required
+                            id='outlined-required'
+                            label='Ticker'
+                            autoComplete='off'
+                            color='info'
+                            helperText={errTicker}
+                            name='ticker'
+                            onChange={inputTickerChange}
+                        />
+
+                        <Button variant="contained" color='success' sx={{
+                            width: '55%',
+                            bgColor: customTheme.palette.success.main,
+                        }}
+                            onClick={addStock}
+                        >Add the stock</Button>
+                    </Box>
+
+                </Modal>
+
+            </>
     );
 }
