@@ -63,7 +63,3 @@ export default function StockData() {
     )
 }
 
-//make an async function that fetches the data and then set the state with the data
-
-//then call the function in the useEffect
-
