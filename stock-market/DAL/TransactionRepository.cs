@@ -29,7 +29,7 @@ namespace stock_market.DAL
                     }
 
                     BaseStock stock = await _db.baseStocks.FirstAsync(s => s.ticker == ticker);
-                    User user = await _db.Users.FirstAsync();
+                    User user = await _db.Users.FindAsync(userid);
                     Timestamp timestamp = await _db.timestamps.OrderByDescending(t => t.time).FirstAsync();
 
                     //find the portfolio for the user and the timestamp
