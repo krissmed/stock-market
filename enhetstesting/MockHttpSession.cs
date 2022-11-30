@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Http;
 
 namespace enhetstesting
 {
+    // Denne kode er hentet fra forelesningen om testing, og er ikke skrevet av meg.
+    // Foreleser sier at han fant den på nettet, men spesifiserer ikke hvor.
+
     [ExcludeFromCodeCoverage]
     public class MockHttpSession : ISession
     {
