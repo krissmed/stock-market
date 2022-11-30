@@ -62,22 +62,22 @@ namespace enhetstesting
         }
 
         [Fact]
-        public async Task AddstockLoggedInIkkeOK()
+        public async Task AddstockikkeLoggedIn()
         {
-            mockRep.Setup(k => k.AddStock("appl", 1, 50, 1)).ReturnsAsync(false);
+            mockRep.Setup(k => k.AddStock("appl", 1, 10,1)).ReturnsAsync(false);
 
             var watchlistController = new WatchlistController(mockRep.Object, mockLog.Object);
 
-            mockSession[_loggetInn] = _loggetInn+_loggetInn;
+            mockSession[_loggetInn] = null;
             mockHttpContext.Setup(s => s.Session).Returns(mockSession);
             watchlistController.ControllerContext.HttpContext = mockHttpContext.Object;
 
             // Act
-            var resultat = await watchlistController.AddStock("appl", 1, 50) as BadRequestObjectResult;
+            var resultat = await watchlistController.AddStock("appl", 10, 100) as UnauthorizedObjectResult;
 
             // Assert 
-            Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
-            Assert.Equal("Could not add to watchlist", resultat.Value);
+            Assert.Equal((int)HttpStatusCode.Unauthorized, resultat.StatusCode);
+            Assert.Equal("User is not logged in", resultat.Value);
         }
 
 
