@@ -106,7 +106,6 @@ namespace enhetstesting
             Assert.Equal((int)HttpStatusCode.OK, resualt.StatusCode);
         }
 
-
         [Fact]
         public async Task GetCurrentPortfolioOK()
         {
@@ -122,9 +121,6 @@ namespace enhetstesting
 
             Assert.Equal((int)HttpStatusCode.OK, resualt.StatusCode);
         }
-
-
-
     }
 }
 

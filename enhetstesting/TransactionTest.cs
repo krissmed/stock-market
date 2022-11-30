@@ -41,6 +41,7 @@ namespace enhetstesting
             Assert.Equal((int)HttpStatusCode.OK, resualt.StatusCode);
             Assert.Equal("User bought stock", resualt.Value);
         }
+
         [Fact]
         public async Task BuyStockNotLoggedOK()
         {
@@ -116,7 +117,6 @@ namespace enhetstesting
             Assert.Equal("User is not logged in", resultat.Value);
         }
 
-
         [Fact]
         public async Task BuyStockWrongInputVal()
         {
@@ -138,6 +138,7 @@ namespace enhetstesting
             Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
             Assert.Equal("Fault in InputVal", resultat.Value);
         }
+
         [Fact]
         public async Task SellStockLoggetinnOK()
         {
@@ -212,7 +213,5 @@ namespace enhetstesting
             Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
 
         }
-        
-        
     }
 }

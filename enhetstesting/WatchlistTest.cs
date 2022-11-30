@@ -3,13 +3,10 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using stock_market.Controllers;
 using stock_market.DAL;
-using stock_market.Model;
 using System.Threading.Tasks;
 using Xunit;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using System.Text;
-using System.Collections.Generic;
 
 namespace enhetstesting
 {
@@ -17,7 +14,6 @@ namespace enhetstesting
     {
 
         private const string _loggetInn = "loggetInn";
-        private const string _ikkeLoggetInn = null;
 
         private readonly Mock<IWatchlistRepository> mockRep = new Mock<IWatchlistRepository>();
         private readonly Mock<ILogger<WatchlistController>> mockLog = new Mock<ILogger<WatchlistController>>();
@@ -62,26 +58,6 @@ namespace enhetstesting
         }
 
         [Fact]
-        public async Task AddstockikkeLoggedIn()
-        {
-            mockRep.Setup(k => k.AddStock("appl", 1, 10,1)).ReturnsAsync(false);
-
-            var watchlistController = new WatchlistController(mockRep.Object, mockLog.Object);
-
-            mockSession[_loggetInn] = null;
-            mockHttpContext.Setup(s => s.Session).Returns(mockSession);
-            watchlistController.ControllerContext.HttpContext = mockHttpContext.Object;
-
-            // Act
-            var resultat = await watchlistController.AddStock("appl", 10, 100) as UnauthorizedObjectResult;
-
-            // Assert 
-            Assert.Equal((int)HttpStatusCode.Unauthorized, resultat.StatusCode);
-            Assert.Equal("User is not logged in", resultat.Value);
-        }
-
-
-        [Fact]
         public async Task DeleteStockLoggetinnOK()
         {
             var mock = new Mock<IWatchlistRepository>();
@@ -97,6 +73,7 @@ namespace enhetstesting
             Assert.Equal((int)HttpStatusCode.OK, resualt.StatusCode);
             Assert.Equal("User deleted from watchlist", resualt.Value);
         }
+
         [Fact]
         public async Task DeletestockLoggetinnIkkeOK()
         {
@@ -134,7 +111,6 @@ namespace enhetstesting
             Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
             Assert.Equal("Could not delete from watchlist", resultat.Value);
         }
-
 
         [Fact]
         public async Task UpdateStockIkkeOK()
@@ -193,9 +169,6 @@ namespace enhetstesting
             Assert.Equal("User is not logged in", resultat.Value);
         }
 
-
-
-
         [Fact]
         public async Task UpdateStockLoggetinnOK()
         {
@@ -230,8 +203,6 @@ namespace enhetstesting
             Assert.Equal("Fault in InputVal", resualt.Value);
         }
 
-
-
         [Fact]
         public async Task UpdatestockLoggetinnIkkeOK()
         {
@@ -250,6 +221,7 @@ namespace enhetstesting
             Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
             Assert.Equal("Could not update watchlist", resultat.Value);
         }
+
         [Fact]
         public async Task AddStockWrongInputVal()
         {
@@ -270,7 +242,6 @@ namespace enhetstesting
             Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
             Assert.Equal("Fault in InputVal", resultat.Value);
         }
-
     }
 }
 
