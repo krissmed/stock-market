@@ -145,6 +145,7 @@ export default function WatchlistTable({ data }) {
     const [errTicker, setErrTicker] = useState("");
     const [errMsgInputNumber, setErrMsgInputNumber] = useState("");
     const [errPriceInput, setErrPriceInput] = useState("");
+    const [addError, setAddError] = useState("");
     
 
     const inputTickerChange = (e) => {
@@ -215,7 +216,7 @@ export default function WatchlistTable({ data }) {
             addStock();
         }
         else {
-            setErrTicker("Invalid input. Try again");
+            setAddError("Invalid input. Try again");
         }
     }
 
@@ -412,7 +413,9 @@ export default function WatchlistTable({ data }) {
                                 }}
                             />
                         </Box>
-
+                        <Typography sx={{color: customTheme.palette.error.main}}>
+                            {addError}
+                        </Typography>
                         <Button variant="contained" color='success' sx={{
                             width: '55%',
                             bgColor: customTheme.palette.success.main,
