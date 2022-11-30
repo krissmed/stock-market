@@ -63,13 +63,13 @@ namespace stock_market.Controllers
                 bool ok = await _db.AddStock(ticker, amount, target_price, userid);
                 if (!ok)
                 {
-                    _log.LogError("TransactionController: Could not add to watchlist");
+                    _log.LogError("WatchlistController: Could not add to watchlist");
                     return BadRequest("Could not add to watchlist");
                 }
-                _log.LogInformation("TransactionController: User added to watchlist");
+                _log.LogInformation("WatchlistController: User added to watchlist");
                 return Ok("User added to watchlist");
             }
-            _log.LogError("TransactionController: Fault in InputVal ");
+            _log.LogError("WatchlistController: Fault in InputVal ");
             return BadRequest("Fault in InputVal");
         }
 
@@ -93,10 +93,10 @@ namespace stock_market.Controllers
             bool ok = await _db.DeleteStock(id, userid);
             if (!ok)
             {
-                _log.LogError("TransactionController: Could not delete from watchlist");
+                _log.LogError("WatchlistController: Could not delete from watchlist");
                 return BadRequest("Could not delete from watchlist");
             }
-            _log.LogInformation("TransactionController: User deleted from watchlist");
+            _log.LogInformation("WatchlistController: User deleted from watchlist");
             return Ok("User deleted from watchlist");
         }
 
@@ -115,13 +115,13 @@ namespace stock_market.Controllers
                 bool ok = await _db.UpdateStock(id, amount, target_price);
                 if (!ok)
                 {
-                    _log.LogError("TransactionController: Could not update watchlist");
+                    _log.LogError("WatchlistController: Could not update watchlist");
                     return BadRequest("Could not update watchlist");
                 }
-                _log.LogInformation("TransactionController: User updated to watchlist");
+                _log.LogInformation("WatchlistController: User updated to watchlist");
                 return Ok("User updated to watchlist");
             }
-            _log.LogError("TransactionController: Fault in InputVal ");
+            _log.LogError("WatchlistController: Fault in InputVal ");
             return BadRequest("Fault in InputVal");
         }
     }

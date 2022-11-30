@@ -23,7 +23,6 @@ namespace stock_market.Controllers
         private const string _loggetInn = "loggetInn";
         private int userid = -1;
 
-
         public TransactionController(ITransactionRepository db, ILogger<TransactionController> log)
         {
             _db = db;
@@ -45,8 +44,6 @@ namespace stock_market.Controllers
                 }
                 userid = HttpContext.Session.GetInt32(_loggetInn).Value;
             }
-
-
             if (ModelState.IsValid)
             {
                 bool ok = await _db.SellStock(ticker, amount, userid);
@@ -60,7 +57,6 @@ namespace stock_market.Controllers
             }
             _log.LogError("TransactionController: Fault in InputVal ");
             return BadRequest("Fault in InputVal");
-
         }
 
         public async Task<ActionResult> BuyStock(string ticker, int amount)
@@ -78,8 +74,6 @@ namespace stock_market.Controllers
                 }
                 userid = HttpContext.Session.GetInt32(_loggetInn).Value;
             }
-
-
             if (ModelState.IsValid)
             {
                 bool ok = await _db.BuyStock(ticker, amount, userid);
@@ -94,6 +88,7 @@ namespace stock_market.Controllers
             _log.LogError("TransactionController: Fault in InputVal ");
             return BadRequest("Fault in InputVal");
         }
+
         [ExcludeFromCodeCoverage]
         public async Task<ActionResult> ListAll()
         {
@@ -107,8 +102,5 @@ namespace stock_market.Controllers
             _log.LogInformation("Listed all transactions");
             return Ok(await _db.ListAll(userid));
         }
-
-
     }
-
 }

@@ -28,10 +28,6 @@ namespace enhetstesting
         private readonly Mock<HttpContext> mockHttpContext = new Mock<HttpContext>();
         private readonly MockHttpSession mockSession = new MockHttpSession();
 
-        
-
-       
-
         [Fact]
         public async Task CreateUserLoggetinnOK()
         {
@@ -59,6 +55,7 @@ namespace enhetstesting
             Assert.Equal((int)HttpStatusCode.OK, resualt.StatusCode);
             Assert.Equal("User created user", resualt.Value);
         }
+
         [Fact]
         public async Task CreateUsernotLoggetinnOK()
         {
@@ -107,7 +104,6 @@ namespace enhetstesting
             Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
             Assert.Equal("Could not create user", resultat.Value);
         }
-
 
         [Fact]
         public async Task DeleteUserLoggetinnOK()
@@ -197,6 +193,7 @@ namespace enhetstesting
             Assert.Equal((int)HttpStatusCode.OK, resualt.StatusCode);
             Assert.Equal("User edited userbal", resualt.Value);
         }
+
         [Fact]
         public async Task EditUserBalanceLoggetinnIkkeOK()
         {
@@ -246,6 +243,7 @@ namespace enhetstesting
             Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
             Assert.Equal("Fault in InputVal", resultat.Value);
         }
+
         [Fact]
         public async Task EditUserWrongInputVal()
         {
@@ -276,6 +274,7 @@ namespace enhetstesting
             Assert.Equal((int)HttpStatusCode.BadRequest, resultat.StatusCode);
             Assert.Equal("Fault in InputVal", resultat.Value);
         }
+
         [Fact]
         public async Task EditUserBalWrongInputVal()
         {
