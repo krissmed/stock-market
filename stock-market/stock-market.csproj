@@ -51,6 +51,7 @@
 
 
 	<ItemGroup>
+    <Folder Include="ClientApp\src\components\" />
     <Folder Include="ClientApp\src\css\" />
     <Folder Include="ClientApp\src\pages\" />
     <Folder Include="ClientApp\src\fetchingData\" />

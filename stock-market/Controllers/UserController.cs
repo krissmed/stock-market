@@ -183,7 +183,7 @@ namespace stock_market.Controllers
                 return Ok(firstname);
             }
             HttpContext.Session.SetInt32(_loggetInn, -1);
-            return BadRequest("Feil i inputvalidering på server");
+            return BadRequest("Feil i inputvalidering pï¿½ server");
         }
         
         public async Task<ActionResult> EditUserBalance(User editUser) //Edits balance of user, get current calues with GET and send new ones with POST. This is meant for when user sell/buy stock
@@ -214,7 +214,7 @@ namespace stock_market.Controllers
                 }
                 return Ok(true);
             }
-            return BadRequest("Feil i inputvalidering på server");
+            return BadRequest("Feil i inputvalidering pï¿½ server");
         }
         [ExcludeFromCodeCoverage]
         public void LogOut()
